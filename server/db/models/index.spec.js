@@ -315,28 +315,28 @@ describe("Word >-< UserRound Association", () => {
     });
   });
 
-  // describe("Word magic methods", () => {
-  //   it("Each word can be used in many rounds", async () => {
-  //     const word = await Word.create({
-  //       word: "panagram"
-  //     });
+  describe("Word magic methods", () => {
+    it("Each word can be used in many rounds", async () => {
+      const word = await Word.create({
+        word: "panagram"
+      });
 
-  //     await word.addRounds([
-  //       await Round.create({
-  //         letters: "abcd",
-  //         coreLetter: "a",
-  //         gameDate: new Date()
-  //       }),
-  //       await Round.create({
-  //         letters: "abcd",
-  //         coreLetter: "a",
-  //         gameDate: new Date()
-  //       })
-  //     ]);
+      await word.addRounds([
+        await Round.create({
+          letters: "abcd",
+          coreLetter: "a",
+          gameDate: new Date()
+        }),
+        await Round.create({
+          letters: "abcd",
+          coreLetter: "a",
+          gameDate: new Date()
+        })
+      ]);
 
-  //     word.getRounds().then(rounds => {
-  //       expect(rounds.length).to.equal(2);
-  //     });
-  //   });
-  // });
+      word.getRounds().then(rounds => {
+        expect(rounds.length).to.equal(2);
+      });
+    });
+  });
 });
