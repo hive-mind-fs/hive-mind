@@ -1,27 +1,6 @@
 const { expect } = require("chai");
 const { db, Word, Round, Game, User, UserRound } = require("../models");
 
-describe("Class and prototype methods", () => {
-  beforeEach(() => db.sync({ force: true }));
-  describe("Word alphabetization", () => {
-    it("Words are returned alphabetically", async () => {
-      await Word.create({ word: "Titanic" });
-      await Word.create({ word: "Sea Sluts" });
-      await Word.create({ word: "Aquaholic" });
-      await Word.create({ word: "SeaWorthy" });
-
-      const alphabetizedWords = await Word.alphabetize();
-
-      expect(alphabetizedWords.map(word => word.word)).to.deep.equal([
-        "Aquaholic",
-        "Sea Sluts",
-        "SeaWorthy",
-        "Titanic"
-      ]);
-    });
-  });
-});
-
 describe("Game >-< Round Association", () => {
   beforeEach(() => db.sync({ force: true }));
 
@@ -73,7 +52,7 @@ describe("Game >-< Round Association", () => {
   });
 });
 
-describe("Game >-< User Association", () => {
+describe("Game/Round >-< User Association", () => {
   beforeEach(() => db.sync({ force: true }));
 
   describe("Game winner", () => {
@@ -88,6 +67,24 @@ describe("Game >-< User Association", () => {
       });
       await game.setWinner(user);
       game.getWinner().then(winner => {
+        expect(winner.id).to.equal(user.id);
+      });
+    });
+  });
+
+  describe("Round winner", () => {
+    it("Each round has a winner", async () => {
+      const round = await Round.create({
+        letters: "abcd",
+        coreLetter: "c",
+        gameDate: new Date()
+      });
+      const user = await User.create({
+        email: "cody@email.com",
+        password: "123"
+      });
+      await round.setWinner(user);
+      round.getWinner().then(winner => {
         expect(winner.id).to.equal(user.id);
       });
     });
@@ -318,28 +315,32 @@ describe("Word >-< UserRound Association", () => {
     });
   });
 
-  // describe("Word magic methods", () => {
-  //   it("Each word can be used in many rounds", async () => {
-  //     const word = await Word.create({
-  //       word: "panagram"
-  //     });
+  describe("Word magic methods", () => {
+    it("Each word can be used in many user rounds", async () => {
+      const word = await Word.create({
+        word: "panagram"
+      });
 
-  //     await word.addRounds([
-  //       await Round.create({
-  //         letters: "abcd",
-  //         coreLetter: "a",
-  //         gameDate: new Date()
-  //       }),
-  //       await Round.create({
-  //         letters: "abcd",
-  //         coreLetter: "a",
-  //         gameDate: new Date()
-  //       })
-  //     ]);
+      const userRounds = await Round.create(
+        {
+          letters: "abcd",
+          coreLetter: "a",
+          gameDate: new Date(),
+          users: [
+            { email: "cody@email.com", password: "123" },
+            { email: "murphy@email.com", password: "123" }
+          ]
+        },
+        {
+          include: [User]
+        }
+      ).then(round => round.getUserRounds().then(userRounds => userRounds));
 
-  //     word.getRounds().then(rounds => {
-  //       expect(rounds.length).to.equal(2);
-  //     });
-  //   });
-  // });
+      await word.addUserRounds(userRounds);
+
+      word.getUserRounds().then(userRounds => {
+        expect(userRounds.length).to.equal(2);
+      });
+    });
+  });
 });

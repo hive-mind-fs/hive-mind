@@ -7,7 +7,7 @@ describe("Round model", () => {
     it("has a gameId, letters, coreLetter, and gameDate property", () => {
       const date = new Date();
       return Round.create({
-        letters: "ABCDEFG",
+        letters: "CDEFGBA",
         coreLetter: "A",
         gameDate: date
       }).then(round => {
