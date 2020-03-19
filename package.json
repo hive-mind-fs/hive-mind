@@ -5,6 +5,7 @@
   "main": "node_modules/expo/AppEntry.js",
   "scripts": {
     "start": "expo start",
+    "start-server": "nodemon server -e html,js,scss --ignore public --ignore client",
     "android": "expo start --android",
     "ios": "expo start --ios",
     "web": "expo start --web",
@@ -32,6 +33,9 @@
   "dependencies": {
     "crypto": "^1.0.1",
     "expo": "~36.0.0",
+    "express": "^4.17.1",
+    "morgan": "^1.9.1",
+    "path": "^0.12.7",
     "pg": "^7.18.2",
     "pg-hstore": "^2.3.2",
     "react": "~16.9.0",
