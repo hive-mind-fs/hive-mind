@@ -316,26 +316,30 @@ describe("Word >-< UserRound Association", () => {
   });
 
   describe("Word magic methods", () => {
-    it("Each word can be used in many rounds", async () => {
+    it("Each word can be used in many user rounds", async () => {
       const word = await Word.create({
         word: "panagram"
       });
 
-      await word.addRounds([
-        await Round.create({
+      const userRounds = await Round.create(
+        {
           letters: "abcd",
           coreLetter: "a",
-          gameDate: new Date()
-        }),
-        await Round.create({
-          letters: "abcd",
-          coreLetter: "a",
-          gameDate: new Date()
-        })
-      ]);
+          gameDate: new Date(),
+          users: [
+            { email: "cody@email.com", password: "123" },
+            { email: "murphy@email.com", password: "123" }
+          ]
+        },
+        {
+          include: [User]
+        }
+      ).then(round => round.getUserRounds().then(userRounds => userRounds));
 
-      word.getRounds().then(rounds => {
-        expect(rounds.length).to.equal(2);
+      await word.addUserRounds(userRounds);
+
+      word.getUserRounds().then(userRounds => {
+        expect(userRounds.length).to.equal(2);
       });
     });
   });
