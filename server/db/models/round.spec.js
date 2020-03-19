@@ -4,7 +4,7 @@ const { db, Round } = require(".");
 describe("Round model", () => {
   beforeEach(() => db.sync({ force: true }));
   describe("Column definitions and validations", () => {
-    it.only("has a gameId, letters, coreLetter, and gameDate property", () => {
+    it("has a gameId, letters, coreLetter, and gameDate property", () => {
       const date = new Date();
       return Round.create({
         letters: "CDEFGBA",

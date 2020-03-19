@@ -50,17 +50,6 @@ Round.belongsToMany(Word, { through: "roundWords" });
 Word.belongsToMany(UserRound, { through: GuessedWord });
 UserRound.belongsToMany(Word, { through: GuessedWord });
 
-/** Class methods here **/
-
-Word.alphabetize = async function() {
-  const words = await Word.findAll({ order: [["word", "ASC"]] });
-
-  // something to sort according to first letter
-  return words;
-};
-
-/** Instance methods here **/
-
 /**
  * We'll export all of our models here, so that any time a module needs a model,
  * we can just require it from 'db/models'

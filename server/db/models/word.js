@@ -8,4 +8,11 @@ const Word = db.define("word", {
   }
 });
 
+Word.alphabetize = async function() {
+  const words = await Word.findAll({ order: [["word", "ASC"]] });
+
+  // something to sort according to first letter
+  return words;
+};
+
 module.exports = Word;
