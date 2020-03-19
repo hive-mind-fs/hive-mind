@@ -73,7 +73,7 @@ describe("Game >-< Round Association", () => {
   });
 });
 
-describe("Game >-< User Association", () => {
+describe("Game/Round >-< User Association", () => {
   beforeEach(() => db.sync({ force: true }));
 
   describe("Game winner", () => {
@@ -88,6 +88,24 @@ describe("Game >-< User Association", () => {
       });
       await game.setWinner(user);
       game.getWinner().then(winner => {
+        expect(winner.id).to.equal(user.id);
+      });
+    });
+  });
+
+  describe("Round winner", () => {
+    it("Each round has a winner", async () => {
+      const round = await Round.create({
+        letters: "abcd",
+        coreLetter: "c",
+        gameDate: new Date()
+      });
+      const user = await User.create({
+        email: "cody@email.com",
+        password: "123"
+      });
+      await round.setWinner(user);
+      round.getWinner().then(winner => {
         expect(winner.id).to.equal(user.id);
       });
     });

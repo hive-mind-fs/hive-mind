@@ -16,8 +16,10 @@ Create tests for associations
 
 /* One-to-one associations */
 // One game has one winner
+// A round has one winner
 // Winner as the accessor method instead of user
 Game.belongsTo(User, { as: "winner", foreignKey: "winnerId" });
+Round.belongsTo(User, { as: "winner", foreignKey: "winnerId" });
 
 /* One-to-many associations */
 
