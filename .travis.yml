@@ -16,5 +16,3 @@ before_script:
   - psql -c 'create database "hive-mind-test";' -U postgres
 script:
   - npm test # test the code
-
-apikey: 9l53e1Ii9Z3zYweGQu2QgQ
