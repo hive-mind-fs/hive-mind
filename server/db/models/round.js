@@ -18,4 +18,21 @@ const Round = db.define("round", {
   }
 });
 
+/**
+ * Hooks
+ */
+
+const alphabetizeLetters = round => {
+  round.letters = round.letters
+    .split("")
+    .sort()
+    .join("");
+};
+
+Round.beforeCreate(alphabetizeLetters);
+Round.beforeUpdate(alphabetizeLetters);
+Round.beforeBulkCreate(Round => {
+  Round.forEach(alphabetizeLetters);
+});
+
 module.exports = Round;
