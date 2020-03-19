@@ -15,4 +15,4 @@ install:
 before_script:
   - psql -c 'create database "hive-mind-test";' -U postgres
 script:
-  - npm test # test the code
+  - npm run test-server # test the server code
