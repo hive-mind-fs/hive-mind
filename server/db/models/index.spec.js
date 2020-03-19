@@ -193,7 +193,8 @@ describe("Round >-< User Association", () => {
   });
 
   describe("User round magic methods", () => {
-    it.only("User rounds can get their user and round", async () => {
+    it("User rounds can set and get their user ", async () => {
+      const userRound = await UserRound.create({});
       const round1 = await Round.create({
         letters: "abcd",
         coreLetter: "a",
@@ -203,13 +204,31 @@ describe("Round >-< User Association", () => {
         email: "cody@email.com",
         password: "123"
       });
-      await round1.addUser(user1);
-      const userRounds = await round1.getUserRounds();
+      await userRound.setUser(user1);
+      await userRound.setRound(round1);
 
-      userRounds[0].getUser().then(user => {
+      userRound.getUser().then(user => {
         expect(user.id).to.equal(user1.id);
       });
-      userRounds[0].getRound().then(round => {
+    });
+  });
+
+  describe("User round magic methods", () => {
+    it("User rounds can set and get their round", async () => {
+      const userRound = await UserRound.create({});
+      const round1 = await Round.create({
+        letters: "abcd",
+        coreLetter: "a",
+        gameDate: new Date()
+      });
+      const user1 = await User.create({
+        email: "cody@email.com",
+        password: "123"
+      });
+      await userRound.setUser(user1);
+      await userRound.setRound(round1);
+
+      userRound.getRound().then(round => {
         expect(round.id).to.equal(round1.id);
       });
     });
@@ -266,52 +285,61 @@ describe("Word >-< Round Association", () => {
   });
 });
 
-// describe("Word >-< UserRound Association", () => {
-//   beforeEach(() => db.sync({ force: true }));
+describe("Word >-< UserRound Association", () => {
+  beforeEach(() => db.sync({ force: true }));
 
-//   describe("Word magic methods", () => {
-//     it("Each  has many words", async () => {
-//       const round = await Round.create({
-//         letters: "abcd",
-//         coreLetter: "a",
-//         gameDate: new Date()
-//       });
+  describe("Word magic methods", () => {
+    it("Each user round has many words", async () => {
+      const userRounds = await Round.create(
+        {
+          letters: "abcd",
+          coreLetter: "a",
+          gameDate: new Date(),
+          users: [
+            { email: "cody@email.com", password: "123" },
+            { email: "murphy@email.com", password: "123" }
+          ]
+        },
+        {
+          include: [User]
+        }
+      ).then(round => round.getUserRounds().then(userRounds => userRounds));
 
-//       await round.addWords([
-//         await Word.create({ word: "i" }),
-//         await Word.create({ word: "love" }),
-//         await Word.create({ word: "my" }),
-//         await Word.create({ word: "team" })
-//       ]);
+      const userRound = userRounds[0];
 
-//       round.getWords().then(words => {
-//         expect(words.length).to.equal(4);
-//       });
-//     });
-//   });
+      await userRound.addWords([
+        await Word.create({ word: "hi" }),
+        await Word.create({ word: "there" })
+      ]);
 
-//   describe("Word magic methods", () => {
-//     it("Each word can be used in many rounds", async () => {
-//       const word = await Word.create({
-//         word: "panagram"
-//       });
+      userRound
+        .getWords()
+        .then(userRoundWords => expect(userRoundWords.length).to.equal(2));
+    });
+  });
 
-//       await word.addRounds([
-//         await Round.create({
-//           letters: "abcd",
-//           coreLetter: "a",
-//           gameDate: new Date()
-//         }),
-//         await Round.create({
-//           letters: "abcd",
-//           coreLetter: "a",
-//           gameDate: new Date()
-//         })
-//       ]);
+  // describe("Word magic methods", () => {
+  //   it("Each word can be used in many rounds", async () => {
+  //     const word = await Word.create({
+  //       word: "panagram"
+  //     });
 
-//       word.getRounds().then(rounds => {
-//         expect(rounds.length).to.equal(2);
-//       });
-//     });
-//   });
-// });
+  //     await word.addRounds([
+  //       await Round.create({
+  //         letters: "abcd",
+  //         coreLetter: "a",
+  //         gameDate: new Date()
+  //       }),
+  //       await Round.create({
+  //         letters: "abcd",
+  //         coreLetter: "a",
+  //         gameDate: new Date()
+  //       })
+  //     ]);
+
+  //     word.getRounds().then(rounds => {
+  //       expect(rounds.length).to.equal(2);
+  //     });
+  //   });
+  // });
+});
