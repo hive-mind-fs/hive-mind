@@ -28,7 +28,7 @@ describe("User model", () => {
         expect(user.age).to.equal(21);
         expect(user.createdAt).to.deep.equal(date);
         expect(user.isAdmin).to.equal(false);
-        expect(user.isOnboarded).to.equal(true);
+        expect(user.isOnboarded).to.equal(false);
       });
     });
   });
