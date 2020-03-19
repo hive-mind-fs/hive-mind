@@ -14,29 +14,41 @@ Round … given a round, set letters. Query MongoDb
 Create tests for associations
 */
 
-// Games have many rounds
-Game.hasMany(Round);
-Round.belongsTo(Game);
-
-// Games have one winner
+/* One-to-one associations */
+// One game has one winner
 // Winner as the accessor method instead of user
 Game.belongsTo(User, { as: "winner", foreignKey: "winnerId" });
 
+/* One-to-many associations */
+
+// One game has many rounds
+Game.hasMany(Round);
+Round.belongsTo(Game);
+
+// UserRound has one user, one round
+UserRound.belongsTo(User);
+UserRound.belongsTo(Round);
+User.hasMany(UserRound);
+Round.hasMany(UserRound);
+
+/* Many-to-many associations */
+
+// Rounds contain many users
+// Users can play in many rounds
 User.belongsToMany(Round, { through: UserRound });
 Round.belongsToMany(User, { through: UserRound });
 
-// All possible words for a round
+// Rounds contain many words
+// Words can belong to diff rounds
 Word.belongsToMany(Round, { through: "roundWords" });
 Round.belongsToMany(Word, { through: "roundWords" });
 
-// Word.belongsToMany(UserRound, { through: GuessedWord });
-// UserRound.belongsToMany(Word, { through: GuessedWord });
-// GuessedWord.belongsTo(Word);
-// GuessedWord.belongsTo(UserRound);
-// Word.hasMany(GuessedWord);
-// UserRound.hasMany(GuessedWord);
+/* A user can guess many words in a particular round */
+/* A word can be guessed by many users */
+Word.belongsToMany(UserRound, { through: GuessedWord });
+UserRound.belongsToMany(Word, { through: GuessedWord });
 
-/** Instance methods here **/
+/** Class methods here **/
 
 Word.alphabetize = async function() {
   const words = await Word.findAll({ order: [["word", "ASC"]] });
@@ -44,6 +56,8 @@ Word.alphabetize = async function() {
   // something to sort according to first letter
   return words;
 };
+
+/** Instance methods here **/
 
 /**
  * We'll export all of our models here, so that any time a module needs a model,

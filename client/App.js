@@ -1,12 +1,31 @@
 import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
-import { registerRootComponent } from 'expo';
+import { StyleSheet, Text } from 'react-native';
+import { AppLoading, registerRootComponent } from 'expo';
+import { Container } from 'native-base';
+import * as Font from 'expo-font';
+import { Ionicons } from '@expo/vector-icons';
 
 export function App() {
+  const [isReady, setIsReady] = React.useState(false);
+
+  React.useEffect(() => {
+    async () => {
+      await Font.loadAsync({
+        Roboto: require('native-base/Fonts/Roboto.ttf'),
+        Roboto_medium: require('native-base/Fonts/Roboto_medium.ttf'),
+        ...Ionicons.font,
+      });
+    }
+    setIsReady(true)
+  });
+
+  if (!isReady) {
+    return <AppLoading/>
+  }
   return (
-    <View style={styles.container}>
+    <Container style={styles.container}>
       <Text>Hivemind!</Text>
-    </View>
+    </Container>
   );
 }
 

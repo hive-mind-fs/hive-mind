@@ -2,18 +2,22 @@
   "name": "hive-mind",
   "version": "2.0.0",
   "description": "We play boggle competitively",
+  "engines": {
+    "node": ">= 7.0.0"
+  },
   "main": "node_modules/expo/AppEntry.js",
   "scripts": {
-    "start": "expo start",
     "android": "expo start --android",
-    "ios": "expo start --ios",
-    "web": "expo start --web",
     "eject": "expo eject",
+    "ios": "expo start --ios",
     "lint": "eslint ./ --ignore-path .gitignore",
     "lint-fix": "npm run lint -- --fix",
+    "seed": "node script/seed.js",
+    "start": "expo start",
     "test": "npm run test-server & npm run test-client",
     "test-client": "jest",
-    "test-server": "NODE_ENV='test' mocha \"./server/**/*.spec.js\" \"./script/**/*.spec.js\" --require @babel/polyfill --require @babel/register"
+    "test-server": "NODE_ENV='test' mocha \"./server/**/*.spec.js\" \"./script/**/*.spec.js\" --require @babel/polyfill --require @babel/register",
+    "web": "expo start --web"
   },
   "jest": {
     "preset": "react-native"
@@ -32,6 +36,8 @@
   "dependencies": {
     "crypto": "^1.0.1",
     "expo": "~36.0.0",
+    "expo-font": "^8.0.0",
+    "native-base": "2.13.8",
     "pg": "^7.18.2",
     "pg-hstore": "^2.3.2",
     "react": "~16.9.0",
