@@ -4,6 +4,7 @@
  * having to figure out which file they belong to!
  */
 export { default as DashboardScreen } from './DashboardScreen';
+export { default as Game } from './Game';
 export { default as GameBoardScreen } from './GameBoardScreen';
 export { default as CountdownScreen } from './CountdownScreen';
 export { default as HiveScreen } from './HiveScreen';
