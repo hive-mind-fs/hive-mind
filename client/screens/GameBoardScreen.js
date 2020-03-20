@@ -59,7 +59,7 @@ const styles = StyleSheet.create({
   gameBoard: {
     flexDirection: 'row',
     justifyContent: 'space-around',
-    padding: 20px,
+    padding: 20,
     margin: 10
   },
   gameButtons: {
