@@ -4,6 +4,7 @@ import { Container } from 'native-base';
 import Hive from '../components/Hive';
 import Input from '../components/Input';
 import Error from '../components/Error';
+import RoundScore from '../components/RoundScore';
 import CorrectWords from '../components/CorrectWords';
 
 //shuffling algorithm: https://en.wikipedia.org/wiki/Fisher%E2%80%93Yates_shuffle#The_modern_algorithm
@@ -22,6 +23,7 @@ export default class GameBoardScreen extends Component {
     letters: ['B', 'C', 'H', 'K', 'N', 'U'],
     roundDict: ['ABACA', 'ABACK', 'ABAKA', 'ABBA', 'ANKH', 'ANNA', 'AUCUBA', 'BABA', 'BABKA', 'BABU', 'BACCA', 'BACH', 'BACK', 'BANANA', 'BANK', 'BUBBA', 'BUNA', 'CABANA', 'CACA', 'CACHUCHA', 'CANCAN', 'CANCHA', 'CANNA', 'CHABUK', 'CHACHKA', 'CHUKKA', 'HABU', 'HACK', 'HAHA', 'HAKU', 'HANK', 'HAUNCH', 'HUCKABACK', 'HUNCHBACK', 'KABAB', 'KABAKA', 'KAHUNA', 'KAKA', 'KANA', 'KANAKA', 'KANBAN', 'KHAN', 'KNACK', 'KUNA', 'NAAN', 'NANA', 'NUCHA', 'NUNCHAKU', 'UNAU', 'UNBAN'],
     correctWords: [],
+    score: 0,
     error: []
   };
 
@@ -30,8 +32,10 @@ export default class GameBoardScreen extends Component {
       <Container
         style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}
       >
-        <Text>Correct Words:</Text>
-        <CorrectWords words={this.state.correctWords} />
+        <Text>Score: </Text>
+        <RoundScore score={this.state.score} />
+        <Text>{this.state.correctWords.length} Correct Words:</Text>
+        <CorrectWords  words={this.state.correctWords} />
         <Error error={this.state.error} />
         <Input inputLetters={this.state.input} />
         <Hive
@@ -70,6 +74,7 @@ export default class GameBoardScreen extends Component {
               let roundDict = this.state.roundDict;
               let correctWords = this.state.correctWords;
               let error = this.state.error;
+              let wordLength = [...input].length;
               let word = [...input].join('');
               if (input.length < 4) {
                 input.length = 0;
@@ -79,6 +84,7 @@ export default class GameBoardScreen extends Component {
                 correctWords.length > 0 ? (word = ', ' + word) : null;
                 correctWords.push(word);
                 this.setState(correctWords);
+                this.setState({score: this.state.score + wordLength});
                 input.length = 0;
                 this.setState(input);
               } else {
