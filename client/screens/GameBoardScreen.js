@@ -59,11 +59,11 @@ const styles = StyleSheet.create({
   gameBoard: {
     flexDirection: 'row',
     justifyContent: 'space-around',
-    padding: '20px',
-    margin: '10'
+    padding: 20px,
+    margin: 10
   },
   gameButtons: {
-    paddingLeft: '10',
-    marginRight: '10'
+    paddingLeft: 10,
+    marginRight: 10
   }
 });
