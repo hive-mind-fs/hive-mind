@@ -11,7 +11,7 @@ letter: {
 }
 });
 
-const Hive = ({ inputLetters }) => {
+const Input = ({ inputLetters }) => {
   return (
     <View style={{ width: 300, height: 100 }}>
    <Text style={styles.letter}>{inputLetters}</Text>
@@ -19,4 +19,4 @@ const Hive = ({ inputLetters }) => {
   );
 };
 
-export default Hive;
+export default Input;
