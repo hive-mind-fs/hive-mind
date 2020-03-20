@@ -16,8 +16,10 @@ Create tests for associations
 
 /* One-to-one associations */
 // One game has one winner
+// A round has one winner
 // Winner as the accessor method instead of user
 Game.belongsTo(User, { as: "winner", foreignKey: "winnerId" });
+Round.belongsTo(User, { as: "winner", foreignKey: "winnerId" });
 
 /* One-to-many associations */
 
@@ -47,17 +49,6 @@ Round.belongsToMany(Word, { through: "roundWords" });
 /* A word can be guessed by many users */
 Word.belongsToMany(UserRound, { through: GuessedWord });
 UserRound.belongsToMany(Word, { through: GuessedWord });
-
-/** Class methods here **/
-
-Word.alphabetize = async function() {
-  const words = await Word.findAll({ order: [["word", "ASC"]] });
-
-  // something to sort according to first letter
-  return words;
-};
-
-/** Instance methods here **/
 
 /**
  * We'll export all of our models here, so that any time a module needs a model,

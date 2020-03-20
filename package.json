@@ -2,18 +2,22 @@
   "name": "hive-mind",
   "version": "2.0.0",
   "description": "We play boggle competitively",
+  "engines": {
+    "node": ">= 7.0.0"
+  },
   "main": "node_modules/expo/AppEntry.js",
   "scripts": {
-    "start": "expo start",
     "android": "expo start --android",
-    "ios": "expo start --ios",
-    "web": "expo start --web",
     "eject": "expo eject",
+    "ios": "expo start --ios",
     "lint": "eslint ./ --ignore-path .gitignore",
     "lint-fix": "npm run lint -- --fix",
+    "seed": "node script/seed.js",
+    "start": "expo start",
     "test": "npm run test-server & npm run test-client",
     "test-client": "jest",
-    "test-server": "NODE_ENV='test' mocha \"./server/**/*.spec.js\" \"./script/**/*.spec.js\" --require @babel/polyfill --require @babel/register"
+    "test-server": "NODE_ENV='test' mocha \"./server/**/*.spec.js\" \"./script/**/*.spec.js\" --require @babel/polyfill --require @babel/register",
+    "web": "expo start --web"
   },
   "jest": {
     "preset": "react-native"
@@ -30,6 +34,10 @@
     ]
   },
   "dependencies": {
+    "@react-native-community/masked-view": "^0.1.7",
+    "@react-navigation/native": "^5.1.1",
+    "@react-navigation/stack": "^5.2.2",
+    "axios": "^0.19.2",
     "crypto": "^1.0.1",
     "expo": "~36.0.0",
     "expo-font": "^8.0.0",
@@ -39,7 +47,16 @@
     "react": "~16.9.0",
     "react-dom": "~16.9.0",
     "react-native": "https://github.com/expo/react-native/archive/sdk-36.0.0.tar.gz",
+    "react-native-gesture-handler": "^1.6.0",
+    "react-native-reanimated": "^1.7.0",
+    "react-native-safe-area-context": "^0.7.3",
+    "react-native-screens": "^2.3.0",
     "react-native-web": "~0.11.7",
+    "react-redux": "^7.2.0",
+    "redux": "^4.0.5",
+    "redux-devtools-extension": "^2.13.8",
+    "redux-logger": "^3.0.6",
+    "redux-thunk": "^2.3.0",
     "sequelize": "^5.21.5"
   },
   "devDependencies": {
