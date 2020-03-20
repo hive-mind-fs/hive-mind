@@ -1,6 +1,6 @@
-const router = require("express").Router();
-const { Round, Word, User } = require("../db/models");
-const { isAdmin, isCorrectUser, isSession } = require("./gateway");
+const router = require('express').Router();
+const { Round, Word, User, UserRound, GuessedWord } = require('../db/models');
+const { isAdmin, isCorrectUser, isSession } = require('./gateway');
 
 module.exports = router;
 
@@ -14,11 +14,21 @@ module.exports = router;
 
 // userRounds --
 // userRoundWords --
-router.get("/:id", async (req, res, next) => {
+router.get('/:id', async (req, res, next) => {
   try {
-    const rounds = req.params.id;
-    await Round.findByPk(+req.params.id, {
-      include: [{ model: Word }]
+    const rounds = await Round.findByPk(+req.params.id, {
+      attributes: [
+        'id',
+        'letters',
+        'coreLetter',
+        'gameDate',
+        'winnerId',
+        'gameId'
+      ],
+      include: [
+        { model: Word, attributes: ['id', 'word'] },
+        { model: UserRound, include: [{ model: Word }] }
+      ]
     });
     res.json(rounds);
   } catch (err) {
@@ -26,7 +36,7 @@ router.get("/:id", async (req, res, next) => {
   }
 });
 
-router.get("/", async (req, res, next) => {
+router.get('/', async (req, res, next) => {
   try {
     const rounds = await Round.findAll({
       include: [{ model: Word }]
@@ -39,10 +49,10 @@ router.get("/", async (req, res, next) => {
 
 // post round info to db
 // create a new entry in user rounds on POST
-router.post("/", async (req, res, next) => {
+router.post('/', async (req, res, next) => {
   try {
     const round = req.body;
-    console.log("round was passed", round);
+    console.log('round was passed', round);
   } catch (err) {
     next(err);
   }
