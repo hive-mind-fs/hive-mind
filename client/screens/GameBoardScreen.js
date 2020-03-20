@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Button, StyleSheet, View, Card, CardItem, Text } from 'react-native';
+import { Button, StyleSheet, View, Text } from 'react-native';
 import { Container } from 'native-base';
 import Hive from '../components/Hive';
 import Input from '../components/Input';
@@ -29,7 +29,7 @@ export default class GameBoardScreen extends Component {
       <Container
         style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}
       >
-      <Text>Correct Words:</Text>
+        <Text>Correct Words:</Text>
         <CorrectWords words={this.state.correctWords} />
         <Error error={this.state.error} />
         <Input inputLetters={this.state.input} />
@@ -68,8 +68,8 @@ export default class GameBoardScreen extends Component {
               let input = this.state.input;
               let correctWords = this.state.correctWords;
               if (input.length >= 4) {
-                let word = [...input].join('')
-                correctWords.length > 0 ? word = ', ' + word : null;
+                let word = [...input].join('');
+                correctWords.length > 0 ? (word = ', ' + word) : null;
                 correctWords.push(word);
                 this.setState(correctWords);
                 input.length = 0;
