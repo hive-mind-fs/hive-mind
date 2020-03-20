@@ -1,27 +1,35 @@
-import { Text, View } from 'native-base';
+import { Button, Text } from 'native-base';
 import React from 'react';
+import { StyleSheet } from 'react-native';
 import Svg, { Polygon } from 'react-native-svg';
 
-const HiveShape = ({ top, left, fill, letter }) => {
+const styles = StyleSheet.create({
+  letterButton: {
+    backgroundColor: 'transparent',
+    position: 'absolute',
+    width: '40%',
+    height: '33%',
+    justifyContent: 'center',
+    alignItems: 'center'
+  },
+  hexagon: { width: '100%', height: '100%' },
+  letter: {
+    position: 'absolute',
+    textAlign: 'center',
+    fontSize: 40,
+    fontWeight: 'bold'
+  }
+});
+
+const HiveShape = ({ top, left, fill, letter, onLetterPress }) => {
   return (
     <Button
       onPress={() => {
-        console.log('HELLO');
+        onLetterPress(letter);
       }}
-      style={{
-        position: 'absolute',
-        top: top,
-        left: left,
-        width: '40%',
-        height: '33%',
-        justifyContent: 'center',
-        alignItems: 'center'
-      }}
+      style={{ ...styles.letterButton, top: top, left: left }}
     >
-      <Svg
-        viewBox="0 0 120 103.92304845413263"
-        style={{ width: '100%', height: '100%' }}
-      >
+      <Svg viewBox="0 0 120 103.92304845413263" style={styles.hexagon}>
         <Polygon
           class="cell-fill"
           points="0,51.96152422706631 30,0 90,0 120,51.96152422706631 90,103.92304845413263 30,103.92304845413263"
@@ -30,16 +38,7 @@ const HiveShape = ({ top, left, fill, letter }) => {
           style={{ fill: fill }}
         ></Polygon>
       </Svg>
-      <Text
-        style={{
-          position: 'absolute',
-          textAlign: 'center',
-          fontSize: 40,
-          fontWeight: 'bold'
-        }}
-      >
-        {letter}
-      </Text>
+      <Text style={styles.letter}>{letter}</Text>
     </Button>
   );
 };

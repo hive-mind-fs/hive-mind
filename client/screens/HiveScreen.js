@@ -7,7 +7,13 @@ export default function HiveScreen({ navigation }) {
     <Container
       style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}
     >
-      <Hive centerLetter="A" otherLetters={['B', 'C', 'D', 'E', 'F', 'G']} />
+      <Hive
+        centerLetter="A"
+        otherLetters={['B', 'C', 'D', 'E', 'F', 'G']}
+        onLetterPress={letter => {
+          console.log(letter);
+        }}
+      />
     </Container>
   );
 }
