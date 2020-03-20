@@ -11,12 +11,12 @@ const styles = StyleSheet.create({
   }
 });
 
-const CorrectWords = ({ words }) => {
+const RoundScore = ({ score }) => {
   return (
-    <View style={{ width: 300, height: 20 }}>
-      <Text style={styles.letter}>{words}</Text>
+    <View style={{ width: 10, height: 20 }}>
+      <Text style={styles.letter}>{score}</Text>
     </View>
   );
 };
 
-export default CorrectWords;
+export default RoundScore;
