@@ -3,8 +3,7 @@ import { Button, StyleSheet, View } from 'react-native';
 import { Container } from 'native-base';
 import Hive from '../components/Hive';
 import Input from '../components/Input';
-
-// const wordsGot = ['this', 'team', 'is', 'poppin'];
+import Error from '../components/Error';
 
 //shuffling algorithm: https://en.wikipedia.org/wiki/Fisher%E2%80%93Yates_shuffle#The_modern_algorithm
 const shuffle = arr => {
@@ -19,7 +18,9 @@ export default class GameBoardScreen extends Component {
   state = {
     input: [],
     cl: 'A',
-    letters: ['B', 'C', 'D', 'E', 'F', 'G']
+    letters: ['B', 'C', 'D', 'E', 'F', 'G'],
+    correctWords: [],
+    error: []
   };
 
   render() {
@@ -27,6 +28,7 @@ export default class GameBoardScreen extends Component {
       <Container
         style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}
       >
+        <Error error={this.state.error} />
         <Input inputLetters={this.state.input} />
         <Hive
           centerLetter={this.state.cl}
@@ -38,15 +40,40 @@ export default class GameBoardScreen extends Component {
           }}
         />
         <View style={styles.flexRow}>
-          <Button title="Delete" onPress={() => input.pop()} />
-          <Button title="Shuffle" onPress={() => {
-            let letters = this.state.letters;
-            letters = shuffle(letters);
-            this.setState(letters);
+          <Button title="Delete" onPress={() => {
+            let input = this.state.input;
+            input.pop();
+            this.setState(input)
             }} />
           <Button
+            title="Shuffle"
+            onPress={() => {
+              let error = this.state.error;
+              error.length > 0 ? error.length = 0 : null;
+              this.setState(error);
+              let letters = this.state.letters;
+              letters = shuffle(letters);
+              this.setState(letters);
+            }}
+          />
+          <Button
             title="Enter"
-            onPress={() => navigation.navigate('DashboardScreen')}
+            onPress={() => {
+              let input = this.state.input;
+              if (input.length > 4) {
+                let word = [...input].join('');
+                let correctWords = this.state.correctWords;
+                correctWords.push(word);
+                this.setState(correctWords);
+                input.length = 0;
+                this.setState(input);
+              } else {
+                input.length = 0;
+                let error = this.state.error;
+                error.push('your word is too short');
+                this.setState(error);
+              }
+            }}
           />
         </View>
       </Container>
