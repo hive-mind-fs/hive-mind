@@ -42,6 +42,7 @@ Round.belongsToMany(User, { through: UserRound });
 
 // Rounds contain many words
 // Words can belong to diff rounds
+// All possible words for a round
 Word.belongsToMany(Round, { through: "roundWords" });
 Round.belongsToMany(Word, { through: "roundWords" });
 
