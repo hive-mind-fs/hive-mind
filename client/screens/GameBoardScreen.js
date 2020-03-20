@@ -4,9 +4,19 @@ import { Body, Card, CardItem, Container, Left, Right } from 'native-base';
 import Hive from '../components/Hive';
 import Input from '../components/Input';
 
-const wordsGot = ['this', 'team', 'is', 'poppin'];
-const letters = ['a', 'b', 'c', 'd', 'e', 'f', 'g'];
-const input = ['a'];
+// const wordsGot = ['this', 'team', 'is', 'poppin'];
+const cl = 'A'
+const letters = ['B', 'C', 'D', 'E', 'F', 'G'];
+const input = [];
+
+//shuffling algorithm: https://en.wikipedia.org/wiki/Fisher%E2%80%93Yates_shuffle#The_modern_algorithm
+const shuffle = (arr) => {
+  for (let i = arr.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [arr[i], arr[j]] = [arr[j], arr[i]];
+  }
+  return arr;
+};
 
 export default function GameBoardScreen({ navigation }) {
   return (
@@ -15,8 +25,8 @@ export default function GameBoardScreen({ navigation }) {
     >
     <Input inputLetters={input} />
       <Hive
-        centerLetter="A"
-        otherLetters={['B', 'C', 'D', 'E', 'F', 'G']}
+        centerLetter={cl}
+        otherLetters={letters}
         onLetterPress={letter => {
           input.push(letter);
         }}
@@ -28,7 +38,7 @@ export default function GameBoardScreen({ navigation }) {
         />
         <Button
           title="Shuffle"
-          onPress={() => navigation.navigate('DashboardScreen')}
+          onPress={() => shuffle(letters)}
         />
         <Button
           title="Enter"
