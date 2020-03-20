@@ -316,7 +316,7 @@ describe("Word >-< UserRound Association", () => {
   });
 
   describe("Word magic methods", () => {
-    it("Each word can be used in many user rounds", async () => {
+    it.only("Each word can be used in many user rounds", async () => {
       const word = await Word.create({
         word: "panagram"
       });
