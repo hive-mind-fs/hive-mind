@@ -38,32 +38,37 @@ async function seed() {
   }
 
   //Seed the roundWords thru table
-  //Create round with real letters
-  const round51 = await Round.create({
-    letters: 'ABCHKNU',
-    coreLetter: 'A',
-    gameDate: new Date()
-  });
+    //Create round with real letters
+    const round51 = await Round.create({
+      letters: 'ABCHKNU',
+      coreLetter: 'A',
+      gameDate: new Date()
+    });
+    let game51 = await Game.findByPk(51);
+    await game51.setWinner(1);
+    await game51.addRound(round51);
+    let user1 = await User.findByPk(1);
+    await round51.setWinner(user1);
 
-  for (let i = 1; i <= 50; i++) {
+  for (let i = 1; i <= 51; i++) {
     let word = await Word.findByPk(i);
     await round51.addWords(word);
   }
 
   //Seed userRounds thru table
-  const round2 = await Round.findByPk(2);
-  const user1 = await User.findByPk(1);
   const user2 = await User.findByPk(2);
-  await round2.addUsers([user1, user2]);
+  await round51.addUsers([user1, user2]);
 
   //Seed UserRoundWords thru table aka "GuessedWords"
   //Start by defining which users were in which rounds.
   await UserRound.bulkCreate([
-    { userId: 3, roundId: 3 } //This UserRound will get id 3
+    { userId: 1, roundId: 50 } //This UserRound will get id 3
   ]);
 
-  // Now specify words.
-  await GuessedWord.bulkCreate([{ wordId: 3, userRoundId: 3 }]);
+  // Seedeing a user who guessed all words in a round
+  for (let i = 1; i <= 50; i++) {
+  await GuessedWord.bulkCreate([{ wordId: i, userRoundId: 1 }]);
+}
 }
 
 // We've separated the `seed` function from the `runSeed` function.
