@@ -1,9 +1,10 @@
 import axios from 'axios';
 
+// I just setup the outline. Need to talk through actual defaultState and actions to see what's best.
+
 /**
  * INITIAL STATE
  */
-// Tbh not sure if this is right, feel free to edit
 const defaultGame = {
     gameStatus: 'countdown',
     round: {}

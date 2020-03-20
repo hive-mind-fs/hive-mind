@@ -2,7 +2,6 @@ import React from 'react';
 import { Button } from 'react-native';
 import { Container, Thumbnail } from 'native-base';
 import { Logo } from '../components';
-// const logo = require('../assets/bee-logo.jpg');
 
 export default function LandingScreen({ navigation }) {
   return (
