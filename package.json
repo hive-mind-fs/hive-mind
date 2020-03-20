@@ -17,6 +17,7 @@
     "start-server": "nodemon server -e html,js,scss --ignore public --ignore client",
     "test": "npm run test-server & npm run test-client",
     "test-client": "jest",
+    "test-server": "NODE_ENV='test' mocha \"./server/**/*.spec.js\" \"./script/**/*.spec.js\" --require @babel/polyfill --require @babel/register",
     "web": "expo start --web"
   },
   "jest": {
