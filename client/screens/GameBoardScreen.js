@@ -34,6 +34,9 @@ export default class GameBoardScreen extends Component {
           centerLetter={this.state.cl}
           otherLetters={this.state.letters}
           onLetterPress={letter => {
+            let error = this.state.error;
+              error.length > 0 ? error.pop() : null;
+              this.setState(error);
             let input = this.state.input;
             input.push(letter);
             this.setState(input);
@@ -43,14 +46,11 @@ export default class GameBoardScreen extends Component {
           <Button title="Delete" onPress={() => {
             let input = this.state.input;
             input.pop();
-            this.setState(input)
+            this.setState(input);
             }} />
           <Button
             title="Shuffle"
             onPress={() => {
-              let error = this.state.error;
-              error.length > 0 ? error.length = 0 : null;
-              this.setState(error);
               let letters = this.state.letters;
               letters = shuffle(letters);
               this.setState(letters);
