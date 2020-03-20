@@ -2,7 +2,7 @@
 
 const db = require('../server/db');
 
-const { User, Round, Game, Word } = require('../server/db/models');
+const { User, Round, Game, Word, UserRound, GuessedWord } = require('../server/db/models');
 
 const dummyUsers = require('../server/db/dummyData/dummyUsers.js');
 const dummyRounds = require('../server/db/dummyData/dummyRounds.js');
@@ -16,7 +16,6 @@ async function seed() {
   await Game.bulkCreate(dummyGames);
 
   //seed associations
-  try {
     for (let i = 1; i <= 50; i++) {
       //A game can have many rounds
       let game = await Game.findByPk(i);
@@ -30,12 +29,12 @@ async function seed() {
     }
 
     //Seed the roundWords thru table
-    const round1 = await Round.findByPk(1)
+    const round1 = await Round.findByPk(1);
     await round1.addWords([
-      await Word.create({ word: "WORDONE" }),
-      await Word.create({ word: "WORDTWO" }),
-      await Word.create({ word: "WORDTHREE" }),
-      await Word.create({ word: "WORDFOUR" })
+      await Word.create({ word: 'WORDONE' }),
+      await Word.create({ word: 'WORDTWO' }),
+      await Word.create({ word: 'WORDTHREE' }),
+      await Word.create({ word: 'WORDFOUR' })
     ]);
 
     //Seed userRounds thru table
@@ -44,14 +43,21 @@ async function seed() {
     const user2 = await User.findByPk(2);
     await round2.addUsers([user1, user2]);
 
+    //Seed UserRoundWords thru table aka "GuessedWords"
+    // const user3 = await User.findByPk(3);
+    // const round3 = await Round.findByPk(3);
+    // const word3 = await Word.findByPk(3);
 
+    //Start by defining which users were in which rounds.
+    await UserRound.bulkCreate([
+      { userId: 3, roundId: 3 }, //This UserRound will get id 3
+    ]);
 
-    console.log(`seeded successfully`);
-
-  } catch (error) {
-    console.log(error);
+    // Now specify words.
+    await GuessedWord.bulkCreate([
+      { wordId: 3, userRoundId: 3 },
+    ]);
   }
-}
 
 // We've separated the `seed` function from the `runSeed` function.
 // This way we can isolate the error handling and exit trapping.
