@@ -9,11 +9,7 @@ export default function CountdownScreen({ navigation }) {
     if (countdownTimer > 0) {
       // Update countdownTimer state
       setTimeout(() => {
-        if (countdownTimer === 1) {
-          setCountdownTimer('Go!')
-        } else {
-          setCountdownTimer(countdownTimer - 1)
-        }
+        setCountdownTimer(countdownTimer === 1 ? 'Go!' : countdownTimer - 1)
       }, 1000)
     } else {
       // Redirect to GameBoard
