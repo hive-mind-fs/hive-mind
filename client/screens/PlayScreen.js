@@ -5,10 +5,12 @@ import { Logo } from '../components';
 
 export default function PlayScreen({ navigation }) {
   return (
-    <Container style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-        <Logo/>
-        <Text>Spelling Bee</Text>
-        <Text>How many words can you make with 7 letters?</Text>
+    <Container
+      style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}
+    >
+      <Logo />
+      <Text>Spelling Bee</Text>
+      <Text>How many words can you make with 7 letters?</Text>
       <Button
         title="Start Playing"
         onPress={() => navigation.navigate('CountdownScreen')}
