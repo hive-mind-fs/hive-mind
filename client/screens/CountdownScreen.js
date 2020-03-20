@@ -7,6 +7,7 @@ export default function CountdownScreen({ navigation }) {
 
   useEffect(() => {
     if (countdownTimer > 0) {
+      // Update countdownTimer state
       setTimeout(() => {
         if (countdownTimer === 1) {
           setCountdownTimer('Go!')
@@ -15,6 +16,7 @@ export default function CountdownScreen({ navigation }) {
         }
       }, 1000)
     } else {
+      // Redirect to GameBoard
       setTimeout(() => {
         navigation.navigate("GameBoardScreen")
       }, 1000)
