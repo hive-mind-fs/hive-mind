@@ -1,38 +1,26 @@
 import React from 'react';
 import { Button, Text, StyleSheet, View } from 'react-native';
 import { Body, Card, CardItem, Container, Left, Right } from 'native-base';
+import Hive from '../components/Hive';
+import Input from '../components/Input';
 
 const wordsGot = ['this', 'team', 'is', 'poppin'];
 const letters = ['a', 'b', 'c', 'd', 'e', 'f', 'g'];
+const input = ['a'];
 
 export default function GameBoardScreen({ navigation }) {
-
   return (
     <Container
       style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}
     >
-      <Text>Time 5:00 - Score 25</Text>
-
-      <Card>
-        <CardItem header bordered>
-          <Text>Words Got</Text>
-        </CardItem>
-        {wordsGot.map(word => (
-          <CardItem key={word}>
-            <Text>{word}</Text>
-          </CardItem>
-        ))}
-      </Card>
-      <View style={styles.gameBoard}>
-        {letters.map(letter => (
-          <Button
-            style={styles.gameButtons}
-            key={letter}
-            title={letter}
-            onPress={() => navigation.navigate('')}
-          />
-        ))}
-      </View>
+    <Input inputLetters={input} />
+      <Hive
+        centerLetter="A"
+        otherLetters={['B', 'C', 'D', 'E', 'F', 'G']}
+        onLetterPress={letter => {
+          input.push(letter);
+        }}
+      />
       <View style={styles.flexRow}>
         <Button
           title="Delete"
