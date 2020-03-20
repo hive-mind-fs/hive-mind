@@ -19,7 +19,8 @@ export default class GameBoardScreen extends Component {
   state = {
     input: [],
     cl: 'A',
-    letters: ['B', 'C', 'D', 'E', 'F', 'G'],
+    letters: ['B', 'C', 'H', 'K', 'N', 'U'],
+    roundDict: ['ABACA', 'ABACK', 'ABAKA', 'ABBA', 'ANKH', 'ANNA', 'AUCUBA', 'BABA', 'BABKA', 'BABU', 'BACCA', 'BACH', 'BACK', 'BANANA', 'BANK', 'BUBBA', 'BUNA', 'CABANA', 'CACA', 'CACHUCHA', 'CANCAN', 'CANCHA', 'CANNA', 'CHABUK', 'CHACHKA', 'CHUKKA', 'HABU', 'HACK', 'HAHA', 'HAKU', 'HANK', 'HAUNCH', 'HUCKABACK', 'HUNCHBACK', 'KABAB', 'KABAKA', 'KAHUNA', 'KAKA', 'KANA', 'KANAKA', 'KANBAN', 'KHAN', 'KNACK', 'KUNA', 'NAAN', 'NANA', 'NUCHA', 'NUNCHAKU', 'UNAU', 'UNBAN'],
     correctWords: [],
     error: []
   };
@@ -66,9 +67,15 @@ export default class GameBoardScreen extends Component {
             title="Enter"
             onPress={() => {
               let input = this.state.input;
+              let roundDict = this.state.roundDict;
               let correctWords = this.state.correctWords;
-              if (input.length >= 4) {
-                let word = [...input].join('');
+              let error = this.state.error;
+              let word = [...input].join('');
+              if (input.length < 4) {
+                input.length = 0;
+                error.push('your word is too short');
+                this.setState(error);
+              } else if ( (input.length >= 4) && (roundDict.indexOf(word) > -1) ) {
                 correctWords.length > 0 ? (word = ', ' + word) : null;
                 correctWords.push(word);
                 this.setState(correctWords);
@@ -76,8 +83,7 @@ export default class GameBoardScreen extends Component {
                 this.setState(input);
               } else {
                 input.length = 0;
-                let error = this.state.error;
-                error.push('your word is too short');
+                error.push('your word is not in our dictionary');
                 this.setState(error);
               }
             }}
