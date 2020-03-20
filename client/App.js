@@ -12,6 +12,7 @@ import {
   DashboardScreen,
   Game,
   GameBoardScreen,
+  HiveScreen,
   LandingScreen,
   LoginScreen,
   PlayScreen,
@@ -49,6 +50,7 @@ export function App() {
           <Stack.Screen name="CountdownScreen" component={CountdownScreen} />
           <Stack.Screen name="Game" component={Game} />
           <Stack.Screen name="GameBoardScreen" component={GameBoardScreen} />
+          <Stack.Screen name="HiveScreen" component={HiveScreen} />
           <Stack.Screen name="LandingScreen" component={LandingScreen} />
           <Stack.Screen name="LoginScreen" component={LoginScreen} />
           <Stack.Screen name="PlayScreen" component={PlayScreen} />
