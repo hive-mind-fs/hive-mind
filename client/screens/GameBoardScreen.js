@@ -24,7 +24,7 @@ export default function GameBoardScreen({ navigation }) {
       <View style={styles.flexRow}>
         <Button
           title="Delete"
-          onPress={() => navigation.navigate('DashboardScreen')}
+          onPress={() => input.pop()}
         />
         <Button
           title="Shuffle"
