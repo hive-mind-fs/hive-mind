@@ -4,7 +4,10 @@ import Svg, { Polygon } from 'react-native-svg';
 
 const HiveShape = ({ top, left, fill, letter }) => {
   return (
-    <View
+    <Button
+      onPress={() => {
+        console.log('HELLO');
+      }}
       style={{
         position: 'absolute',
         top: top,
@@ -37,7 +40,7 @@ const HiveShape = ({ top, left, fill, letter }) => {
       >
         {letter}
       </Text>
-    </View>
+    </Button>
   );
 };
 
