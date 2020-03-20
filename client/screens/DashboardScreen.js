@@ -1,5 +1,5 @@
 import React from 'react';
-import { Button, Text } from 'react-native';
+import { Button, Text, View } from 'react-native';
 import { Container, Icon, Left, List, ListItem, Right } from 'native-base';
 
 const screens = [
@@ -8,6 +8,7 @@ const screens = [
   'SignupScreen',
   'CountdownScreen',
   'GameBoardScreen',
+  'HiveScreen',
   'PlayScreen',
   'PostRoundScreen',
   'ProfileScreen',
@@ -20,7 +21,6 @@ export default function DashboardScreen({ navigation }) {
       style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}
     >
       <Text>Home Screen</Text>
-
       <List>
         <Text>This is to get the screens to show up:</Text>
         {screens.map(screen => (
