@@ -29,6 +29,7 @@ export default class GameBoardScreen extends Component {
       <Container
         style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}
       >
+      <Text>Correct Words:</Text>
         <CorrectWords words={this.state.correctWords} />
         <Error error={this.state.error} />
         <Input inputLetters={this.state.input} />
