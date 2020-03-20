@@ -6,6 +6,7 @@ const wordsGot = ['this', 'team', 'is', 'poppin'];
 const letters = ['a', 'b', 'c', 'd', 'e', 'f', 'g'];
 
 export default function GameBoardScreen({ navigation }) {
+  
   return (
     <Container
       style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}

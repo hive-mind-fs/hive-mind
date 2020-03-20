@@ -10,6 +10,7 @@ import { Provider } from 'react-redux';
 import {
   CountdownScreen,
   DashboardScreen,
+  Game,
   GameBoardScreen,
   LandingScreen,
   LoginScreen,
@@ -46,6 +47,7 @@ export function App() {
         <Stack.Navigator>
           <Stack.Screen name="DashboardScreen" component={DashboardScreen} />
           <Stack.Screen name="CountdownScreen" component={CountdownScreen} />
+          <Stack.Screen name="Game" component={Game} />
           <Stack.Screen name="GameBoardScreen" component={GameBoardScreen} />
           <Stack.Screen name="LandingScreen" component={LandingScreen} />
           <Stack.Screen name="LoginScreen" component={LoginScreen} />
