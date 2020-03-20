@@ -11,7 +11,7 @@ const styles = StyleSheet.create({
   }
 });
 
-const RoundScore= ({ score }) => {
+const RoundScore = ({ score }) => {
   return (
     <View style={{ width: 10, height: 20 }}>
       <Text style={styles.letter}>{score}</Text>

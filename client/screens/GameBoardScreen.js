@@ -34,7 +34,7 @@ export default class GameBoardScreen extends Component {
       >
         <Text>Score: </Text>
         <RoundScore score={this.state.score} />
-        <Text>{this.state.correctWords.length} Correct Words:</Text>
+        <Text>You've found {this.state.correctWords.length} correct Words:</Text>
         <CorrectWords  words={this.state.correctWords} />
         <Error error={this.state.error} />
         <Input inputLetters={this.state.input} />
@@ -84,7 +84,7 @@ export default class GameBoardScreen extends Component {
                 correctWords.length > 0 ? (word = ', ' + word) : null;
                 correctWords.push(word);
                 this.setState(correctWords);
-                this.setState({score: this.state.score + wordLength});
+                this.setState({score: this.state.score += wordLength});
                 input.length = 0;
                 this.setState(input);
               } else {
