@@ -1,14 +1,14 @@
-import React from "react";
-import { Button, Text, StyleSheet, View } from "react-native";
-import { Body, Card, CardItem, Container, Left, Right } from "native-base";
+import React from 'react';
+import { Button, Text, StyleSheet, View } from 'react-native';
+import { Body, Card, CardItem, Container, Left, Right } from 'native-base';
 
-const wordsGot = ["this", "team", "is", "poppin"];
-const letters = ["a", "b", "c", "d", "e", "f", "g"];
+const wordsGot = ['this', 'team', 'is', 'poppin'];
+const letters = ['a', 'b', 'c', 'd', 'e', 'f', 'g'];
 
 export default function GameBoardScreen({ navigation }) {
   return (
     <Container
-      style={{ flex: 1, alignItems: "center", justifyContent: "center" }}
+      style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}
     >
       <Text>Time 5:00 - Score 25</Text>
 
@@ -28,23 +28,23 @@ export default function GameBoardScreen({ navigation }) {
             style={styles.gameButtons}
             key={letter}
             title={letter}
-            onPress={() => navigation.navigate("")}
+            onPress={() => navigation.navigate('')}
           />
         ))}
-        <hr/>
+        <hr />
       </View>
       <View style={styles.flexRow}>
         <Button
           title="Delete"
-          onPress={() => navigation.navigate("Dashboard")}
+          onPress={() => navigation.navigate('DashboardScreen')}
         />
         <Button
           title="Shuffle"
-          onPress={() => navigation.navigate("Dashboard")}
+          onPress={() => navigation.navigate('DashboardScreen')}
         />
         <Button
           title="Enter"
-          onPress={() => navigation.navigate("Dashboard")}
+          onPress={() => navigation.navigate('DashboardScreen')}
         />
       </View>
     </Container>
@@ -53,17 +53,17 @@ export default function GameBoardScreen({ navigation }) {
 
 const styles = StyleSheet.create({
   flexRow: {
-    flexDirection: "row",
-    justifyContent: "space-around"
+    flexDirection: 'row',
+    justifyContent: 'space-around'
   },
   gameBoard: {
-      flexDirection: "row",
-      justifyContent: "space-around",
-      padding: "20px",
-      margin: "10"
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+    padding: '20px',
+    margin: '10'
   },
   gameButtons: {
-      paddingLeft: "10",
-      marginRight: "10"
+    paddingLeft: '10',
+    marginRight: '10'
   }
 });

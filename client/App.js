@@ -1,12 +1,12 @@
-import "react-native-gesture-handler";
-import React from "react";
-import { View, StyleSheet, Text, Button } from "react-native";
-import { AppLoading, registerRootComponent } from "expo";
-import { Container } from "native-base";
-import * as Font from "expo-font";
-import { Ionicons } from "@expo/vector-icons";
-import { NavigationContainer } from "@react-navigation/native";
-import { createStackNavigator } from "@react-navigation/stack";
+import { Ionicons } from '@expo/vector-icons';
+import { NavigationContainer } from '@react-navigation/native';
+import { createStackNavigator } from '@react-navigation/stack';
+import { AppLoading, registerRootComponent } from 'expo';
+import * as Font from 'expo-font';
+import React from 'react';
+import { StyleSheet } from 'react-native';
+import 'react-native-gesture-handler';
+import { Provider } from 'react-redux';
 import {
   CountdownScreen,
   DashboardScreen,
@@ -18,7 +18,8 @@ import {
   ProfileScreen,
   RulesScreen,
   SignupScreen
-} from "./screens";
+} from './screens';
+import store from './store/store';
 
 const Stack = createStackNavigator();
 
@@ -28,8 +29,8 @@ export function App() {
   React.useEffect(() => {
     async () => {
       await Font.loadAsync({
-        Roboto: require("native-base/Fonts/Roboto.ttf"),
-        Roboto_medium: require("native-base/Fonts/Roboto_medium.ttf"),
+        Roboto: require('native-base/Fonts/Roboto.ttf'),
+        Roboto_medium: require('native-base/Fonts/Roboto_medium.ttf'),
         ...Ionicons.font
       });
     };
@@ -40,29 +41,31 @@ export function App() {
     return <AppLoading />;
   }
   return (
-    <NavigationContainer>
-      <Stack.Navigator>
-        <Stack.Screen name="DashboardScreen" component={DashboardScreen} />
-        <Stack.Screen name="CountdownScreen" component={CountdownScreen} />
-        <Stack.Screen name="GameBoardScreen" component={GameBoardScreen} />
-        <Stack.Screen name="LandingScreen" component={LandingScreen} />
-        <Stack.Screen name="LoginScreen" component={LoginScreen} />
-        <Stack.Screen name="PlayScreen" component={PlayScreen} />
-        <Stack.Screen name="PostRoundScreen" component={PostRoundScreen} />
-        <Stack.Screen name="ProfileScreen" component={ProfileScreen} />
-        <Stack.Screen name="RulesScreen" component={RulesScreen} />
-        <Stack.Screen name="SignupScreen" component={SignupScreen} />
-      </Stack.Navigator>
-    </NavigationContainer>
+    <Provider store={store}>
+      <NavigationContainer>
+        <Stack.Navigator>
+          <Stack.Screen name="DashboardScreen" component={DashboardScreen} />
+          <Stack.Screen name="CountdownScreen" component={CountdownScreen} />
+          <Stack.Screen name="GameBoardScreen" component={GameBoardScreen} />
+          <Stack.Screen name="LandingScreen" component={LandingScreen} />
+          <Stack.Screen name="LoginScreen" component={LoginScreen} />
+          <Stack.Screen name="PlayScreen" component={PlayScreen} />
+          <Stack.Screen name="PostRoundScreen" component={PostRoundScreen} />
+          <Stack.Screen name="ProfileScreen" component={ProfileScreen} />
+          <Stack.Screen name="RulesScreen" component={RulesScreen} />
+          <Stack.Screen name="SignupScreen" component={SignupScreen} />
+        </Stack.Navigator>
+      </NavigationContainer>
+    </Provider>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#fff",
-    alignItems: "center",
-    justifyContent: "center"
+    backgroundColor: '#fff',
+    alignItems: 'center',
+    justifyContent: 'center'
   }
 });
 

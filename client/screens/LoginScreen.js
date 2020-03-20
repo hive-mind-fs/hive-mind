@@ -4,11 +4,13 @@ import { Container } from 'native-base';
 
 export default function LoginScreen({ navigation }) {
   return (
-    <Container style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-        <Text>Login</Text>
+    <Container
+      style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}
+    >
+      <Text>Login</Text>
       <Button
         title="Go to Dashboard"
-        onPress={() => navigation.navigate('Dashboard')}
+        onPress={() => navigation.navigate('DashboardScreen')}
       />
     </Container>
   );
