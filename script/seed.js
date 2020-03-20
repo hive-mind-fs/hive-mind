@@ -7,6 +7,7 @@ const { User, Round, Game, Word, UserRound, GuessedWord } = require('../server/d
 const dummyUsers = require('../server/db/dummyData/dummyUsers.js');
 const dummyRounds = require('../server/db/dummyData/dummyRounds.js');
 const dummyGames = require('../server/db/dummyData/dummyGames.js');
+const dummyWords = require('../server/db/dummyData/dummyWords.js');
 
 async function seed() {
   await db.sync({ force: true });
@@ -14,6 +15,7 @@ async function seed() {
   await User.bulkCreate(dummyUsers);
   await Round.bulkCreate(dummyRounds);
   await Game.bulkCreate(dummyGames);
+  await Word.bulkCreate(dummyWords);
 
   //seed associations
     for (let i = 1; i <= 50; i++) {
@@ -44,10 +46,6 @@ async function seed() {
     await round2.addUsers([user1, user2]);
 
     //Seed UserRoundWords thru table aka "GuessedWords"
-    // const user3 = await User.findByPk(3);
-    // const round3 = await Round.findByPk(3);
-    // const word3 = await Word.findByPk(3);
-
     //Start by defining which users were in which rounds.
     await UserRound.bulkCreate([
       { userId: 3, roundId: 3 }, //This UserRound will get id 3
