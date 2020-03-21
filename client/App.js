@@ -7,6 +7,7 @@ import React from 'react';
 import { StyleSheet } from 'react-native';
 import 'react-native-gesture-handler';
 import { Provider } from 'react-redux';
+import { Nav, Stats } from './components'
 import {
   CountdownScreen,
   DashboardScreen,
@@ -58,6 +59,8 @@ export function App() {
           <Stack.Screen name="ProfileScreen" component={ProfileScreen} />
           <Stack.Screen name="RulesScreen" component={RulesScreen} />
           <Stack.Screen name="SignupScreen" component={SignupScreen} />
+          <Stack.Screen name="Nav" component={Nav} />
+          <Stack.Screen name="Stats" component={Stats} />
         </Stack.Navigator>
       </NavigationContainer>
     </Provider>
