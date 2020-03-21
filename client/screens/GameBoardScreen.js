@@ -95,10 +95,6 @@ export default class GameBoardScreen extends Component {
     this.tick();
   }
 
-  componentWillUnmount() {
-    clearInterval(this.tick);
-  }
-
   tick = () => {
     if (this.state.gameTimer > 0) {
       // Update gameTimer state
@@ -123,6 +119,7 @@ export default class GameBoardScreen extends Component {
       <Container
         style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}
       >
+        <Text>{ this.state.gameTimer === 0 ? 'Round Over!' : `Time: ${minutes}:${seconds}`}</Text>
         <Text>
           Score: {this.state.score} Rank: {this.state.rank}
         </Text>
