@@ -75,6 +75,7 @@ export default class GameBoardScreen extends Component {
               let roundDict = this.state.roundDict;
               let correctWords = this.state.correctWords;
               let error = this.state.error;
+              let score = this.state.score;
               let panagramList = this.state.panagramList;
               let wordLength = [...input].length;
               let word = [...input].join('');
@@ -86,7 +87,7 @@ export default class GameBoardScreen extends Component {
                 correctWords.length > 0 ? (word = ', ' + word) : null;
                 correctWords.push(word);
                 this.setState(correctWords);
-                panagramList.indexOf(word) > -1 ? this.setState({score: this.state.score += (wordLength + 4)}) : this.setState({score: this.state.score += (wordLength - 3)});
+                panagramList.indexOf(word) > -1 ? this.setState({score: score += (wordLength + 4)}) : this.setState({score: score += (wordLength - 3)});
                 input.length = 0;
                 this.setState(input);
               } else {
