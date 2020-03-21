@@ -4,7 +4,6 @@ import { Container } from 'native-base';
 import Hive from '../components/Hive';
 import Input from '../components/Input';
 import Error from '../components/Error';
-import RoundScore from '../components/RoundScore';
 import CorrectWords from '../components/CorrectWords';
 
 //shuffling algorithm: https://en.wikipedia.org/wiki/Fisher%E2%80%93Yates_shuffle#The_modern_algorithm
@@ -33,8 +32,7 @@ export default class GameBoardScreen extends Component {
       <Container
         style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}
       >
-        <Text>Score: </Text>
-        <RoundScore score={this.state.score} />
+        <Text>Score: {this.state.score}</Text>
         <Text>You've found {this.state.correctWords.length} correct Words:</Text>
         <CorrectWords  words={this.state.correctWords} />
         <Error error={this.state.error} />
