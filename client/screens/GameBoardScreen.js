@@ -19,8 +19,9 @@ const shuffle = arr => {
 export default class GameBoardScreen extends Component {
   state = {
     input: [],
-    cl: 'A',
     letters: ['B', 'C', 'H', 'K', 'N', 'U'],
+    cl: 'A',
+    panagramList: ["HUNCHBACK"],
     roundDict: ['ABACA', 'ABACK', 'ABAKA', 'ABBA', 'ANKH', 'ANNA', 'AUCUBA', 'BABA', 'BABKA', 'BABU', 'BACCA', 'BACH', 'BACK', 'BANANA', 'BANK', 'BUBBA', 'BUNA', 'CABANA', 'CACA', 'CACHUCHA', 'CANCAN', 'CANCHA', 'CANNA', 'CHABUK', 'CHACHKA', 'CHUKKA', 'HABU', 'HACK', 'HAHA', 'HAKU', 'HANK', 'HAUNCH', 'HUCKABACK', 'HUNCHBACK', 'KABAB', 'KABAKA', 'KAHUNA', 'KAKA', 'KANA', 'KANAKA', 'KANBAN', 'KHAN', 'KNACK', 'KUNA', 'NAAN', 'NANA', 'NUCHA', 'NUNCHAKU', 'UNAU', 'UNBAN'],
     correctWords: [],
     score: 0,
@@ -74,6 +75,7 @@ export default class GameBoardScreen extends Component {
               let roundDict = this.state.roundDict;
               let correctWords = this.state.correctWords;
               let error = this.state.error;
+              let panagramList = this.state.panagramList;
               let wordLength = [...input].length;
               let word = [...input].join('');
               if (input.length < 4) {
@@ -84,7 +86,7 @@ export default class GameBoardScreen extends Component {
                 correctWords.length > 0 ? (word = ', ' + word) : null;
                 correctWords.push(word);
                 this.setState(correctWords);
-                this.setState({score: this.state.score += wordLength});
+                panagramList.indexOf(word) > -1 ? this.setState({score: this.state.score += (wordLength + 4)}) : this.setState({score: this.state.score += (wordLength - 3)});
                 input.length = 0;
                 this.setState(input);
               } else {
