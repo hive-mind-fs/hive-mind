@@ -31,3 +31,8 @@ To debug in the iOS simulator:
 ⌘ + D
 Debug Remote JS
 ```
+
+# Scoring
+4-letter words are worth 1 point each.
+Longer words earn 1 point per letter.
+Each puzzle includes at least one “pangram” which uses every letter. These are worth 7 extra points!
