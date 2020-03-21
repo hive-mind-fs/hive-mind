@@ -8,6 +8,7 @@ const screens = [
   'SignupScreen',
   'CountdownScreen',
   'Game',
+  'Nav',
   'GameBoardScreen',
   'HiveScreen',
   'PlayScreen',

@@ -15,13 +15,14 @@ const defaultGame = {
  * ACTION TYPES
  */
 const SET_GAME_STATUS = 'SET_GAME_STATUS';
-
+const START_ROUND = 'GET_ROUND';
 
 /**
  * ACTION CREATORS
  */
 const setGameStatus = gameStatus => ({ type: SET_GAME_STATUS, gameStatus });
 
+const startRound = round => ({ type: START_ROUND, round })
 
 /**
  * THUNK CREATORS
@@ -32,6 +33,14 @@ export const setGameStatusThunk = gameStatus => async dispatch => {
     } catch (err) {
         console.error(err);
     }
+};
+
+export const startRoundThunk = () => async dispatch => {
+  try {
+      dispatch(startRound);
+  } catch (err) {
+      console.error(err);
+  }
 };
 
 
