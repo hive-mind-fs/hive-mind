@@ -16,47 +16,103 @@ const shuffle = arr => {
 };
 
 export default class GameBoardScreen extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      input: [],
-      letters: ['B', 'C', 'H', 'K', 'N', 'U'],
-      cl: 'A',
-      panagramList: ["HUNCHBACK"],
-      roundDict: ['ABACA', 'ABACK', 'ABAKA', 'ABBA', 'ANKH', 'ANNA', 'AUCUBA', 'BABA', 'BABKA', 'BABU', 'BACCA', 'BACH', 'BACK', 'BANANA', 'BANK', 'BUBBA', 'BUNA', 'CABANA', 'CACA', 'CACHUCHA', 'CANCAN', 'CANCHA', 'CANNA', 'CHABUK', 'CHACHKA', 'CHUKKA', 'HABU', 'HACK', 'HAHA', 'HAKU', 'HANK', 'HAUNCH', 'HUCKABACK', 'HUNCHBACK', 'KABAB', 'KABAKA', 'KAHUNA', 'KAKA', 'KANA', 'KANAKA', 'KANBAN', 'KHAN', 'KNACK', 'KUNA', 'NAAN', 'NANA', 'NUCHA', 'NUNCHAKU', 'UNAU', 'UNBAN'],
-      correctWords: [],
-      score: 0,
-      error: [],
-      gameTimer: 300
-    };
-  }
+  state = {
+    input: [],
+    letters: ['B', 'C', 'H', 'K', 'N', 'U'],
+    cl: 'A',
+    panagramList: ['HUNCHBACK'],
+    roundDict: [
+      'ABACA',
+      'ABACK',
+      'ABAKA',
+      'ABBA',
+      'ANKH',
+      'ANNA',
+      'AUCUBA',
+      'BABA',
+      'BABKA',
+      'BABU',
+      'BACCA',
+      'BACH',
+      'BACK',
+      'BANANA',
+      'BANK',
+      'BUBBA',
+      'BUNA',
+      'CABANA',
+      'CACA',
+      'CACHUCHA',
+      'CANCAN',
+      'CANCHA',
+      'CANNA',
+      'CHABUK',
+      'CHACHKA',
+      'CHUKKA',
+      'HABU',
+      'HACK',
+      'HAHA',
+      'HAKU',
+      'HANK',
+      'HAUNCH',
+      'HUCKABACK',
+      'HUNCHBACK',
+      'KABAB',
+      'KABAKA',
+      'KAHUNA',
+      'KAKA',
+      'KANA',
+      'KANAKA',
+      'KANBAN',
+      'KHAN',
+      'KNACK',
+      'KUNA',
+      'NAAN',
+      'NANA',
+      'NUCHA',
+      'NUNCHAKU',
+      'UNAU',
+      'UNBAN'
+    ],
+    correctWords: [],
+    score: 0,
+    rank: 'Beginner',
+    rankings: [
+      'Beginner',
+      'Good Start',
+      'Moving Up',
+      'Good',
+      'Solid',
+      'Nice',
+      'Great',
+      'Amazing',
+      'Genius'
+    ],
+    error: [],
+    gameTimer: 300
+  };
 
   componentDidMount() {
     this.tick();
-  }
-
-  componentWillUnmount() {
-    clearInterval(this.tick)
   }
 
   tick = () => {
     if (this.state.gameTimer > 0) {
       // Update gameTimer state
       setTimeout(() => {
-        this.setState({gameTimer: this.state.gameTimer - 1})
+        this.setState({ gameTimer: this.state.gameTimer - 1 });
         this.tick();
-      }, 1000)
+      }, 1000);
     } else {
       // Redirect to PostRound
       setTimeout(() => {
-        this.props.navigation.navigate("PostRoundScreen")
-      }, 1000)
+        this.props.navigation.navigate('PostRoundScreen');
+      }, 1000);
     }
-  }
+  };
 
-  render() {  
+  render() {
     let minutes = Math.floor(this.state.gameTimer / 60);
-    let secondsCalc = this.state.gameTimer - (minutes * 60);
+    let secondsCalc = this.state.gameTimer - minutes * 60;
     let seconds = secondsCalc <= 9 ? '0' + secondsCalc : secondsCalc;
 
     return (
@@ -64,9 +120,18 @@ export default class GameBoardScreen extends Component {
         style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}
       >
         <Text>{ this.state.gameTimer === 0 ? 'Round Over!' : `Time: ${minutes}:${seconds}`}</Text>
-        <Text>Score: {this.state.score}</Text>
-        <Text>You've found {this.state.correctWords.length} correct Words:</Text>
-        <CorrectWords  words={this.state.correctWords} />
+        <Text>
+          Score: {this.state.score} Rank: {this.state.rank}
+        </Text>
+        <Text>
+          You've found {this.state.correctWords.length} correct Words:
+        </Text>
+        <CorrectWords words={this.state.correctWords} />
+        <Text>
+          {this.state.gameTimer === 0
+            ? 'Round Over!'
+            : `Time: ${minutes}:${seconds}`}
+        </Text>
         <Error error={this.state.error} />
         <Input inputLetters={this.state.input} />
         <Hive
@@ -106,25 +171,80 @@ export default class GameBoardScreen extends Component {
               let correctWords = this.state.correctWords;
               let error = this.state.error;
               let score = this.state.score;
+              let rank = this.state.rank;
+              let rankings = this.state.rankings;
               let panagramList = this.state.panagramList;
               let wordLength = [...input].length;
               let word = [...input].join('');
+
+              //Clear error message everytime enter is pressed
+              error.length > 0 ? error.pop() : null;
+              this.setState(error);
+
+              // Too short word logic
               if (input.length < 4) {
                 input.length = 0;
                 error.push('your word is too short');
                 this.setState(error);
-              } else if ( (input.length >= 4) && (roundDict.indexOf(word) > -1) ) {
+              }
+              // Correct word logic
+              else if (input.length >= 4 && roundDict.indexOf(word) > -1) {
                 correctWords.length > 0 ? (word = ', ' + word) : null;
                 correctWords.push(word);
                 this.setState(correctWords);
-                panagramList.indexOf(word) > -1 ? this.setState({score: score += (wordLength + 4)}) : this.setState({score: score += (wordLength - 3)});
+
+                //Scoring Logic
+                wordLength === 4
+                  ? this.setState({ score: (score += wordLength - 3) })
+                  : panagramList.indexOf(word) > -1 && wordLength > 4
+                  ? this.setState({ score: (score += wordLength + 7) })
+                  : this.setState({ score: (score += wordLength) });
+
                 input.length = 0;
                 this.setState(input);
-              } else {
+              }
+              // Incorect word logic
+              else {
                 input.length = 0;
                 error.push('your word is not in our dictionary');
                 this.setState(error);
               }
+              //Ranking Logic
+              // Convert round dictionary into array of points for each word
+              const possiblePoints = roundDict
+                .map(i =>
+                  i.length === 4
+                    ? 1
+                    : panagramList.indexOf(i) > -1
+                    ? i.length + 7
+                    : i.length
+                )
+                .reduce((a, b) => a + b, 0);
+
+              //Change ranking
+              let x = 0;
+              let shareOfTotal = (score / possiblePoints) * 100;
+              shareOfTotal < 2.5
+                ? (x = 0)
+                : shareOfTotal > 2.5 && shareOfTotal < 5
+                ? (x = 1)
+                : shareOfTotal > 5 && shareOfTotal < 10
+                ? (x = 2)
+                : shareOfTotal > 10 && shareOfTotal < 15
+                ? (x = 3)
+                : shareOfTotal > 15 && shareOfTotal < 25
+                ? (x = 4)
+                : shareOfTotal > 25 && shareOfTotal < 40
+                ? (x = 5)
+                : shareOfTotal > 40 && shareOfTotal < 55
+                ? (x = 6)
+                : shareOfTotal > 55 && shareOfTotal < 75
+                ? (x = 7)
+                : shareOfTotal > 75
+                ? (x = 8)
+                : null;
+
+              this.setState({ rank: rankings[x] });
             }}
           />
         </View>
