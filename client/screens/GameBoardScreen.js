@@ -20,10 +20,73 @@ export default class GameBoardScreen extends Component {
     input: [],
     letters: ['B', 'C', 'H', 'K', 'N', 'U'],
     cl: 'A',
-    panagramList: ["HUNCHBACK"],
-    roundDict: ['ABACA', 'ABACK', 'ABAKA', 'ABBA', 'ANKH', 'ANNA', 'AUCUBA', 'BABA', 'BABKA', 'BABU', 'BACCA', 'BACH', 'BACK', 'BANANA', 'BANK', 'BUBBA', 'BUNA', 'CABANA', 'CACA', 'CACHUCHA', 'CANCAN', 'CANCHA', 'CANNA', 'CHABUK', 'CHACHKA', 'CHUKKA', 'HABU', 'HACK', 'HAHA', 'HAKU', 'HANK', 'HAUNCH', 'HUCKABACK', 'HUNCHBACK', 'KABAB', 'KABAKA', 'KAHUNA', 'KAKA', 'KANA', 'KANAKA', 'KANBAN', 'KHAN', 'KNACK', 'KUNA', 'NAAN', 'NANA', 'NUCHA', 'NUNCHAKU', 'UNAU', 'UNBAN'],
+    panagramList: ['HUNCHBACK'],
+    roundDict: [
+      'ABACA',
+      'ABACK',
+      'ABAKA',
+      'ABBA',
+      'ANKH',
+      'ANNA',
+      'AUCUBA',
+      'BABA',
+      'BABKA',
+      'BABU',
+      'BACCA',
+      'BACH',
+      'BACK',
+      'BANANA',
+      'BANK',
+      'BUBBA',
+      'BUNA',
+      'CABANA',
+      'CACA',
+      'CACHUCHA',
+      'CANCAN',
+      'CANCHA',
+      'CANNA',
+      'CHABUK',
+      'CHACHKA',
+      'CHUKKA',
+      'HABU',
+      'HACK',
+      'HAHA',
+      'HAKU',
+      'HANK',
+      'HAUNCH',
+      'HUCKABACK',
+      'HUNCHBACK',
+      'KABAB',
+      'KABAKA',
+      'KAHUNA',
+      'KAKA',
+      'KANA',
+      'KANAKA',
+      'KANBAN',
+      'KHAN',
+      'KNACK',
+      'KUNA',
+      'NAAN',
+      'NANA',
+      'NUCHA',
+      'NUNCHAKU',
+      'UNAU',
+      'UNBAN'
+    ],
     correctWords: [],
     score: 0,
+    rank: [],
+    rankings: [
+      'Beginner',
+      'Good Start',
+      'Moving Up',
+      'Good',
+      'Solid',
+      'Nice',
+      'Great',
+      'Amazing',
+      'Genius'
+    ],
     error: []
   };
 
@@ -32,9 +95,13 @@ export default class GameBoardScreen extends Component {
       <Container
         style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}
       >
-        <Text>Score: {this.state.score}</Text>
-        <Text>You've found {this.state.correctWords.length} correct Words:</Text>
-        <CorrectWords  words={this.state.correctWords} />
+        <Text>
+          Score: {this.state.score} Rank: {this.state.rank}
+        </Text>
+        <Text>
+          You've found {this.state.correctWords.length} correct Words:
+        </Text>
+        <CorrectWords words={this.state.correctWords} />
         <Error error={this.state.error} />
         <Input inputLetters={this.state.input} />
         <Hive
@@ -77,18 +144,39 @@ export default class GameBoardScreen extends Component {
               let panagramList = this.state.panagramList;
               let wordLength = [...input].length;
               let word = [...input].join('');
+              //Clear error message everytime enter is pressed
+              error.length > 0 ? error.pop() : null;
+              this.setState(error);
+              // Too short word logic
               if (input.length < 4) {
                 input.length = 0;
                 error.push('your word is too short');
                 this.setState(error);
-              } else if ( (input.length >= 4) && (roundDict.indexOf(word) > -1) ) {
+              }
+              // Correct word logic
+              else if (input.length >= 4 && roundDict.indexOf(word) > -1) {
                 correctWords.length > 0 ? (word = ', ' + word) : null;
                 correctWords.push(word);
                 this.setState(correctWords);
-                wordLength === 4 ? this.setState({score: score += (wordLength - 3)}) : ((panagramList.indexOf(word) > -1) && (wordLength > 4)) ? this.setState({score: score += (wordLength + 7)}) : this.setState({score: score += wordLength});
+
+                //Scoring Logic
+                wordLength === 4
+                  ? this.setState({ score: (score += wordLength - 3) })
+                  : panagramList.indexOf(word) > -1 && wordLength > 4
+                  ? this.setState({ score: (score += wordLength + 7) })
+                  : this.setState({ score: (score += wordLength) });
+
+                //Ranking Logic
+                let sortedDict = roundDict.sort(function(a, b) {
+                  return b.length - a.length;
+                });
+                console.log(sortedDict);
+
                 input.length = 0;
                 this.setState(input);
-              } else {
+              }
+              // Incorect word logic
+              else {
                 input.length = 0;
                 error.push('your word is not in our dictionary');
                 this.setState(error);
