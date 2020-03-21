@@ -144,9 +144,11 @@ export default class GameBoardScreen extends Component {
               let panagramList = this.state.panagramList;
               let wordLength = [...input].length;
               let word = [...input].join('');
+
               //Clear error message everytime enter is pressed
               error.length > 0 ? error.pop() : null;
               this.setState(error);
+
               // Too short word logic
               if (input.length < 4) {
                 input.length = 0;
@@ -166,12 +168,6 @@ export default class GameBoardScreen extends Component {
                   ? this.setState({ score: (score += wordLength + 7) })
                   : this.setState({ score: (score += wordLength) });
 
-                //Ranking Logic
-                let sortedDict = roundDict.sort(function(a, b) {
-                  return b.length - a.length;
-                });
-                console.log(sortedDict);
-
                 input.length = 0;
                 this.setState(input);
               }
@@ -181,6 +177,10 @@ export default class GameBoardScreen extends Component {
                 error.push('your word is not in our dictionary');
                 this.setState(error);
               }
+               //Ranking Logic
+              const possiblePoints = roundDict.map(i => i.length === 4 ? 1 : panagramList.indexOf(i) > -1 ? i.length + 7 : i.length).reduce((a, b) => a + b, 0);
+              console.log(possiblePoints);
+
             }}
           />
         </View>
