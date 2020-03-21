@@ -193,6 +193,11 @@ export default class GameBoardScreen extends Component {
                 error.push('Your word must contain the center letter.');
                 this.setState(error);
               }
+              else if(correctWords.includes(word)){
+                input.length = 0;
+                error.push('Youve already found this word');
+                this.setState(error);
+              }
               else if (input.length >= 4 && roundDict.indexOf(word) > -1) {
                 correctWords.length > 0 ? (word = ', ' + word) : null;
                 correctWords.push(word);
