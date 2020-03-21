@@ -16,22 +16,54 @@ const shuffle = arr => {
 };
 
 export default class GameBoardScreen extends Component {
-  state = {
-    input: [],
-    letters: ['B', 'C', 'H', 'K', 'N', 'U'],
-    cl: 'A',
-    panagramList: ["HUNCHBACK"],
-    roundDict: ['ABACA', 'ABACK', 'ABAKA', 'ABBA', 'ANKH', 'ANNA', 'AUCUBA', 'BABA', 'BABKA', 'BABU', 'BACCA', 'BACH', 'BACK', 'BANANA', 'BANK', 'BUBBA', 'BUNA', 'CABANA', 'CACA', 'CACHUCHA', 'CANCAN', 'CANCHA', 'CANNA', 'CHABUK', 'CHACHKA', 'CHUKKA', 'HABU', 'HACK', 'HAHA', 'HAKU', 'HANK', 'HAUNCH', 'HUCKABACK', 'HUNCHBACK', 'KABAB', 'KABAKA', 'KAHUNA', 'KAKA', 'KANA', 'KANAKA', 'KANBAN', 'KHAN', 'KNACK', 'KUNA', 'NAAN', 'NANA', 'NUCHA', 'NUNCHAKU', 'UNAU', 'UNBAN'],
-    correctWords: [],
-    score: 0,
-    error: []
-  };
+  constructor(props) {
+    super(props);
+    this.state = {
+      input: [],
+      letters: ['B', 'C', 'H', 'K', 'N', 'U'],
+      cl: 'A',
+      panagramList: ["HUNCHBACK"],
+      roundDict: ['ABACA', 'ABACK', 'ABAKA', 'ABBA', 'ANKH', 'ANNA', 'AUCUBA', 'BABA', 'BABKA', 'BABU', 'BACCA', 'BACH', 'BACK', 'BANANA', 'BANK', 'BUBBA', 'BUNA', 'CABANA', 'CACA', 'CACHUCHA', 'CANCAN', 'CANCHA', 'CANNA', 'CHABUK', 'CHACHKA', 'CHUKKA', 'HABU', 'HACK', 'HAHA', 'HAKU', 'HANK', 'HAUNCH', 'HUCKABACK', 'HUNCHBACK', 'KABAB', 'KABAKA', 'KAHUNA', 'KAKA', 'KANA', 'KANAKA', 'KANBAN', 'KHAN', 'KNACK', 'KUNA', 'NAAN', 'NANA', 'NUCHA', 'NUNCHAKU', 'UNAU', 'UNBAN'],
+      correctWords: [],
+      score: 0,
+      error: [],
+      gameTimer: 300
+    };
+  }
 
-  render() {
+  componentDidMount() {
+    this.tick();
+  }
+
+  componentWillUnmount() {
+    clearInterval(this.tick)
+  }
+
+  tick = () => {
+    if (this.state.gameTimer > 0) {
+      // Update gameTimer state
+      setTimeout(() => {
+        this.setState({gameTimer: this.state.gameTimer - 1})
+        this.tick();
+      }, 1000)
+    } else {
+      // Redirect to PostRound
+      setTimeout(() => {
+        this.props.navigation.navigate("PostRoundScreen")
+      }, 1000)
+    }
+  }
+
+  render() {  
+    let minutes = Math.floor(this.state.gameTimer / 60);
+    let secondsCalc = this.state.gameTimer - (minutes * 60);
+    let seconds = secondsCalc <= 9 ? '0' + secondsCalc : secondsCalc;
+
     return (
       <Container
         style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}
       >
+        <Text>{ this.state.gameTimer === 0 ? 'Round Over!' : `Time: ${minutes}:${seconds}`}</Text>
         <Text>Score: {this.state.score}</Text>
         <Text>You've found {this.state.correctWords.length} correct Words:</Text>
         <CorrectWords  words={this.state.correctWords} />
