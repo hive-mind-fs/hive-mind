@@ -7,13 +7,13 @@ import {
   Right,
 } from 'native-base';
 
-export default function Stats(props) {
-  console.log('PROPS', props)
+export default function Stats(props, {navigation}) {
+  // const navigation = props.navigation;
   return (
     <List>
         {props.stats.map((item, index) => (
             <ListItem key={index} 
-            // onPress={() => props.navigation.navigate('DashboardScreen')}
+            // onPress={() => navigation.navigate('DashboardScreen')}
             >
                 <Left>
                     <Text>{ item.title }</Text>

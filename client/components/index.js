@@ -4,5 +4,4 @@
  * having to figure out which file they belong to!
  */
 export {default as Logo} from './Logo';
-export {default as Nav} from './Nav';
 export {default as Stats} from './Stats';

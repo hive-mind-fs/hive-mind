@@ -1,7 +1,7 @@
 import React from 'react';
 import { Button, Text } from 'react-native';
 import { Container, H1, Tab, Tabs, TabHeading } from 'native-base';
-import { Stats, Logo, Nav } from '../components';
+import { Stats, Logo } from '../components';
 
 export default function ProfileScreen({ navigation }) {
 
@@ -43,17 +43,16 @@ export default function ProfileScreen({ navigation }) {
       <H1>Username</H1>
       <Tabs>
           <Tab heading={ <TabHeading><Text>Stats</Text></TabHeading>}>
-            <Stats stats={stats} navigaton={ navigation }/>
+            <Stats stats={stats}/>
           </Tab>
           <Tab heading={ <TabHeading><Text>Game Log</Text></TabHeading>}>
-            <Stats stats={games} navigaton={ navigation }/>
+            <Stats stats={games}/>
           </Tab>
         </Tabs>
       <Button
         title="Logout"
         onPress={() => navigation.navigate('DashboardScreen')}
       />
-      {/* <Nav navigaton={ navigation } active='profile' /> */}
     </Container>
   );
 }

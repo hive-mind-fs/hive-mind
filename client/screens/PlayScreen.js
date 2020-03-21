@@ -1,7 +1,7 @@
 import React from 'react';
 import { Button, Text } from 'react-native';
 import { Container, H1 } from 'native-base';
-import { Logo, Nav } from '../components';
+import { Logo } from '../components';
 
 export default function PlayScreen({ navigation }) {
   return (
@@ -17,7 +17,6 @@ export default function PlayScreen({ navigation }) {
         title="Rules"
         onPress={() => navigation.navigate('RulesScreen')}
       />
-      {/* <Nav navigation={ navigation } active='play' /> */}
     </Container>
   );
 }
