@@ -179,25 +179,42 @@ export default class GameBoardScreen extends Component {
                 error.push('your word is not in our dictionary');
                 this.setState(error);
               }
-               //Ranking Logic
+              //Ranking Logic
               // Convert round dictionary into array of points for each word
-              const possiblePoints = roundDict.map(i => i.length === 4 ? 1 : panagramList.indexOf(i) > -1 ? i.length + 7 : i.length).reduce((a, b) => a + b, 0);
+              const possiblePoints = roundDict
+                .map(i =>
+                  i.length === 4
+                    ? 1
+                    : panagramList.indexOf(i) > -1
+                    ? i.length + 7
+                    : i.length
+                )
+                .reduce((a, b) => a + b, 0);
 
               //Change ranking
               let x = 0;
-              let shareOfTotal = (score/possiblePoints)*100;
-              shareOfTotal < 2.5 ? x = 0 :
-              shareOfTotal > 2.5 && shareOfTotal < 5 ? x = 1 :
-              shareOfTotal > 5 && shareOfTotal < 10 ? x = 2 :
-              shareOfTotal > 10 && shareOfTotal < 15 ? x = 3 :
-              shareOfTotal > 15 && shareOfTotal < 25 ? x = 4 :
-              shareOfTotal > 25 && shareOfTotal < 40 ? x = 5 :
-              shareOfTotal > 40 && shareOfTotal < 55 ? x = 6 :
-              shareOfTotal > 55 && shareOfTotal < 75 ? x = 7 :
-              shareOfTotal > 75 ? x = 8 : null;
+              let shareOfTotal = (score / possiblePoints) * 100;
+              shareOfTotal < 2.5
+                ? (x = 0)
+                : shareOfTotal > 2.5 && shareOfTotal < 5
+                ? (x = 1)
+                : shareOfTotal > 5 && shareOfTotal < 10
+                ? (x = 2)
+                : shareOfTotal > 10 && shareOfTotal < 15
+                ? (x = 3)
+                : shareOfTotal > 15 && shareOfTotal < 25
+                ? (x = 4)
+                : shareOfTotal > 25 && shareOfTotal < 40
+                ? (x = 5)
+                : shareOfTotal > 40 && shareOfTotal < 55
+                ? (x = 6)
+                : shareOfTotal > 55 && shareOfTotal < 75
+                ? (x = 7)
+                : shareOfTotal > 75
+                ? (x = 8)
+                : null;
 
-              this.setState({rank: rankings[x]});
-
+              this.setState({ rank: rankings[x] });
             }}
           />
         </View>
