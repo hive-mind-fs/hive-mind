@@ -85,7 +85,7 @@ export default class GameBoardScreen extends Component {
                 correctWords.length > 0 ? (word = ', ' + word) : null;
                 correctWords.push(word);
                 this.setState(correctWords);
-                panagramList.indexOf(word) > -1 ? this.setState({score: score += (wordLength + 4)}) : this.setState({score: score += (wordLength - 3)});
+                wordLength === 4 ? this.setState({score: score += (wordLength - 3)}) : ((panagramList.indexOf(word) > -1) && (wordLength > 4)) ? this.setState({score: score += (wordLength + 7)}) : this.setState({score: score += wordLength});
                 input.length = 0;
                 this.setState(input);
               } else {
