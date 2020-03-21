@@ -75,7 +75,7 @@ export default class GameBoardScreen extends Component {
     ],
     correctWords: [],
     score: 0,
-    rank: [],
+    rank: 'Beginner',
     rankings: [
       'Beginner',
       'Good Start',
@@ -141,6 +141,8 @@ export default class GameBoardScreen extends Component {
               let correctWords = this.state.correctWords;
               let error = this.state.error;
               let score = this.state.score;
+              let rank = this.state.rank;
+              let rankings = this.state.rankings;
               let panagramList = this.state.panagramList;
               let wordLength = [...input].length;
               let word = [...input].join('');
@@ -178,8 +180,23 @@ export default class GameBoardScreen extends Component {
                 this.setState(error);
               }
                //Ranking Logic
+              // Convert round dictionary into array of points for each word
               const possiblePoints = roundDict.map(i => i.length === 4 ? 1 : panagramList.indexOf(i) > -1 ? i.length + 7 : i.length).reduce((a, b) => a + b, 0);
-              console.log(possiblePoints);
+
+              //Change ranking
+              let x = 0;
+              let shareOfTotal = (score/possiblePoints)*100;
+              shareOfTotal < 2.5 ? x = 0 :
+              shareOfTotal > 2.5 && shareOfTotal < 5 ? x = 1 :
+              shareOfTotal > 5 && shareOfTotal < 10 ? x = 2 :
+              shareOfTotal > 10 && shareOfTotal < 15 ? x = 3 :
+              shareOfTotal > 15 && shareOfTotal < 25 ? x = 4 :
+              shareOfTotal > 25 && shareOfTotal < 40 ? x = 5 :
+              shareOfTotal > 40 && shareOfTotal < 55 ? x = 6 :
+              shareOfTotal > 55 && shareOfTotal < 75 ? x = 7 :
+              shareOfTotal > 75 ? x = 8 : null;
+
+              this.setState({rank: rankings[x]});
 
             }}
           />
