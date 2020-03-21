@@ -87,10 +87,38 @@ export default class GameBoardScreen extends Component {
       'Amazing',
       'Genius'
     ],
-    error: []
+    error: [],
+    gameTimer: 300
+  };
+
+  componentDidMount() {
+    this.tick();
+  }
+
+  componentWillUnmount() {
+    clearInterval(this.tick);
+  }
+
+  tick = () => {
+    if (this.state.gameTimer > 0) {
+      // Update gameTimer state
+      setTimeout(() => {
+        this.setState({ gameTimer: this.state.gameTimer - 1 });
+        this.tick();
+      }, 1000);
+    } else {
+      // Redirect to PostRound
+      setTimeout(() => {
+        this.props.navigation.navigate('PostRoundScreen');
+      }, 1000);
+    }
   };
 
   render() {
+    let minutes = Math.floor(this.state.gameTimer / 60);
+    let secondsCalc = this.state.gameTimer - minutes * 60;
+    let seconds = secondsCalc <= 9 ? '0' + secondsCalc : secondsCalc;
+
     return (
       <Container
         style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}
@@ -102,6 +130,11 @@ export default class GameBoardScreen extends Component {
           You've found {this.state.correctWords.length} correct Words:
         </Text>
         <CorrectWords words={this.state.correctWords} />
+        <Text>
+          {this.state.gameTimer === 0
+            ? 'Round Over!'
+            : `Time: ${minutes}:${seconds}`}
+        </Text>
         <Error error={this.state.error} />
         <Input inputLetters={this.state.input} />
         <Hive
