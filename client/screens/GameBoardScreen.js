@@ -184,10 +184,15 @@ export default class GameBoardScreen extends Component {
               // Too short word logic
               if (input.length < 4) {
                 input.length = 0;
-                error.push('your word is too short');
+                error.push('Your word is too short');
                 this.setState(error);
               }
               // Correct word logic
+              else if(!word.includes(this.state.cl)){
+                input.length = 0;
+                error.push('Your word must contain the center letter.');
+                this.setState(error);
+              }
               else if (input.length >= 4 && roundDict.indexOf(word) > -1) {
                 correctWords.length > 0 ? (word = ', ' + word) : null;
                 correctWords.push(word);
