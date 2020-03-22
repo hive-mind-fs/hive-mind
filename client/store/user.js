@@ -11,10 +11,12 @@ const defaultUser = {};
 const getUser = user => ({ type: GET_USER, user });
 const removeUser = () => ({ type: REMOVE_USER });
 
+const BASE_URL = 'http://localhost:8080';
+
 // Thunk creators
 export const me = () => async dispatch => {
   try {
-    const res = await axios.get('/auth/me');
+    const res = await axios.get(`${BASE_URL}/auth/me`);
     dispatch(getUser(res.data || defaultUser));
   } catch (e) {
     console.error(e);
@@ -24,7 +26,10 @@ export const me = () => async dispatch => {
 export const auth = (email, password, method) => async dispatch => {
   let res;
   try {
-    res = await axios.post(`/auth/${method}`, { email, password });
+    res = await axios.post(`${BASE_URL}/auth/${method}`, {
+      email,
+      password
+    });
   } catch (e) {
     return dispatch(getUser({ error: e }));
   }
@@ -38,7 +43,7 @@ export const auth = (email, password, method) => async dispatch => {
 
 export const logout = () => async dispatch => {
   try {
-    await axios.post('/auth/logout');
+    await axios.post(`${BASE_URL}/auth/logout`);
     dispatch(removeUser());
   } catch (e) {
     console.error(e);

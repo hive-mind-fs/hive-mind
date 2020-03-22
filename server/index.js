@@ -62,6 +62,10 @@ const createApp = () => {
     }
   });
 
+  app.get('/ping', (req, res) => {
+    res.send('ping');
+  });
+
   // sends index.html
   app.use('*', (req, res) => {
     res.sendFile(path.join(__dirname, '..', 'public/index.html'));
