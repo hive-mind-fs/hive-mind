@@ -1,7 +1,7 @@
-const Sequelize = require("sequelize");
-const db = require("../db");
+const Sequelize = require('sequelize');
+const db = require('../db');
 
-const Round = db.define("round", {
+const Round = db.define('round', {
   letters: {
     type: Sequelize.STRING,
     allowNull: false
@@ -24,9 +24,9 @@ const Round = db.define("round", {
 
 const alphabetizeLetters = round => {
   round.letters = round.letters
-    .split("")
+    .split('')
     .sort()
-    .join("");
+    .join('');
 };
 
 Round.beforeCreate(alphabetizeLetters);
@@ -34,5 +34,16 @@ Round.beforeUpdate(alphabetizeLetters);
 Round.beforeBulkCreate(Round => {
   Round.forEach(alphabetizeLetters);
 });
+
+/**
+ * Class Methods
+ **/
+
+Round.getRandom = async function() {
+  const round = await Round.findOne({
+    order: [Sequelize.fn('RANDOM')]
+  });
+  return round;
+};
 
 module.exports = Round;

@@ -14,6 +14,25 @@ module.exports = router;
 
 // userRounds --
 // userRoundWords --
+router.get('/', async (req, res, next) => {
+  try {
+    const one = req.query.one;
+    let rounds;
+    if (one === 'true') {
+      rounds = await Round.getRandom({
+        include: [{ model: Word, attributes: ['id', 'word'] }]
+      });
+    } else {
+      rounds = await Round.findAll({
+        include: [{ model: Word, attributes: ['id', 'word'] }]
+      });
+    }
+    res.json(rounds);
+  } catch (err) {
+    next(err);
+  }
+});
+
 router.get('/:id', async (req, res, next) => {
   try {
     const rounds = await Round.findByPk(+req.params.id, {
@@ -31,28 +50,6 @@ router.get('/:id', async (req, res, next) => {
       ]
     });
     res.json(rounds);
-  } catch (err) {
-    next(err);
-  }
-});
-
-router.get('/', async (req, res, next) => {
-  try {
-    const rounds = await Round.findAll({
-      include: [{ model: Word }]
-    });
-    res.json(rounds);
-  } catch (err) {
-    next(err);
-  }
-});
-
-// post round info to db
-// create a new entry in user rounds on POST
-router.post('/', async (req, res, next) => {
-  try {
-    const round = req.body;
-    console.log('round was passed', round);
   } catch (err) {
     next(err);
   }
