@@ -20,11 +20,11 @@ router.get('/', async (req, res, next) => {
     let rounds;
     if (one === 'true') {
       rounds = await Round.getRandom({
-        include: [{ model: Word, attributes: ['id', 'word'] }]
+        include: [{ model: Word, attributes: WORD_ATTRIBUTES }]
       });
     } else {
       rounds = await Round.findAll({
-        include: [{ model: Word, attributes: ['id', 'word'] }]
+        include: [{ model: Word, attributes: WORD_ATTRIBUTES }]
       });
     }
     res.json(rounds);
