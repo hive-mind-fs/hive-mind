@@ -1,11 +1,11 @@
 import React from 'react';
-import { connect } from 'redux';
+import { connect } from 'react-redux';
 import { Button, Text } from 'react-native';
 import { Container, H1 } from 'native-base';
 import { Logo } from '../components';
-import { fetchPracticeRound } from '../store'
+import { fetchPracticeRound } from '../store/game'
 
-export default function PlayScreen({ navigation, createUserRound }) {
+function PlayScreen({ navigation, createUserRound }) {
   return (
     <Container
       style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}
@@ -16,9 +16,9 @@ export default function PlayScreen({ navigation, createUserRound }) {
       <Button
         title="Start Playing"
         onPress={() => {
-          createUserRound(10) // To do, replace with user id
+          createUserRound(8) // To do, replace with user id
           navigation.navigate('CountdownScreen')
-        }
+        }}
       />
       <Button
         title="Rules"
@@ -33,3 +33,5 @@ const mapDispatch = dispatch => {
     createUserRound: (userId) => dispatch(fetchPracticeRound(userId))
   };
 };
+
+export default connect(null, mapDispatch)(PlayScreen)

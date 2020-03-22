@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
 import { Button, StyleSheet, View, Text } from 'react-native';
 import { Container } from 'native-base';
 import Hive from '../components/Hive';
@@ -16,11 +17,14 @@ const shuffle = arr => {
   return arr;
 };
 
-export default class GameBoardScreen extends Component {
+class GameBoardScreen extends Component {
+  constructor() {
+    super()
+  }
   state = {
     input: [],
-    letters: ['B', 'C', 'H', 'K', 'N', 'U'],
-    cl: 'A',
+    letters: ['O', 'O', 'Z', 'Z', 'Z', 'Z'],
+    cl: 'Z',
     panagramList: ['HUNCHBACK'],
     roundDict: [
       'ABACA',
@@ -140,8 +144,10 @@ export default class GameBoardScreen extends Component {
         <Error error={this.state.error} />
         <Input inputLetters={this.state.input} />
         <Hive
-          centerLetter={this.state.cl}
-          otherLetters={this.state.letters}
+          // centerLetter={this.state.cl}
+          centerLetter={ this.props.practiceRound.round.coreLetter }
+          // otherLetters={this.state.letters}
+          otherLetters={ this.props.practiceRound.round.letters.split('') }
           onLetterPress={letter => {
             let error = this.state.error;
             error.length > 0 ? error.pop() : null;
@@ -292,3 +298,11 @@ const styles = StyleSheet.create({
     marginRight: 10
   }
 });
+
+const mapState = state => {
+  return {
+    practiceRound: state.game.practiceRound
+  }
+}
+
+export default connect(mapState, null)(GameBoardScreen)

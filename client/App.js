@@ -23,7 +23,7 @@ import {
   RulesScreen,
   SignupScreen
 } from './screens';
-import store from './store/store';
+import store from './store';
 
 const Stack = createStackNavigator();
 
