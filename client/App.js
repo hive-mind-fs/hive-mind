@@ -7,10 +7,14 @@ import React from 'react';
 import { StyleSheet } from 'react-native';
 import 'react-native-gesture-handler';
 import { Provider } from 'react-redux';
+// import { Stats } from './components';
 import {
   CountdownScreen,
   DashboardScreen,
+  Game,
   GameBoardScreen,
+  HomeScreen,
+  HiveScreen,
   LandingScreen,
   LoginScreen,
   PlayScreen,
@@ -44,9 +48,12 @@ export function App() {
     <Provider store={store}>
       <NavigationContainer>
         <Stack.Navigator>
+          <Stack.Screen name="HomeScreen" component={HomeScreen} />
           <Stack.Screen name="DashboardScreen" component={DashboardScreen} />
           <Stack.Screen name="CountdownScreen" component={CountdownScreen} />
+          <Stack.Screen name="Game" component={Game} />
           <Stack.Screen name="GameBoardScreen" component={GameBoardScreen} />
+          <Stack.Screen name="HiveScreen" component={HiveScreen} />
           <Stack.Screen name="LandingScreen" component={LandingScreen} />
           <Stack.Screen name="LoginScreen" component={LoginScreen} />
           <Stack.Screen name="PlayScreen" component={PlayScreen} />
@@ -54,6 +61,7 @@ export function App() {
           <Stack.Screen name="ProfileScreen" component={ProfileScreen} />
           <Stack.Screen name="RulesScreen" component={RulesScreen} />
           <Stack.Screen name="SignupScreen" component={SignupScreen} />
+          {/* <Stack.Screen name="Stats" component={Stats} /> */}
         </Stack.Navigator>
       </NavigationContainer>
     </Provider>

@@ -31,3 +31,22 @@ To debug in the iOS simulator:
 ⌘ + D
 Debug Remote JS
 ```
+
+# Scoring
+
+4-letter words are worth 1 point each.
+Longer words earn 1 point per letter.
+Each puzzle includes at least one “pangram” which uses every letter. These are worth 7 extra points!
+
+# Ranking
+Ranks are based on a percentage of possible points in a puzzle. For our purposes the rankings will break down as follows,where x is a users points:
+
+Beginner: 0% < x < 2.5%
+Good Start: 2.5% < x < 5%
+Moving Up: 5% < x < 10%
+Good: 10% < x < 15%
+Solid: 15% < x < 25%
+Nice: 25% < x < 40%
+Great: 40% < x < 55%
+Amazing: 55% < x < 75%
+Genius:  75% < x < 100%
