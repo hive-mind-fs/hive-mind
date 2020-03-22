@@ -49,9 +49,7 @@ Round.belongsToMany(Word, { through: 'roundWords' });
 /* A user can guess many words in a particular round */
 /* A word can be guessed by many users */
 Word.belongsToMany(UserRound, {
-  through: GuessedWord,
-  foreignKey: 'wordId',
-  otherKey: 'userRoundId'
+  through: GuessedWord
 });
 UserRound.belongsToMany(Word, {
   through: GuessedWord
