@@ -5,12 +5,12 @@ const { isAdmin, isCorrectUser, isSession } = require('./gateway');
 module.exports = router;
 
 // Create
-// Given user id, create new user rounds entry
+// Given user id, create new user rounds entry with random round
 router.post('/:userId', async (req, res, next) => {
   try {
     const userId = +req.params.userId;
     const round = await Round.getRandom()
-    const userRound = await User.create({userId: userId, roundId: round.id})
+    const userRound = await UserRound.create({userId: userId, roundId: round.id})
     res.send(userRound)
   } catch (err) {
     next(err);
