@@ -127,11 +127,11 @@ export default class GameBoardScreen extends Component {
           You've found {this.state.correctWords.length} correct Words:
         </Text>
         <CorrectWords words={this.state.correctWords} />
-        <Text>
+        {/* <Text>
           {this.state.gameTimer === 0
             ? 'Round Over!'
             : `Time: ${minutes}:${seconds}`}
-        </Text>
+        </Text> */}
         <Error error={this.state.error} />
         <Input inputLetters={this.state.input} />
         <Hive
