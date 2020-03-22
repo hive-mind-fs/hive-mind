@@ -5,6 +5,7 @@ import Hive from '../components/Hive';
 import Input from '../components/Input';
 import Error from '../components/Error';
 import CorrectWords from '../components/CorrectWords';
+import { shallowEqual } from '@babel/types';
 
 //shuffling algorithm: https://en.wikipedia.org/wiki/Fisher%E2%80%93Yates_shuffle#The_modern_algorithm
 const shuffle = arr => {
@@ -119,7 +120,11 @@ export default class GameBoardScreen extends Component {
       <Container
         style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}
       >
-        <Text>{ this.state.gameTimer === 0 ? 'Round Over!' : `Time: ${minutes}:${seconds}`}</Text>
+        <Text>
+          {this.state.gameTimer === 0
+            ? 'Round Over!'
+            : `Time: ${minutes}:${seconds}`}
+        </Text>
         <Text>
           Score: {this.state.score} Rank: {this.state.rank}
         </Text>
@@ -188,17 +193,15 @@ export default class GameBoardScreen extends Component {
                 this.setState(error);
               }
               // Correct word logic
-              else if(!word.includes(this.state.cl)){
+              else if (!word.includes(this.state.cl)) {
                 input.length = 0;
                 error.push('Your word must contain the center letter.');
                 this.setState(error);
-              }
-              else if(correctWords.includes(word)){
+              } else if (correctWords.includes(word)) {
                 input.length = 0;
                 error.push('Youve already found this word');
                 this.setState(error);
-              }
-              else if (input.length >= 4 && roundDict.indexOf(word) > -1) {
+              } else if (input.length >= 4 && roundDict.indexOf(word) > -1) {
                 correctWords.length > 0 ? (word = ', ' + word) : null;
                 correctWords.push(word);
                 this.setState(correctWords);
@@ -231,30 +234,39 @@ export default class GameBoardScreen extends Component {
                 )
                 .reduce((a, b) => a + b, 0);
 
-              //Change ranking
-              let x = 0;
-              let shareOfTotal = (score / possiblePoints) * 100;
-              shareOfTotal < 2.5
-                ? (x = 0)
-                : shareOfTotal > 2.5 && shareOfTotal < 5
-                ? (x = 1)
-                : shareOfTotal > 5 && shareOfTotal < 10
-                ? (x = 2)
-                : shareOfTotal > 10 && shareOfTotal < 15
-                ? (x = 3)
-                : shareOfTotal > 15 && shareOfTotal < 25
-                ? (x = 4)
-                : shareOfTotal > 25 && shareOfTotal < 40
-                ? (x = 5)
-                : shareOfTotal > 40 && shareOfTotal < 55
-                ? (x = 6)
-                : shareOfTotal > 55 && shareOfTotal < 75
-                ? (x = 7)
-                : shareOfTotal > 75
-                ? (x = 8)
-                : null;
+              // Change ranking
+              // let x = 0;
+              // let shareOfTotal = (score / possiblePoints) * 100;
+              // shareOfTotal < 2.5
+              //   ? (x = 0)
+              //   : shareOfTotal > 2.5 && shareOfTotal < 5
+              //   ? (x = 1)
+              //   : shareOfTotal > 5 && shareOfTotal < 10
+              //   ? (x = 2)
+              //   : shareOfTotal > 10 && shareOfTotal < 15
+              //   ? (x = 3)
+              //   : shareOfTotal > 15 && shareOfTotal < 25
+              //   ? (x = 4)
+              //   : shareOfTotal > 25 && shareOfTotal < 40
+              //   ? (x = 5)
+              //   : shareOfTotal > 40 && shareOfTotal < 55
+              //   ? (x = 6)
+              //   : shareOfTotal > 55 && shareOfTotal < 75
+              //   ? (x = 7)
+              //   : shareOfTotal > 75
+              //   ? (x = 8)
+              //   : null;
 
-              this.setState({ rank: rankings[x] });
+              // this.setState({ rank: rankings[x] });
+
+              const ranker = (n = (score / possiblePoints) * 100) => {
+                let newArray = [2.5, 5, 10, 15, 25, 40, 55, 75].concat(n);
+                newArray.sort((a, b) => a - b);
+                x = newArray.indexOf(num);
+              };
+
+              this.setState({ rank: rankings[ranker(n)] });
+
             }}
           />
         </View>
