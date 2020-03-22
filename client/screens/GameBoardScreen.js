@@ -259,14 +259,15 @@ export default class GameBoardScreen extends Component {
 
               // this.setState({ rank: rankings[x] });
 
+              //Attemmpt at better algo for ranking
               const ranker = (n = (score / possiblePoints) * 100) => {
-                let newArray = [2.5, 5, 10, 15, 25, 40, 55, 75].concat(n);
-                newArray.sort((a, b) => a - b);
-                x = newArray.indexOf(num);
+                return [2.5, 5, 10, 15, 25, 40, 55, 75]
+                  .concat(n)
+                  .sort((a, b) => a - b)
+                  .indexOf(n);
               };
 
               this.setState({ rank: rankings[ranker(n)] });
-
             }}
           />
         </View>
