@@ -20,17 +20,17 @@ class GameBoardScreen extends Component {
     this.cl = props.practiceRound.round.coreLetter;
     this.roundDict = props.practiceRound.round.words.map(word => word.word);
     this.panagramList = ['HUNCHBACK']; // HEY BOBBY, this can be derived from word dict
-  }
 
-  state = {
-    input: [],
-    correctWords: [],
-    lettersOrdering: this.otherLetters,
-    score: 0,
-    rank: 'Beginner',
-    error: [],
-    gameTimer: 300
-  };
+    this.state = {
+      input: [],
+      correctWords: [],
+      lettersOrdering: this.otherLetters,
+      score: 0,
+      rank: 'Beginner',
+      error: [],
+      gameTimer: 300
+    };
+  }
 
   componentDidMount() {
     this.tick();
