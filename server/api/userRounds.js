@@ -34,3 +34,27 @@ router.post('/:userId', async (req, res, next) => {
 
 // Update
 // Given userRound id, persist to database
+router.put('/:practiceRoundId', async (req, res, next) => {
+    try {
+        let practiceRoundId = +req.params.practiceRoundId;
+
+        const userRound = await UserRound.findByPk(practiceRoundId, {
+            returning: true,
+            where: { id: practiceRoundId },
+            include: [
+                { model: Word, attributes: WORD_ATTRIBUTES },
+                {
+                    model: Round,
+                    attributes: ROUND_ATTRIBUTES,
+                    include : [{model: Word}]
+                },
+            ]
+        })
+
+        const updatedRound = await userRound.update(req.body)
+
+        res.send(updatedRound)
+    } catch (err) {
+        next(err);
+    }
+});

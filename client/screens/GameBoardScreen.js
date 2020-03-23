@@ -7,22 +7,18 @@ import Input from '../components/Input';
 import Error from '../components/Error';
 import CorrectWords from '../components/CorrectWords';
 import { shallowEqual } from '@babel/types';
-import { setUserRound } from '../store';
-
-import { shuffle, ranker, RANKINGS } from './gameBoardController';
+import { savePracticeRound } from '../store';
+// import { shuffle, ranker, RANKINGS } from './gameBoardController';
 
 class GameBoardScreen extends Component {
   constructor(props) {
     super(props);
     console.log('props are', props);
-    console.log('LETTERS', props.practiceRound.round.letters);
     // HEY BOBBY, this is broken. it's using all the letters right now. We need to remove the core letter from teh set of letters returned from the database
     this.otherLetters = props.practiceRound.round.letters; // subtract core letter
     this.cl = props.practiceRound.round.coreLetter;
     this.roundDict = props.practiceRound.round.words.map(word => word.word);
     this.panagramList = ['HUNCHBACK']; // HEY BOBBY, this can be derived from word dict
-    
-
     this.state = {
       input: [],
       correctWords: [],
@@ -41,7 +37,7 @@ class GameBoardScreen extends Component {
         'Genius'
       ],
       error: [],
-      gameTimer: 300
+      gameTimer: 10
     };
   }
 
@@ -68,11 +64,12 @@ class GameBoardScreen extends Component {
     } else {
       // Redirect to PostRound
       setTimeout(() => {
-        this.props.setUserRound(
-          props.practiceRound.id,
-          this.score,
-          this.correctWords
-        );
+        // this.props.setUserRound(
+        //   props.practiceRound.id,
+        //   this.score,
+        //   this.correctWords
+        // );
+        this.props.savePracticeRound(this.props.practiceRound.id, this.state.score, this.state.correctWords)
         this.props.navigation.navigate('PostRoundScreen');
       }, 1000);
     }
@@ -250,8 +247,8 @@ const mapState = state => {
 
 const mapDispatch = dispatch => {
   return {
-    setUserRound: (userRoundId, score, correctWords) =>
-      dispatch(setUserRound(userRoundId, score, correctWords))
+    savePracticeRound: (userRoundId, score, correctWords) =>
+      dispatch(savePracticeRound(userRoundId, score, correctWords))
   };
 };
 

@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import { Button, Text } from 'react-native';
 import { Container, H1 } from 'native-base';
 import { Logo } from '../components';
-import { fetchPracticeRound } from '../store/game'
+import { fetchPracticeRound } from '../store/game';
 
 function PlayScreen({ navigation, createUserRound }) {
   return (
