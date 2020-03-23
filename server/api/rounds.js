@@ -1,10 +1,8 @@
-const router = require("express").Router();
-const { Round } = require("../db/models");
-const { isAdmin, isCorrectUser, isSession } = require("./gateway");
+const router = require('express').Router();
+const { Round } = require('../db/models');
+const { isAdmin, isCorrectUser, isSession } = require('./gateway');
 
-module.exports = router;
-
-router.get("/", async (req, res, next) => {
+router.get('/', async (req, res, next) => {
   try {
     // include words
     const rounds = await Round.findAll();
@@ -13,3 +11,5 @@ router.get("/", async (req, res, next) => {
     next(err);
   }
 });
+
+module.exports = router;

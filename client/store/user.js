@@ -1,63 +1,56 @@
 import axios from 'axios';
 
-/**
- * ACTION TYPES
- */
+// Action types
 const GET_USER = 'GET_USER';
 const REMOVE_USER = 'REMOVE_USER';
 
-/**
- * INITIAL STATE
- */
+// Initial state
 const defaultUser = {};
 
-/**
- * ACTION CREATORS
- */
+// Action creators
 const getUser = user => ({ type: GET_USER, user });
 const removeUser = () => ({ type: REMOVE_USER });
 
-/**
- * THUNK CREATORS
- */
+const BASE_URL = 'http://localhost:8080';
+
+// Thunk creators
 export const me = () => async dispatch => {
   try {
-    const res = await axios.get('/auth/me');
+    const res = await axios.get(`${BASE_URL}/auth/me`);
     dispatch(getUser(res.data || defaultUser));
-  } catch (err) {
-    console.error(err);
+  } catch (e) {
+    console.error(e);
   }
 };
 
 export const auth = (email, password, method) => async dispatch => {
   let res;
   try {
-    res = await axios.post(`/auth/${method}`, { email, password });
-  } catch (authError) {
-    return dispatch(getUser({ error: authError }));
+    res = await axios.post(`${BASE_URL}/auth/${method}`, {
+      email,
+      password
+    });
+  } catch (e) {
+    return dispatch(getUser({ error: e }));
   }
 
   try {
     dispatch(getUser(res.data));
-    history.push('/home');
-  } catch (dispatchOrHistoryErr) {
-    console.error(dispatchOrHistoryErr);
+  } catch (e) {
+    console.error(e);
   }
 };
 
 export const logout = () => async dispatch => {
   try {
-    await axios.post('/auth/logout');
+    await axios.post(`${BASE_URL}/auth/logout`);
     dispatch(removeUser());
-    history.push('/login');
-  } catch (err) {
-    console.error(err);
+  } catch (e) {
+    console.error(e);
   }
 };
 
-/**
- * REDUCER
- */
+// Reducer
 export default function(state = defaultUser, action) {
   switch (action.type) {
     case GET_USER:
