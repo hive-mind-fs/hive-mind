@@ -7,19 +7,10 @@ import Error from '../components/Error';
 import CorrectWords from '../components/CorrectWords';
 import { shallowEqual } from '@babel/types';
 
-//shuffling algorithm: https://en.wikipedia.org/wiki/Fisher%E2%80%93Yates_shuffle#The_modern_algorithm
-const shuffle = arr => {
-  for (let i = arr.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [arr[i], arr[j]] = [arr[j], arr[i]];
-  }
-  return arr;
-};
+import { shuffle, ranker } from './gameBoardController';
 
 export default class GameBoardScreen extends Component {
-  state = {
-    input: [],
-    letters: ['B', 'C', 'H', 'K', 'N', 'U'],
+  reduxState = {
     cl: 'A',
     panagramList: ['HUNCHBACK'],
     roundDict: [
@@ -74,20 +65,15 @@ export default class GameBoardScreen extends Component {
       'UNAU',
       'UNBAN'
     ],
+    otherLetters: ['B', 'C', 'H', 'K', 'N', 'U']
+  };
+
+  state = {
+    input: [],
     correctWords: [],
+    lettersOrdering: this.reduxState.otherLetters,
     score: 0,
     rank: 'Beginner',
-    rankings: [
-      'Beginner',
-      'Good Start',
-      'Moving Up',
-      'Good',
-      'Solid',
-      'Nice',
-      'Great',
-      'Amazing',
-      'Genius'
-    ],
     error: [],
     gameTimer: 300
   };
@@ -117,9 +103,7 @@ export default class GameBoardScreen extends Component {
     let seconds = secondsCalc <= 9 ? '0' + secondsCalc : secondsCalc;
 
     return (
-      <Container
-        style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}
-      >
+      <Container style={styles.container}>
         <Text>
           {this.state.gameTimer === 0
             ? 'Round Over!'
@@ -140,8 +124,8 @@ export default class GameBoardScreen extends Component {
         <Error error={this.state.error} />
         <Input inputLetters={this.state.input} />
         <Hive
-          centerLetter={this.state.cl}
-          otherLetters={this.state.letters}
+          centerLetter={this.reduxState.cl}
+          otherLetters={this.state.lettersOrdering}
           onLetterPress={letter => {
             let error = this.state.error;
             error.length > 0 ? error.pop() : null;
@@ -163,22 +147,23 @@ export default class GameBoardScreen extends Component {
           <Button
             title="Shuffle"
             onPress={() => {
-              let letters = this.state.letters;
-              letters = shuffle(letters);
-              this.setState(letters);
+              let lettersOrdering = this.state.lettersOrdering;
+              lettersOrdering = shuffle(lettersOrdering);
+              this.setState(lettersOrdering);
             }}
           />
           <Button
             title="Enter"
             onPress={() => {
+              let roundDict = this.reduxState.roundDict;
+              let panagramList = this.reduxState.panagramList;
+              let cl = this.reduxState.cl;
+
               let input = this.state.input;
-              let roundDict = this.state.roundDict;
               let correctWords = this.state.correctWords;
               let error = this.state.error;
               let score = this.state.score;
               let rank = this.state.rank;
-              let rankings = this.state.rankings;
-              let panagramList = this.state.panagramList;
               let wordLength = [...input].length;
               let word = [...input].join('');
 
@@ -193,7 +178,7 @@ export default class GameBoardScreen extends Component {
                 this.setState(error);
               }
               // Correct word logic
-              else if (!word.includes(this.state.cl)) {
+              else if (!word.includes(cl)) {
                 input.length = 0;
                 error.push('Your word must contain the center letter.');
                 this.setState(error);
@@ -234,40 +219,7 @@ export default class GameBoardScreen extends Component {
                 )
                 .reduce((a, b) => a + b, 0);
 
-              // Change ranking
-              // let x = 0;
-              // let shareOfTotal = (score / possiblePoints) * 100;
-              // shareOfTotal < 2.5
-              //   ? (x = 0)
-              //   : shareOfTotal > 2.5 && shareOfTotal < 5
-              //   ? (x = 1)
-              //   : shareOfTotal > 5 && shareOfTotal < 10
-              //   ? (x = 2)
-              //   : shareOfTotal > 10 && shareOfTotal < 15
-              //   ? (x = 3)
-              //   : shareOfTotal > 15 && shareOfTotal < 25
-              //   ? (x = 4)
-              //   : shareOfTotal > 25 && shareOfTotal < 40
-              //   ? (x = 5)
-              //   : shareOfTotal > 40 && shareOfTotal < 55
-              //   ? (x = 6)
-              //   : shareOfTotal > 55 && shareOfTotal < 75
-              //   ? (x = 7)
-              //   : shareOfTotal > 75
-              //   ? (x = 8)
-              //   : null;
-
-              // this.setState({ rank: rankings[x] });
-
-              //Attemmpt at better algo for ranking
-              const ranker = (n = (score / possiblePoints) * 100) => {
-                return [2.5, 5, 10, 15, 25, 40, 55, 75]
-                  .concat(n)
-                  .sort((a, b) => a - b)
-                  .indexOf(n);
-              };
-
-              this.setState({ rank: rankings[ranker(n)] });
+              this.setState({ rank: RANKINGS[ranker(n)] });
             }}
           />
         </View>
@@ -290,5 +242,10 @@ const styles = StyleSheet.create({
   gameButtons: {
     paddingLeft: 10,
     marginRight: 10
+  },
+  container: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center'
   }
 });
