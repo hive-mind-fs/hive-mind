@@ -7,19 +7,21 @@ import Input from '../components/Input';
 import Error from '../components/Error';
 import CorrectWords from '../components/CorrectWords';
 import { shallowEqual } from '@babel/types';
+import { setUserRound } from '../store';
 
-import { shuffle, ranker } from './gameBoardController';
+import { shuffle, ranker, RANKINGS } from './gameBoardController';
 
 class GameBoardScreen extends Component {
   constructor(props) {
     super(props);
-
     console.log('props are', props);
+    console.log('LETTERS', props.practiceRound.round.letters);
     // HEY BOBBY, this is broken. it's using all the letters right now. We need to remove the core letter from teh set of letters returned from the database
-    this.otherLetters = props.practiceRound.round.letters.split(''); // subtract core letter
+    this.otherLetters = props.practiceRound.round.letters; // subtract core letter
     this.cl = props.practiceRound.round.coreLetter;
     this.roundDict = props.practiceRound.round.words.map(word => word.word);
     this.panagramList = ['HUNCHBACK']; // HEY BOBBY, this can be derived from word dict
+    
 
     this.state = {
       input: [],
@@ -27,6 +29,17 @@ class GameBoardScreen extends Component {
       lettersOrdering: this.otherLetters,
       score: 0,
       rank: 'Beginner',
+      rankings: [
+        'Beginner',
+        'Good Start',
+        'Moving Up',
+        'Good',
+        'Solid',
+        'Nice',
+        'Great',
+        'Amazing',
+        'Genius'
+      ],
       error: [],
       gameTimer: 300
     };
@@ -35,6 +48,15 @@ class GameBoardScreen extends Component {
   componentDidMount() {
     this.tick();
   }
+
+  //shuffling algorithm: https://en.wikipedia.org/wiki/Fisher%E2%80%93Yates_shuffle#The_modern_algorithm
+  shuffle = arr => {
+    for (let i = arr.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [arr[i], arr[j]] = [arr[j], arr[i]];
+    }
+    return arr;
+  };
 
   tick = () => {
     if (this.state.gameTimer > 0) {
@@ -46,10 +68,20 @@ class GameBoardScreen extends Component {
     } else {
       // Redirect to PostRound
       setTimeout(() => {
+        this.props.setUserRound(
+          props.practiceRound.id,
+          this.score,
+          this.correctWords
+        );
         this.props.navigation.navigate('PostRoundScreen');
       }, 1000);
     }
   };
+
+  /**
+   * Globals
+   **/
+  
 
   //error function
   err = str => {
@@ -160,6 +192,7 @@ class GameBoardScreen extends Component {
                 this.err('Your word is not in our dictionary.');
               }
               //Ranking Logic
+
               // Convert round dictionary into array of points for each word
               const possiblePoints = this.roundDict
                 .map(i =>
@@ -171,7 +204,14 @@ class GameBoardScreen extends Component {
                 )
                 .reduce((a, b) => a + b, 0);
 
-              this.setState({ rank: RANKINGS[ranker(n)] });
+              //Attemmpt at better algo for ranking
+              const ranker = (n = (score / possiblePoints) * 100) => {
+                return [2.5, 5, 10, 15, 25, 40, 55, 75]
+                  .concat(n)
+                  .sort((a, b) => a - b)
+                  .indexOf(n);
+              };
+              this.setState({ rank: this.state.rankings[ranker()] });
             }}
           />
         </View>
@@ -208,4 +248,11 @@ const mapState = state => {
   };
 };
 
-export default connect(mapState, null)(GameBoardScreen);
+const mapDispatch = dispatch => {
+  return {
+    setUserRound: (userRoundId, score, correctWords) =>
+      dispatch(setUserRound(userRoundId, score, correctWords))
+  };
+};
+
+export default connect(mapState, mapDispatch)(GameBoardScreen);
