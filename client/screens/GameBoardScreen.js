@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
 import { Button, StyleSheet, View, Text } from 'react-native';
 import { Container } from 'native-base';
 import Hive from '../components/Hive';
@@ -9,69 +10,22 @@ import { shallowEqual } from '@babel/types';
 
 import { shuffle, ranker } from './gameBoardController';
 
-export default class GameBoardScreen extends Component {
-  reduxState = {
-    cl: 'A',
-    panagramList: ['HUNCHBACK'],
-    roundDict: [
-      'ABACA',
-      'ABACK',
-      'ABAKA',
-      'ABBA',
-      'ANKH',
-      'ANNA',
-      'AUCUBA',
-      'BABA',
-      'BABKA',
-      'BABU',
-      'BACCA',
-      'BACH',
-      'BACK',
-      'BANANA',
-      'BANK',
-      'BUBBA',
-      'BUNA',
-      'CABANA',
-      'CACA',
-      'CACHUCHA',
-      'CANCAN',
-      'CANCHA',
-      'CANNA',
-      'CHABUK',
-      'CHACHKA',
-      'CHUKKA',
-      'HABU',
-      'HACK',
-      'HAHA',
-      'HAKU',
-      'HANK',
-      'HAUNCH',
-      'HUCKABACK',
-      'HUNCHBACK',
-      'KABAB',
-      'KABAKA',
-      'KAHUNA',
-      'KAKA',
-      'KANA',
-      'KANAKA',
-      'KANBAN',
-      'KHAN',
-      'KNACK',
-      'KUNA',
-      'NAAN',
-      'NANA',
-      'NUCHA',
-      'NUNCHAKU',
-      'UNAU',
-      'UNBAN'
-    ],
-    otherLetters: ['B', 'C', 'H', 'K', 'N', 'U']
-  };
+class GameBoardScreen extends Component {
+  constructor() {
+    super();
+    // HEY BOBBY, this is broken. it's using all the letters right now. We need to remove the core letter from teh set of letters returned from the database
+    this.otherLetters = this.props.practiceRound.round.letters.split(''); // subtract core letter
+    this.cl = this.props.practiceRound.round.coreLetter;
+    this.roundDict = this.props.practiceRound.round.words.map(
+      word => word.word
+    );
+    this.panagramList = ['HUNCHBACK']; // HEY BOBBY, this can be derived from word dict
+  }
 
   state = {
     input: [],
     correctWords: [],
-    lettersOrdering: this.reduxState.otherLetters,
+    lettersOrdering: this.otherLetters,
     score: 0,
     rank: 'Beginner',
     error: [],
@@ -124,8 +78,8 @@ export default class GameBoardScreen extends Component {
         <Error error={this.state.error} />
         <Input inputLetters={this.state.input} />
         <Hive
-          centerLetter={this.reduxState.cl}
-          otherLetters={this.state.lettersOrdering}
+          centerLetter={this.cl} // comes from redux now
+          otherLetters={this.otherLetters} // comes from redux now
           onLetterPress={letter => {
             let error = this.state.error;
             error.length > 0 ? error.pop() : null;
@@ -155,10 +109,6 @@ export default class GameBoardScreen extends Component {
           <Button
             title="Enter"
             onPress={() => {
-              let roundDict = this.reduxState.roundDict;
-              let panagramList = this.reduxState.panagramList;
-              let cl = this.reduxState.cl;
-
               let input = this.state.input;
               let correctWords = this.state.correctWords;
               let error = this.state.error;
@@ -186,7 +136,10 @@ export default class GameBoardScreen extends Component {
                 input.length = 0;
                 error.push('Youve already found this word');
                 this.setState(error);
-              } else if (input.length >= 4 && roundDict.indexOf(word) > -1) {
+              } else if (
+                input.length >= 4 &&
+                this.roundDict.indexOf(word) > -1
+              ) {
                 correctWords.length > 0 ? (word = ', ' + word) : null;
                 correctWords.push(word);
                 this.setState(correctWords);
@@ -194,7 +147,7 @@ export default class GameBoardScreen extends Component {
                 //Scoring Logic
                 wordLength === 4
                   ? this.setState({ score: (score += wordLength - 3) })
-                  : panagramList.indexOf(word) > -1 && wordLength > 4
+                  : this.panagramList.indexOf(word) > -1 && wordLength > 4
                   ? this.setState({ score: (score += wordLength + 7) })
                   : this.setState({ score: (score += wordLength) });
 
@@ -213,7 +166,7 @@ export default class GameBoardScreen extends Component {
                 .map(i =>
                   i.length === 4
                     ? 1
-                    : panagramList.indexOf(i) > -1
+                    : this.panagramList.indexOf(i) > -1
                     ? i.length + 7
                     : i.length
                 )
@@ -249,3 +202,11 @@ const styles = StyleSheet.create({
     justifyContent: 'center'
   }
 });
+
+const mapState = state => {
+  return {
+    practiceRound: state.game.practiceRound
+  };
+};
+
+export default connect(mapState, null)(GameBoardScreen);

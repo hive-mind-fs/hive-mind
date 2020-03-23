@@ -10,11 +10,12 @@ module.exports = router;
 router.post('/:userId', async (req, res, next) => {
     try {
         const userId = +req.params.userId;
-        //const round = await Round.getRandom()
+        // const round = await Round.getRandom()
         // To do: programatically generate words for round
         const round = await Round.findByPk(51)
-        const userRound = await UserRound.create({ userId: userId, roundId: round.id })
-        const userRoundWithAssociations = await UserRound.findByPk(userRound.id, {
+        
+        const userRound = await UserRound.findOrCreate({
+            where: { userId: userId, roundId: round.id },
             attributes: USERROUND_ATTRIBUTES,
             include: [
                 { model: Word, attributes: WORD_ATTRIBUTES },
@@ -25,7 +26,7 @@ router.post('/:userId', async (req, res, next) => {
                 },
             ]
         })
-        res.send(userRoundWithAssociations)
+        res.send(userRound[0])
     } catch (err) {
         next(err);
     }
