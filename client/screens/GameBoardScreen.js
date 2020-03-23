@@ -97,6 +97,12 @@ export default class GameBoardScreen extends Component {
     }
   };
 
+   //error function
+   err = () => {
+    this.state.input.length = 0;
+    this.setState(this.state.error);
+  };
+
   render() {
     let minutes = Math.floor(this.state.gameTimer / 60);
     let secondsCalc = this.state.gameTimer - minutes * 60;
@@ -173,19 +179,16 @@ export default class GameBoardScreen extends Component {
 
               // Too short word logic
               if (input.length < 4) {
-                input.length = 0;
                 error.push('Your word is too short');
-                this.setState(error);
+                this.err();
               }
               // Correct word logic
               else if (!word.includes(cl)) {
-                input.length = 0;
                 error.push('Your word must contain the center letter.');
-                this.setState(error);
+                this.err();
               } else if (correctWords.includes(word)) {
-                input.length = 0;
                 error.push('Youve already found this word');
-                this.setState(error);
+                this.err();
               } else if (input.length >= 4 && roundDict.indexOf(word) > -1) {
                 correctWords.length > 0 ? (word = ', ' + word) : null;
                 correctWords.push(word);
@@ -203,9 +206,8 @@ export default class GameBoardScreen extends Component {
               }
               // Incorect word logic
               else {
-                input.length = 0;
-                error.push('your word is not in our dictionary');
-                this.setState(error);
+                error.push('Your word is not in our dictionary.');
+                this.err();
               }
               //Ranking Logic
               // Convert round dictionary into array of points for each word
