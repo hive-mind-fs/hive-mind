@@ -11,26 +11,25 @@ import { shallowEqual } from '@babel/types';
 import { shuffle, ranker } from './gameBoardController';
 
 class GameBoardScreen extends Component {
-  constructor() {
-    super();
-    // HEY BOBBY, this is broken. it's using all the letters right now. We need to remove the core letter from teh set of letters returned from the database
-    this.otherLetters = this.props.practiceRound.round.letters.split(''); // subtract core letter
-    this.cl = this.props.practiceRound.round.coreLetter;
-    this.roundDict = this.props.practiceRound.round.words.map(
-      word => word.word
-    );
+  constructor(props) {
+    super(props);
+    this.cl = props.practiceRound.round.coreLetter;
+    this.otherLetters = props.practiceRound.round.letters
+      .replace(this.cl, '')
+      .split(''); // subtract core letter
+    this.roundDict = props.practiceRound.round.words.map(word => word.word);
     this.panagramList = ['HUNCHBACK']; // HEY BOBBY, this can be derived from word dict
-  }
 
-  state = {
-    input: [],
-    correctWords: [],
-    lettersOrdering: this.otherLetters,
-    score: 0,
-    rank: 'Beginner',
-    error: [],
-    gameTimer: 300
-  };
+    this.state = {
+      input: [],
+      correctWords: [],
+      lettersOrdering: this.otherLetters,
+      score: 0,
+      rank: 'Beginner',
+      error: [],
+      gameTimer: 300
+    };
+  }
 
   componentDidMount() {
     this.tick();
