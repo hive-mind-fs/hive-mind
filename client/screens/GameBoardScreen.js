@@ -10,9 +10,7 @@ import { shallowEqual } from '@babel/types';
 import { shuffle, ranker } from './gameBoardController';
 
 export default class GameBoardScreen extends Component {
-  state = {
-    input: [],
-    letters: ['B', 'C', 'H', 'K', 'N', 'U'],
+  reduxState = {
     cl: 'A',
     panagramList: ['HUNCHBACK'],
     roundDict: [
@@ -67,10 +65,15 @@ export default class GameBoardScreen extends Component {
       'UNAU',
       'UNBAN'
     ],
+    otherLetters: ['B', 'C', 'H', 'K', 'N', 'U']
+  };
+
+  state = {
+    input: [],
     correctWords: [],
+    lettersOrdering: this.reduxState.otherLetters,
     score: 0,
     rank: 'Beginner',
-    rankings: RANKINGS,
     error: [],
     gameTimer: 300
   };
@@ -123,8 +126,8 @@ export default class GameBoardScreen extends Component {
         <Error error={this.state.error} />
         <Input inputLetters={this.state.input} />
         <Hive
-          centerLetter={this.state.cl}
-          otherLetters={this.state.letters}
+          centerLetter={this.reduxState.cl}
+          otherLetters={this.state.lettersOrdering}
           onLetterPress={letter => {
             let error = this.state.error;
             error.length > 0 ? error.pop() : null;
@@ -146,21 +149,23 @@ export default class GameBoardScreen extends Component {
           <Button
             title="Shuffle"
             onPress={() => {
-              let letters = this.state.letters;
-              letters = shuffle(letters);
-              this.setState(letters);
+              let lettersOrdering = this.state.lettersOrdering;
+              lettersOrdering = shuffle(lettersOrdering);
+              this.setState(lettersOrdering);
             }}
           />
           <Button
             title="Enter"
             onPress={() => {
+              let roundDict = this.reduxState.roundDict;
+              let panagramList = this.reduxState.panagramList;
+              let cl = this.reduxState.cl;
+
               let input = this.state.input;
-              let roundDict = this.state.roundDict;
               let correctWords = this.state.correctWords;
               let error = this.state.error;
               let score = this.state.score;
               let rank = this.state.rank;
-              let panagramList = this.state.panagramList;
               let wordLength = [...input].length;
               let word = [...input].join('');
 
@@ -175,7 +180,7 @@ export default class GameBoardScreen extends Component {
                 this.setState(error);
               }
               // Correct word logic
-              else if (!word.includes(this.state.cl)) {
+              else if (!word.includes(cl)) {
                 input.length = 0;
                 error.push('Your word must contain the center letter.');
                 this.setState(error);
