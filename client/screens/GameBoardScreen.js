@@ -13,11 +13,10 @@ import { shuffle, ranker } from './gameBoardController';
 class GameBoardScreen extends Component {
   constructor(props) {
     super(props);
-
-    console.log('props are', props);
-    // HEY BOBBY, this is broken. it's using all the letters right now. We need to remove the core letter from teh set of letters returned from the database
-    this.otherLetters = props.practiceRound.round.letters.split(''); // subtract core letter
     this.cl = props.practiceRound.round.coreLetter;
+    this.otherLetters = props.practiceRound.round.letters
+      .replace(this.cl, '')
+      .split(''); // subtract core letter
     this.roundDict = props.practiceRound.round.words.map(word => word.word);
     this.panagramList = ['HUNCHBACK']; // HEY BOBBY, this can be derived from word dict
 
