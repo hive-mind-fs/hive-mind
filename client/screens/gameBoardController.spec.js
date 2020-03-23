@@ -1,13 +1,8 @@
 const { expect } = require('chai');
+const { ranker } = require('./gameBoardController');
 
 describe('Ranker function', () => {
   it('It properly maps the inout to the output range', () => {
-    const ranker = (n = (score / possiblePoints) * 100) => {
-      return [2.5, 5, 10, 15, 25, 40, 55, 75]
-        .concat(n)
-        .sort((a, b) => a - b)
-        .indexOf(n);
-    };
     expect(ranker(2)).to.deep.equal(0);
     expect(ranker(4)).to.deep.equal(1);
     expect(ranker(5)).to.deep.equal(1);
