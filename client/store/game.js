@@ -1,58 +1,63 @@
 import axios from 'axios';
 
-// I just setup the outline. Need to talk through actual defaultState and actions to see what's best.
-
 /**
  * INITIAL STATE
  */
 const defaultGame = {
-    gameStatus: 'countdown',
-    round: {}
+  gameStatus: 'countdown',
+  practiceRound: {}
 };
-
 
 /**
  * ACTION TYPES
  */
 const SET_GAME_STATUS = 'SET_GAME_STATUS';
-const START_ROUND = 'GET_ROUND';
+const SET_PRACTICE_ROUND = 'SET_PRACTICE_ROUND';
 
 /**
  * ACTION CREATORS
  */
 const setGameStatus = gameStatus => ({ type: SET_GAME_STATUS, gameStatus });
 
-const startRound = round => ({ type: START_ROUND, round })
+const setPracticeRound = practiceRound => ({
+  type: SET_PRACTICE_ROUND,
+  practiceRound
+});
 
 /**
  * THUNK CREATORS
  */
 export const setGameStatusThunk = gameStatus => async dispatch => {
-    try {
-        dispatch(setGameStatus);
-    } catch (err) {
-        console.error(err);
-    }
-};
-
-export const startRoundThunk = () => async dispatch => {
   try {
-      dispatch(startRound);
+    dispatch(setGameStatus);
   } catch (err) {
-      console.error(err);
+    console.error(err);
   }
 };
 
+export const fetchPracticeRound = userId => async dispatch => {
+  try {
+    let practiceRound;
+    try {
+      practiceRound = await axios.post(`http://localhost:8080/api/userRounds/${userId}`);
+    } catch (error) {
+      practiceRound = await axios.post(`/api/userRounds/${userId}`);
+    }
+    dispatch(setPracticeRound(practiceRound.data));
+  } catch (err) {
+    console.error(err);
+  }
+};
 
 /**
  * REDUCER
  */
 export default function(state = defaultGame, action) {
-    switch (action.type) {
-      case SET_GAME_STATUS:
-        return {...state}, action.gameStatus;
-      default:
-        return state;
-    }
+  switch (action.type) {
+    case SET_PRACTICE_ROUND:
+      console.log('STATE PRACTICE', { ...state, practiceRound: action.practiceRound})
+      return { ...state, practiceRound: action.practiceRound};
+    default:
+      return state;
   }
-  
+}

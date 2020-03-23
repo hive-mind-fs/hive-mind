@@ -1,10 +1,10 @@
-const Game = require("./game");
-const Round = require("./round");
-const User = require("./user");
-const Word = require("./word");
-const UserRound = require("./userRound");
-const GuessedWord = require("./guessedWord");
-const db = require("../db");
+const Game = require('./game');
+const Round = require('./round');
+const User = require('./user');
+const Word = require('./word');
+const UserRound = require('./userRound');
+const GuessedWord = require('./guessedWord');
+const db = require('../db');
 
 /** Model associations here **/
 
@@ -18,8 +18,8 @@ Create tests for associations
 // One game has one winner
 // A round has one winner
 // Winner as the accessor method instead of user
-Game.belongsTo(User, { as: "winner", foreignKey: "winnerId" });
-Round.belongsTo(User, { as: "winner", foreignKey: "winnerId" });
+Game.belongsTo(User, { as: 'winner', foreignKey: 'winnerId' });
+Round.belongsTo(User, { as: 'winner', foreignKey: 'winnerId' });
 
 /* One-to-many associations */
 
@@ -43,13 +43,17 @@ Round.belongsToMany(User, { through: UserRound });
 // Rounds contain many words
 // Words can belong to diff rounds
 // All possible words for a round
-Word.belongsToMany(Round, { through: "roundWords" });
-Round.belongsToMany(Word, { through: "roundWords" });
+Word.belongsToMany(Round, { through: 'roundWords' });
+Round.belongsToMany(Word, { through: 'roundWords' });
 
 /* A user can guess many words in a particular round */
 /* A word can be guessed by many users */
-Word.belongsToMany(UserRound, { through: GuessedWord });
-UserRound.belongsToMany(Word, { through: GuessedWord });
+Word.belongsToMany(UserRound, {
+  through: GuessedWord
+});
+UserRound.belongsToMany(Word, {
+  through: GuessedWord
+});
 
 /**
  * We'll export all of our models here, so that any time a module needs a model,
