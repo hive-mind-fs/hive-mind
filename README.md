@@ -32,6 +32,12 @@ To debug in the iOS simulator:
 Debug Remote JS
 ```
 
+Run the server locally on localhost:8080.
+
+```
+npm run start-server
+```
+
 # Scoring
 
 4-letter words are worth 1 point each.

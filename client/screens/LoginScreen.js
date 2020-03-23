@@ -2,7 +2,7 @@ import { Container, Header, Content, Form, Item, Input } from 'native-base';
 import React, { useState } from 'react';
 import { Button, Text } from 'react-native';
 import { connect } from 'react-redux';
-import { auth } from '../store/store';
+import { auth } from '../store';
 
 const LoginScreen = ({ navigation, handleSubmit }) => {
   const [email, setEmail] = useState('');
