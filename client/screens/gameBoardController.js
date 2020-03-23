@@ -11,3 +11,16 @@ export const shuffle = arr => {
 };
 
 /**
+ * Globals
+ **/
+export const RANKINGS = [
+  'Beginner',
+  'Good Start',
+  'Moving Up',
+  'Good',
+  'Solid',
+  'Nice',
+  'Great',
+  'Amazing',
+  'Genius'
+];

@@ -70,17 +70,7 @@ export default class GameBoardScreen extends Component {
     correctWords: [],
     score: 0,
     rank: 'Beginner',
-    rankings: [
-      'Beginner',
-      'Good Start',
-      'Moving Up',
-      'Good',
-      'Solid',
-      'Nice',
-      'Great',
-      'Amazing',
-      'Genius'
-    ],
+    rankings: RANKINGS,
     error: [],
     gameTimer: 300
   };
@@ -170,7 +160,6 @@ export default class GameBoardScreen extends Component {
               let error = this.state.error;
               let score = this.state.score;
               let rank = this.state.rank;
-              let rankings = this.state.rankings;
               let panagramList = this.state.panagramList;
               let wordLength = [...input].length;
               let word = [...input].join('');
@@ -260,7 +249,7 @@ export default class GameBoardScreen extends Component {
                   .indexOf(n);
               };
 
-              this.setState({ rank: rankings[ranker(n)] });
+              this.setState({ rank: RANKINGS[ranker(n)] });
             }}
           />
         </View>
