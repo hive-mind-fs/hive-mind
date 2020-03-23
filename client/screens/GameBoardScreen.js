@@ -103,9 +103,7 @@ export default class GameBoardScreen extends Component {
     let seconds = secondsCalc <= 9 ? '0' + secondsCalc : secondsCalc;
 
     return (
-      <Container
-        style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}
-      >
+      <Container style={styles.container}>
         <Text>
           {this.state.gameTimer === 0
             ? 'Round Over!'
@@ -244,5 +242,10 @@ const styles = StyleSheet.create({
   gameButtons: {
     paddingLeft: 10,
     marginRight: 10
+  },
+  container: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center'
   }
 });
