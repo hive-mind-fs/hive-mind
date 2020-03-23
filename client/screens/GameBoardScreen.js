@@ -14,12 +14,6 @@ class GameBoardScreen extends Component {
   constructor() {
     super();
     // HEY BOBBY, this is broken. it's using all the letters right now. We need to remove the core letter from teh set of letters returned from the database
-    this.otherLetters = this.props.practiceRound.round.letters.split(''); // subtract core letter
-    this.cl = this.props.practiceRound.round.coreLetter;
-    this.roundDict = this.props.practiceRound.round.words.map(
-      word => word.word
-    );
-    this.panagramList = ['HUNCHBACK']; // HEY BOBBY, this can be derived from word dict
   }
 
   state = {
@@ -55,6 +49,11 @@ class GameBoardScreen extends Component {
     let minutes = Math.floor(this.state.gameTimer / 60);
     let secondsCalc = this.state.gameTimer - minutes * 60;
     let seconds = secondsCalc <= 9 ? '0' + secondsCalc : secondsCalc;
+
+    let otherLetters = this.props.practiceRound.round.letters.split(''); // subtract core letter
+    let cl = this.props.practiceRound.round.coreLetter;
+    let roundDict = this.props.practiceRound.round.words.map(word => word.word);
+    let panagramList = ['HUNCHBACK']; // HEY BOBBY, this can be derived from word dict
 
     return (
       <Container style={styles.container}>
