@@ -13,7 +13,7 @@ import {
   ranker,
   getScore,
   getPossiblePoints,
-  getRankIndex,
+  getRank,
   getMinutesAndSeconds
 } from './gameBoardController';
 
@@ -106,7 +106,7 @@ function GameBoardScreen(props) {
       err('Your word is not in our dictionary.');
     }
 
-    setRank(RANKINGS[getRankIndex(score, possiblePoints)]);
+    setRank(getRank(score, possiblePoints));
   };
 
   return (
