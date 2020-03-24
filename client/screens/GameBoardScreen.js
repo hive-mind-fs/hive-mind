@@ -7,6 +7,7 @@ import Input from '../components/Input';
 import Error from '../components/Error';
 import CorrectWords from '../components/CorrectWords';
 import { shallowEqual } from '@babel/types';
+import { savePracticeRound } from '../store';
 
 import {
   shuffle,
@@ -54,6 +55,7 @@ function GameBoardScreen(props) {
   //   } else {
   //     // Redirect to PostRound
   //     setTimeout(() => {
+  //       this.props.savePracticeRound(this.props.practiceRound.id, this.state.score, this.state.correctWords)
   //       this.props.navigation.navigate('PostRoundScreen');
   //     }, 1000);
   //   }
@@ -98,7 +100,6 @@ function GameBoardScreen(props) {
     } else {
       err('Your word is not in our dictionary.');
     }
-
     setRank(getRank(score, possiblePoints));
   };
 
@@ -153,4 +154,11 @@ const mapState = state => {
   };
 };
 
-export default connect(mapState)(GameBoardScreen);
+const mapDispatch = dispatch => {
+  return {
+    savePracticeRound: (userRoundId, score, correctWords) =>
+      dispatch(savePracticeRound(userRoundId, score, correctWords))
+  };
+};
+
+export default connect(mapState, mapDispatch)(GameBoardScreen);
