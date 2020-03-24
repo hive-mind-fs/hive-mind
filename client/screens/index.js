@@ -8,7 +8,6 @@ export { default as Game } from './Game';
 export { default as GameBoardScreen } from './GameBoardScreen';
 export { default as CountdownScreen } from './CountdownScreen';
 export { default as HomeScreen } from './HomeScreen';
-export { default as HiveScreen } from './HiveScreen';
 export { default as LandingScreen } from './LandingScreen';
 export { default as LoginScreen } from './LoginScreen';
 export { default as PlayScreen } from './PlayScreen';

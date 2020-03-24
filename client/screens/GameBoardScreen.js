@@ -1,4 +1,4 @@
-import React, { useState, Component } from 'react';
+import React, { useState } from 'react';
 import { connect } from 'react-redux';
 import { Button, StyleSheet, View, Text } from 'react-native';
 import { Container } from 'native-base';
@@ -6,12 +6,10 @@ import Hive from '../components/Hive';
 import Input from '../components/Input';
 import Error from '../components/Error';
 import CorrectWords from '../components/CorrectWords';
-import { shallowEqual } from '@babel/types';
 import { savePracticeRound } from '../store';
 
 import {
   shuffle,
-  ranker,
   getScore,
   getRank,
   getMinutesAndSeconds,

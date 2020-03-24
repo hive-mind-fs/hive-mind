@@ -5,7 +5,12 @@ import { Container, H1 } from 'native-base';
 import { Logo } from '../components';
 import { fetchPracticeRound } from '../store/game';
 
-function PlayScreen({ navigation, createUserRound }) {
+function PlayScreen({ navigation, createUserRound, userId }) {
+  const handleSubmit = () => {
+    createUserRound(8); // To do, replace with user id
+    navigation.navigate('CountdownScreen');
+  };
+
   return (
     <Container
       style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}
@@ -13,13 +18,7 @@ function PlayScreen({ navigation, createUserRound }) {
       <Logo />
       <H1>Spelling Bee</H1>
       <Text>How many words can you make with 7 letters?</Text>
-      <Button
-        title="Start Playing"
-        onPress={() => {
-          createUserRound(8) // To do, replace with user id
-          navigation.navigate('CountdownScreen')
-        }}
-      />
+      <Button title="Start Playing" onPress={() => handleSubmit()} />
       <Button
         title="Rules"
         onPress={() => navigation.navigate('RulesScreen')}
@@ -28,10 +27,16 @@ function PlayScreen({ navigation, createUserRound }) {
   );
 }
 
-const mapDispatch = dispatch => {
+const mapState = state => {
   return {
-    createUserRound: (userId) => dispatch(fetchPracticeRound(userId))
+    userId: state.user.id
   };
 };
 
-export default connect(null, mapDispatch)(PlayScreen)
+const mapDispatch = dispatch => {
+  return {
+    createUserRound: userId => dispatch(fetchPracticeRound(userId))
+  };
+};
+
+export default connect(mapState, mapDispatch)(PlayScreen);
