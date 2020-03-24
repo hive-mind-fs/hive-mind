@@ -1,15 +1,18 @@
 import { Container, Header, Content, Form, Item, Input } from 'native-base';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Button, Text } from 'react-native';
 import { connect } from 'react-redux';
 import { auth } from '../store';
 
-const SignupScreen = ({ navigation, handleSubmit }) => {
+const SignupScreen = ({ navigation, handleSubmit, user }) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [user, setUser] = useState({});
 
-  console.log(user);
+  useEffect(() => {
+    if (user.id) {
+      navigation.navigate('PlayScreen');
+    }
+  });
 
   return (
     <Container>

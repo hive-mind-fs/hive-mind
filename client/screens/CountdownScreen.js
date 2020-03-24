@@ -9,19 +9,19 @@ export default function CountdownScreen({ navigation }) {
     if (countdownTimer > 0) {
       // Update countdownTimer state
       setTimeout(() => {
-        setCountdownTimer(countdownTimer === 1 ? 'Go!' : countdownTimer - 1)
-      }, 1000)
+        setCountdownTimer(countdownTimer === 1 ? 'Go!' : countdownTimer - 1);
+      }, 1000);
     } else {
       // Redirect to GameBoard
       setTimeout(() => {
-        navigation.navigate("GameBoardScreen")
-      }, 1000)
+        navigation.navigate('GameBoardScreen');
+      }, 1000);
     }
-  })
+  });
 
   return (
     <Container
-      style={{ flex: 1, alignItems: "center", justifyContent: "center" }}
+      style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}
     >
       <Text>Game Starts In</Text>
       <H1>{countdownTimer}</H1>
