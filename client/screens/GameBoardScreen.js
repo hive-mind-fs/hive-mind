@@ -12,19 +12,19 @@ import {
   shuffle,
   ranker,
   getScore,
-  getPossiblePoints,
   getRank,
-  getMinutesAndSeconds
+  getMinutesAndSeconds,
+  getInitialStateFromProps
 } from './gameBoardController';
 
 function GameBoardScreen(props) {
-  const cl = props.practiceRound.round.coreLetter;
-  const otherLetters = props.practiceRound.round.letters
-    .replace(cl, '')
-    .split(''); // subtract core letter
-  const roundDict = props.practiceRound.round.words.map(word => word.word);
-  const panagramList = ['HUNCHBACK']; // HEY BOBBY, this can be derived from word dict
-  const possiblePoints = getPossiblePoints(roundDict, panagramList);
+  const {
+    cl,
+    otherLetters,
+    roundDict,
+    panagramList,
+    possiblePoints
+  } = getInitialStateFromProps(props);
 
   [input, setInput] = useState([]);
   [correctWords, setCorrectWords] = useState([]);

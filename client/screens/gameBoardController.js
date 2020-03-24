@@ -1,4 +1,43 @@
 /**
+ * Getters from practice round object
+ **/
+
+const getCoreLetter = round => round.coreLetter;
+const getOtherLetters = (round, cl) => round.letters.replace(cl, '').split('');
+const getRoundDict = round => round.words.map(word => word.word);
+const getPanagramList = roundDict =>
+  roundDict.filter(word => new Set(word.split('')).size === 7);
+
+export const getScore = (word, panagramList) => {
+  const wordLength = word.length;
+  let score;
+  if (wordLength === 4) {
+    score = 1;
+  } else if (panagramList.includes(word)) {
+    score = wordLength + 7;
+  } else {
+    score = wordLength;
+  }
+  return score;
+};
+
+const getPossiblePoints = (roundDict, panagramList) => {
+  return roundDict
+    .map(word => getScore(word, panagramList))
+    .reduce((a, b) => a + b, 0);
+};
+
+export const getInitialStateFromProps = props => {
+  const round = props.practiceRound.round;
+  const cl = getCoreLetter(round);
+  const otherLetters = getOtherLetters(round, cl);
+  const roundDict = getRoundDict(round);
+  const panagramList = getPanagramList(roundDict);
+  const possiblePoints = getPossiblePoints(roundDict, panagramList);
+  return { cl, otherLetters, roundDict, panagramList, possiblePoints };
+};
+
+/**
  * Functions
  **/
 //shuffling algorithm: https://en.wikipedia.org/wiki/Fisher%E2%80%93Yates_shuffle#The_modern_algorithm
@@ -18,25 +57,6 @@ export const getMinutesAndSeconds = gameTimer => {
     minutes,
     seconds
   };
-};
-
-export const getScore = (word, panagramList) => {
-  const wordLength = word.length;
-  let score;
-  if (wordLength === 4) {
-    score = 1;
-  } else if (panagramList.includes(word)) {
-    score = wordLength + 7;
-  } else {
-    score = wordLength;
-  }
-  return score;
-};
-
-export const getPossiblePoints = (roundDict, panagramList) => {
-  return roundDict
-    .map(word => getScore(word, panagramList))
-    .reduce((a, b) => a + b, 0);
 };
 
 //Ranking Logic
