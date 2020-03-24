@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { useState, Component } from 'react';
 import { connect } from 'react-redux';
 import { Button, StyleSheet, View, Text } from 'react-native';
 import { Container } from 'native-base';
@@ -8,175 +8,133 @@ import Error from '../components/Error';
 import CorrectWords from '../components/CorrectWords';
 import { shallowEqual } from '@babel/types';
 
-import { shuffle, ranker } from './gameBoardController';
+import {
+  shuffle,
+  ranker,
+  getScore,
+  getPossiblePoints,
+  getRankIndex,
+  getMinutesAndSeconds
+} from './gameBoardController';
 
-class GameBoardScreen extends Component {
-  constructor(props) {
-    super(props);
-    this.cl = props.practiceRound.round.coreLetter;
-    this.otherLetters = props.practiceRound.round.letters
-      .replace(this.cl, '')
-      .split(''); // subtract core letter
-    this.roundDict = props.practiceRound.round.words.map(word => word.word);
-    this.panagramList = ['HUNCHBACK']; // HEY BOBBY, this can be derived from word dict
+function GameBoardScreen(props) {
+  const cl = props.practiceRound.round.coreLetter;
+  const otherLetters = props.practiceRound.round.letters
+    .replace(cl, '')
+    .split(''); // subtract core letter
+  const roundDict = props.practiceRound.round.words.map(word => word.word);
+  const panagramList = ['HUNCHBACK']; // HEY BOBBY, this can be derived from word dict
+  const possiblePoints = (getPossiblePoints(roundDict, panagramList)[
+    (input, setInput)
+  ] = useState([]));
+  [correctWords, setCorrectWords] = useState([]);
+  [lettersOrdering, setLettersOrdering] = useState(otherLetters);
+  [score, setScore] = useState(0);
+  [rank, setRank] = useState('Beginner');
+  [error, setError] = useState([]);
 
-    this.state = {
-      input: [],
-      correctWords: [],
-      lettersOrdering: this.otherLetters,
-      score: 0,
-      rank: 'Beginner',
-      error: [],
-      gameTimer: 300
-    };
-  }
+  // a little more complicated
+  [gameTimer, setGameTime] = useState(300);
+  [isActive, toggleActive] = useState(true);
+  [minutesAndSeconds, setMinutesAndSeconds] = useState(
+    getMinutesAndSeconds(300)
+  );
 
-  componentDidMount() {
-    this.tick();
-  }
+  // chose to fire only when this.state.gameTimer has changed
+  // gameOver, when that has changed then fire this effect
+  // update game timer?
+  // update minutes and seconds?
+  // useEffect(() => {
+  //   if (this.state.gameTimer > 0) {
+  //     // Update gameTimer state
+  //     setTimeout(() => {
+  //       this.setState({ gameTimer: this.state.gameTimer - 1 });
+  //       this.tick();
+  //     }, 1000);
+  //   } else {
+  //     // Redirect to PostRound
+  //     setTimeout(() => {
+  //       this.props.navigation.navigate('PostRoundScreen');
+  //     }, 1000);
+  //   }
+  // }, [gameTimer]);
 
-  tick = () => {
-    if (this.state.gameTimer > 0) {
-      // Update gameTimer state
-      setTimeout(() => {
-        this.setState({ gameTimer: this.state.gameTimer - 1 });
-        this.tick();
-      }, 1000);
-    } else {
-      // Redirect to PostRound
-      setTimeout(() => {
-        this.props.navigation.navigate('PostRoundScreen');
-      }, 1000);
-    }
-  };
-
+  // to do, come back here
   //error function
   err = str => {
-    this.state.input.length = 0;
-    this.state.error.push(str);
-    this.setState(this.state.error);
+    setError([...error, str]);
   };
 
-  render() {
-    let minutes = Math.floor(this.state.gameTimer / 60);
-    let secondsCalc = this.state.gameTimer - minutes * 60;
-    let seconds = secondsCalc <= 9 ? '0' + secondsCalc : secondsCalc;
+  handleDelete = () => {
+    // can't mutate state, need to copy
+    setInput(input.slice(0, input.length - 1));
+  };
 
-    return (
-      <Container style={styles.container}>
-        <Text>
-          {this.state.gameTimer === 0
-            ? 'Round Over!'
-            : `Time: ${minutes}:${seconds}`}
-        </Text>
-        <Text>
-          Score: {this.state.score} Rank: {this.state.rank}
-        </Text>
-        <Text>
-          You've found {this.state.correctWords.length} correct Words:
-        </Text>
-        <CorrectWords words={this.state.correctWords} />
-        {/* <Text>
-          {this.state.gameTimer === 0
-            ? 'Round Over!'
-            : `Time: ${minutes}:${seconds}`}
-        </Text> */}
-        <Error error={this.state.error} />
-        <Input inputLetters={this.state.input} />
-        <Hive
-          centerLetter={this.cl} // comes from redux now
-          otherLetters={this.otherLetters} // comes from redux now
-          onLetterPress={letter => {
-            let error = this.state.error;
-            error.length > 0 ? error.pop() : null;
-            this.setState(error);
-            let input = this.state.input;
-            input.push(letter);
-            this.setState(input);
-          }}
-        />
-        <View style={styles.flexRow}>
-          <Button
-            title="Delete"
-            onPress={() => {
-              let input = this.state.input;
-              input.pop();
-              this.setState(input);
-            }}
-          />
-          <Button
-            title="Shuffle"
-            onPress={() => {
-              let lettersOrdering = this.state.lettersOrdering;
-              lettersOrdering = shuffle(lettersOrdering);
-              this.setState(lettersOrdering);
-            }}
-          />
-          <Button
-            title="Enter"
-            onPress={() => {
-              let input = this.state.input;
-              let correctWords = this.state.correctWords;
-              let error = this.state.error;
-              let score = this.state.score;
-              let rank = this.state.rank;
-              let wordLength = [...input].length;
-              let word = [...input].join('');
+  handleShuffle = () => {
+    // make sure shuffle is making a copy of the array
+    setLettersOrdering(shuffle(lettersOrdering));
+  };
 
-              //Clear error message everytime enter is pressed
-              error.length > 0 ? error.pop() : null;
-              this.setState(error);
+  handleLetterPress = letter => {
+    setError(error.slice(0, error.length - 1));
+    setInput([...input, letter]);
+  };
 
-              // Too short word logic
-              if (input.length < 4) {
-                this.err('Your word is too short');
-              }
-              // Correct word logic
-              else if (!word.includes(this.cl)) {
-                this.err('Your word must contain the center letter.');
-              } else if (correctWords.includes(word)) {
-                this.err('Youve already found this word');
-              } else if (
-                input.length >= 4 &&
-                this.roundDict.indexOf(word) > -1
-              ) {
-                correctWords.length > 0 ? (word = ', ' + word) : null;
-                correctWords.push(word);
-                this.setState(correctWords);
+  handleEnter = () => {
+    let word = input.join('');
+    // Clear input
+    setInput([]);
 
-                //Scoring Logic
-                wordLength === 4
-                  ? this.setState({ score: (score += wordLength - 3) })
-                  : this.panagramList.indexOf(word) > -1 && wordLength > 4
-                  ? this.setState({ score: (score += wordLength + 7) })
-                  : this.setState({ score: (score += wordLength) });
+    //Clear error message everytime enter is pressed
+    setError(error.slice(0, error.length - 1));
 
-                input.length = 0;
-                this.setState(input);
-              }
-              // Incorect word logic
-              else {
-                this.err('Your word is not in our dictionary.');
-              }
-              //Ranking Logic
-              // Convert round dictionary into array of points for each word
-              const possiblePoints = this.roundDict
-                .map(i =>
-                  i.length === 4
-                    ? 1
-                    : this.panagramList.indexOf(i) > -1
-                    ? i.length + 7
-                    : i.length
-                )
-                .reduce((a, b) => a + b, 0);
+    // Too short word logic
+    if (word.length < 4) {
+      err('Your word is too short');
+    } else if (!word.includes(cl)) {
+      err('Your word must contain the center letter.');
+    } else if (correctWords.includes(word)) {
+      err('Youve already found this word');
+    } else if (roundDict.includes(word)) {
+      setCorrectWords([...correctWords, word]);
 
-              this.setState({ rank: RANKINGS[ranker(n)] });
-            }}
-          />
-        </View>
-      </Container>
-    );
-  }
+      // Score function
+      setScore(getScore(word, panagramList));
+    }
+    // Incorect word logic
+    else {
+      err('Your word is not in our dictionary.');
+    }
+
+    setRank(RANKINGS[getRankIndex(score, possiblePoints)]);
+  };
+
+  return (
+    <Container style={styles.container}>
+      // <Text>
+      //   {gameTimer === 0
+      //     ? 'Round Over!'
+      //     : `Time: ${minutesAndSeconds.minutes}:${minutesAndSeconds.seconds}`}
+      // </Text>
+      <Text>
+        {Score: {score}, Rank: {rank}}
+      </Text>
+      <Text>You've found {correctWords.length} correct Words:</Text>
+      <CorrectWords words={correctWords.join(', ')} />
+      <Error error={error} />
+      <Input inputLetters={input} />
+      <Hive
+        centerLetter={cl} // comes from redux now
+        otherLetters={otherLetters} // comes from redux now
+        onLetterPress={letter => handleLetterPress(letter)}
+      />
+      <View style={styles.flexRow}>
+        <Button title="Delete" onPress={() => handleDelete()} />
+        <Button title="Shuffle" onPress={() => handleShuffle()} />
+        <Button title="Enter" onPress={() => handleEnter()} />
+      </View>
+    </Container>
+  );
 }
 
 const styles = StyleSheet.create({
