@@ -17,7 +17,7 @@ function PostRoundScreen({ practiceRound, navigation, createUserRound }) {
     }
   ];
 
-  const words = ['stuff', 'things', 'lorem', 'ipsup thooo', 'these', 'arent', 'real', 'words', 'yet', 'also', 'words', 'you', 'got', 'should', 'be', 'bold'];
+  const words = practiceRound.words.map(word => word.word);
   
   return (
     <Container
