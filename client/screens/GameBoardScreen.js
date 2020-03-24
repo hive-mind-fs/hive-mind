@@ -71,7 +71,6 @@ function GameBoardScreen(props) {
   };
 
   handleShuffle = () => {
-    // make sure shuffle is making a copy of the array
     setLettersOrdering(shuffle(lettersOrdering));
   };
 
@@ -99,7 +98,7 @@ function GameBoardScreen(props) {
       setCorrectWords([...correctWords, word]);
 
       // Score function
-      setScore(getScore(word, panagramList));
+      setScore(score + getScore(word, panagramList));
     }
     // Incorect word logic
     else {
