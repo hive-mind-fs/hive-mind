@@ -24,8 +24,17 @@ import {
   SignupScreen
 } from './screens';
 import store from './store';
+import colors from './utils/styles';
 
 const Stack = createStackNavigator();
+
+const navStyle = {
+  headerBackTitleVisible: false,
+  headerTitleStyle: {
+    color: colors.BLACK
+  },
+  headerTintColor: colors.GOLD
+};
 
 export function App() {
   const [isReady, setIsReady] = React.useState(false);
@@ -48,19 +57,34 @@ export function App() {
     <Provider store={store}>
       <NavigationContainer>
         <Stack.Navigator>
+          <Stack.Screen
+            name="LandingScreen"
+            component={LandingScreen}
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
+            name="LoginScreen"
+            component={LoginScreen}
+            options={{
+              headerTitle: 'Log In',
+              ...navStyle
+            }}
+          />
+          <Stack.Screen
+            name="SignupScreen"
+            component={SignupScreen}
+            options={{ headerTitle: 'Sign Up', ...navStyle }}
+          />
           <Stack.Screen name="HomeScreen" component={HomeScreen} />
           <Stack.Screen name="DashboardScreen" component={DashboardScreen} />
           <Stack.Screen name="CountdownScreen" component={CountdownScreen} />
           <Stack.Screen name="Game" component={Game} />
           <Stack.Screen name="GameBoardScreen" component={GameBoardScreen} />
           <Stack.Screen name="HiveScreen" component={HiveScreen} />
-          <Stack.Screen name="LandingScreen" component={LandingScreen} />
-          <Stack.Screen name="LoginScreen" component={LoginScreen} />
           <Stack.Screen name="PlayScreen" component={PlayScreen} />
           <Stack.Screen name="PostRoundScreen" component={PostRoundScreen} />
           <Stack.Screen name="ProfileScreen" component={ProfileScreen} />
           <Stack.Screen name="RulesScreen" component={RulesScreen} />
-          <Stack.Screen name="SignupScreen" component={SignupScreen} />
           {/* <Stack.Screen name="Stats" component={Stats} /> */}
         </Stack.Navigator>
       </NavigationContainer>

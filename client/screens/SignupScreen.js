@@ -7,6 +7,9 @@ import { auth } from '../store';
 const SignupScreen = ({ navigation, handleSubmit }) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [user, setUser] = useState({});
+
+  console.log(user);
 
   return (
     <Container>
@@ -15,12 +18,14 @@ const SignupScreen = ({ navigation, handleSubmit }) => {
           <Item>
             <Input
               placeholder="Email"
+              autoCapitalize="none"
               onChange={e => setEmail(e.nativeEvent.text)}
             />
           </Item>
           <Item last>
             <Input
               placeholder="Password"
+              autoCapitalize="none"
               secureTextEntry={true}
               onChange={e => setPassword(e.nativeEvent.text)}
             />
@@ -41,4 +46,10 @@ const mapDispatch = dispatch => {
   };
 };
 
-export default connect(null, mapDispatch)(SignupScreen);
+const mapState = state => {
+  return {
+    user: state.user
+  };
+};
+
+export default connect(mapState, mapDispatch)(SignupScreen);
