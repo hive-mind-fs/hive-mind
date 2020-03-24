@@ -11,30 +11,25 @@ const defaultGame = {
 /**
  * ACTION TYPES
  */
-const SET_GAME_STATUS = 'SET_GAME_STATUS';
 const SET_PRACTICE_ROUND = 'SET_PRACTICE_ROUND';
+const SAVED_PRACTICE_ROUND = 'SAVE_PRACTICE_ROUND';
 
 /**
  * ACTION CREATORS
  */
-const setGameStatus = gameStatus => ({ type: SET_GAME_STATUS, gameStatus });
-
 const setPracticeRound = practiceRound => ({
   type: SET_PRACTICE_ROUND,
+  practiceRound
+});
+
+const savedPracticeRound = practiceRound => ({
+  type: SAVED_PRACTICE_ROUND,
   practiceRound
 });
 
 /**
  * THUNK CREATORS
  */
-export const setGameStatusThunk = gameStatus => async dispatch => {
-  try {
-    dispatch(setGameStatus);
-  } catch (err) {
-    console.error(err);
-  }
-};
-
 export const fetchPracticeRound = userId => async dispatch => {
   try {
     let practiceRound;
@@ -49,14 +44,33 @@ export const fetchPracticeRound = userId => async dispatch => {
   }
 };
 
+export const savePracticeRound = (practiceRoundId, score, correctWords) => async dispatch => {
+  try {
+    let practiceRound;
+    try {
+      practiceRound = await axios.put(`http://localhost:8080/api/userRounds/${practiceRoundId}`, {
+        score: score
+      });
+    } catch (error) {
+      practiceRound = await axios.put(`/api/userRounds/${practiceRoundId}`, {
+        score: score
+      });
+    }
+    dispatch(savedPracticeRound(practiceRound.data));
+  } catch (err) {
+    console.error(err);
+  }
+};
+
 /**
  * REDUCER
  */
 export default function(state = defaultGame, action) {
   switch (action.type) {
     case SET_PRACTICE_ROUND:
-      console.log('STATE PRACTICE', { ...state, practiceRound: action.practiceRound})
-      return { ...state, practiceRound: action.practiceRound};
+      return { ...state, practiceRound: action.practiceRound };
+    case SAVED_PRACTICE_ROUND:
+      return { ...state, practiceRound: action.practiceRound }
     default:
       return state;
   }

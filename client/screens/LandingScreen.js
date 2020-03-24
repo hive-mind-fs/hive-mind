@@ -1,18 +1,20 @@
 import React from 'react';
 import { Button } from 'react-native';
-import { Container, Thumbnail } from 'native-base';
+import { Container } from 'native-base';
 import { Logo } from '../components';
 
 export default function LandingScreen({ navigation }) {
   return (
-    <Container style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-        <Logo/>
+    <Container
+      style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}
+    >
+      <Logo />
       <Button
-        title="Signup"
+        title="Sign Up"
         onPress={() => navigation.navigate('SignupScreen')}
       />
       <Button
-        title="Login"
+        title="Log In"
         onPress={() => navigation.navigate('LoginScreen')}
       />
     </Container>

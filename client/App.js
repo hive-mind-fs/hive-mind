@@ -1,20 +1,15 @@
 import { Ionicons } from '@expo/vector-icons';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
+import axios from 'axios';
 import { AppLoading, registerRootComponent } from 'expo';
 import * as Font from 'expo-font';
-import React from 'react';
-import { StyleSheet } from 'react-native';
+import React, { useEffect, useState } from 'react';
 import 'react-native-gesture-handler';
 import { Provider } from 'react-redux';
-// import { Stats } from './components';
 import {
   CountdownScreen,
-  DashboardScreen,
-  Game,
   GameBoardScreen,
-  HomeScreen,
-  HiveScreen,
   LandingScreen,
   LoginScreen,
   PlayScreen,
@@ -23,7 +18,7 @@ import {
   RulesScreen,
   SignupScreen
 } from './screens';
-import store from './store';
+import store, { getUser } from './store';
 import colors from './utils/styles';
 
 const Stack = createStackNavigator();
@@ -36,10 +31,46 @@ const navStyle = {
   headerTintColor: colors.GOLD
 };
 
-export function App() {
-  const [isReady, setIsReady] = React.useState(false);
+const BASE_URL = 'http://localhost:8080';
 
-  React.useEffect(() => {
+const play = (
+  <Stack.Screen
+    name="PlayScreen"
+    component={PlayScreen}
+    options={{ headerShown: false }}
+  />
+);
+const rules = <Stack.Screen name="RulesScreen" component={RulesScreen} />;
+const countdown = (
+  <Stack.Screen
+    name="CountdownScreen"
+    component={CountdownScreen}
+    options={{ headerShown: false }}
+  />
+);
+const game = (
+  <Stack.Screen
+    name="GameBoardScreen"
+    component={GameBoardScreen}
+    options={{ headerShown: false }}
+  />
+);
+const after = (
+  <Stack.Screen name="PostRoundScreen" component={PostRoundScreen} />
+);
+const profile = <Stack.Screen name="ProfileScreen" component={ProfileScreen} />;
+
+export function App() {
+  const [isReady, setIsReady] = useState(false);
+  const [user, setUser] = useState({});
+
+  async function me() {
+    const { data } = await axios.get(`${BASE_URL}/auth/me`);
+    store.dispatch(getUser(data));
+    setUser(data);
+  }
+
+  useEffect(() => {
     async () => {
       await Font.loadAsync({
         Roboto: require('native-base/Fonts/Roboto.ttf'),
@@ -53,6 +84,22 @@ export function App() {
   if (!isReady) {
     return <AppLoading />;
   }
+
+  if (user.id) {
+    <Provider store={store}>
+      <NavigationContainer>
+        <Stack.Navigator>
+          {play}
+          {rules}
+          {countdown}
+          {game}
+          {after}
+          {profile}
+        </Stack.Navigator>
+      </NavigationContainer>
+    </Provider>;
+  }
+
   return (
     <Provider store={store}>
       <NavigationContainer>
@@ -75,30 +122,16 @@ export function App() {
             component={SignupScreen}
             options={{ headerTitle: 'Sign Up', ...navStyle }}
           />
-          <Stack.Screen name="HomeScreen" component={HomeScreen} />
-          <Stack.Screen name="DashboardScreen" component={DashboardScreen} />
-          <Stack.Screen name="CountdownScreen" component={CountdownScreen} />
-          <Stack.Screen name="Game" component={Game} />
-          <Stack.Screen name="GameBoardScreen" component={GameBoardScreen} />
-          <Stack.Screen name="HiveScreen" component={HiveScreen} />
-          <Stack.Screen name="PlayScreen" component={PlayScreen} />
-          <Stack.Screen name="PostRoundScreen" component={PostRoundScreen} />
-          <Stack.Screen name="ProfileScreen" component={ProfileScreen} />
-          <Stack.Screen name="RulesScreen" component={RulesScreen} />
-          {/* <Stack.Screen name="Stats" component={Stats} /> */}
+          {play}
+          {rules}
+          {countdown}
+          {game}
+          {after}
+          {profile}
         </Stack.Navigator>
       </NavigationContainer>
     </Provider>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center'
-  }
-});
 
 export default registerRootComponent(App);

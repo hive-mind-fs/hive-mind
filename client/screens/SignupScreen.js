@@ -1,14 +1,15 @@
-import { Container, Header, Content, Form, Item, Input } from 'native-base';
+import { Container, Content, Form, Item, Input } from 'native-base';
 import React, { useEffect, useState } from 'react';
-import { Button, Text } from 'react-native';
+import { Button } from 'react-native';
 import { connect } from 'react-redux';
 import { auth } from '../store';
 
-const SignupScreen = ({ navigation, handleSubmit, user }) => {
+const SignupScreen = ({ handleSubmit, navigation, user }) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
   useEffect(() => {
+    console.log(user);
     if (user.id) {
       navigation.navigate('PlayScreen');
     }
@@ -43,15 +44,15 @@ const SignupScreen = ({ navigation, handleSubmit, user }) => {
   );
 };
 
-const mapDispatch = dispatch => {
-  return {
-    handleSubmit: (email, password) => dispatch(auth(email, password, 'signup'))
-  };
-};
-
 const mapState = state => {
   return {
     user: state.user
+  };
+};
+
+const mapDispatch = dispatch => {
+  return {
+    handleSubmit: (email, password) => dispatch(auth(email, password, 'signup'))
   };
 };
 

@@ -10,7 +10,6 @@ const screens = [
   'Game',
   'Nav',
   'GameBoardScreen',
-  'HiveScreen',
   'PlayScreen',
   'PostRoundScreen',
   'ProfileScreen',
