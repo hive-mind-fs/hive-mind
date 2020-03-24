@@ -24,9 +24,9 @@ function GameBoardScreen(props) {
     .split(''); // subtract core letter
   const roundDict = props.practiceRound.round.words.map(word => word.word);
   const panagramList = ['HUNCHBACK']; // HEY BOBBY, this can be derived from word dict
-  const possiblePoints = (getPossiblePoints(roundDict, panagramList)[
-    (input, setInput)
-  ] = useState([]));
+  const possiblePoints = getPossiblePoints(roundDict, panagramList);
+
+  [input, setInput] = useState([]);
   [correctWords, setCorrectWords] = useState([]);
   [lettersOrdering, setLettersOrdering] = useState(otherLetters);
   [score, setScore] = useState(0);
@@ -111,13 +111,8 @@ function GameBoardScreen(props) {
 
   return (
     <Container style={styles.container}>
-      // <Text>
-      //   {gameTimer === 0
-      //     ? 'Round Over!'
-      //     : `Time: ${minutesAndSeconds.minutes}:${minutesAndSeconds.seconds}`}
-      // </Text>
       <Text>
-        {Score: {score}, Rank: {rank}}
+        Score: {score} Rank: {rank}
       </Text>
       <Text>You've found {correctWords.length} correct Words:</Text>
       <CorrectWords words={correctWords.join(', ')} />
