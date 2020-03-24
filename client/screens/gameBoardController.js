@@ -4,6 +4,7 @@
 
 const getCoreLetter = round => round.coreLetter;
 const getOtherLetters = (round, cl) => round.letters.replace(cl, '').split('');
+const getRoundDictObjs = round => round.words;
 const getRoundDict = round => round.words.map(word => word.word);
 const getPanagramList = roundDict =>
   roundDict.filter(word => new Set(word.split('')).size === 7);
@@ -31,10 +32,11 @@ export const getInitialStateFromProps = props => {
   const round = props.practiceRound.round;
   const cl = getCoreLetter(round);
   const otherLetters = getOtherLetters(round, cl);
+  const roundDictObjs = getRoundDictObjs(round);
   const roundDict = getRoundDict(round);
   const panagramList = getPanagramList(roundDict);
   const possiblePoints = getPossiblePoints(roundDict, panagramList);
-  return { cl, otherLetters, roundDict, panagramList, possiblePoints };
+  return { cl, otherLetters, roundDictObjs, roundDict, panagramList, possiblePoints };
 };
 
 /**

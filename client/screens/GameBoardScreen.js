@@ -21,6 +21,7 @@ function GameBoardScreen(props) {
     cl,
     otherLetters,
     roundDict,
+    roundDictObjs,
     panagramList,
     possiblePoints
   } = getInitialStateFromProps(props);
@@ -36,44 +37,18 @@ function GameBoardScreen(props) {
   [gameTimer, setGameTimer] = useState(10);
   [isActive, toggleActive] = useState(true);
 
-
-  // Reset timer when screen is loaded
-  // useEffect(() => {
-  //   const unsubscribe = props.navigation.addListener('focus', () => {
-  //     setGameTimer(300);
-  //   });
-  //   return unsubscribe;
-  // }, [props.navigation]);
-
   useEffect(() => {
     setTimeout(() => {
       if (gameTimer > 0) {
         setGameTimer(gameTimer - 1)
         } else {
-          props.savePracticeRound(props.practiceRound.id, score, correctWords)
+          let userWords = roundDictObjs.filter(word => correctWords.includes(word.word));
+          console.log('userWORDS', userWords);
+          props.savePracticeRound(props.practiceRound.id, score, userWords)
           props.navigation.navigate("PostRoundScreen")
         }
     }, 1000)
   }, [gameTimer])
-
-  // chose to fire only when this.state.gameTimer has changed
-  // gameOver, when that has changed then fire this effect
-  // update game timer?
-  // update minutes and seconds?
-  // useEffect(() => {
-  //   if (this.state.gameTimer > 0) {
-  //     // Update gameTimer state
-  //     setTimeout(() => {
-  //       this.setState({ gameTimer: this.state.gameTimer - 1 });
-  //       this.tick();
-  //     }, 1000);
-  //   } else {
-  //     // Redirect to PostRound
-  //     setTimeout(() => {
-  //       this.props.navigation.navigate('PostRoundScreen');
-  //     }, 1000);
-  //   }
-  // }, [gameTimer]);
 
   err = str => {
     setError([...error, str]);
@@ -101,7 +76,7 @@ function GameBoardScreen(props) {
     } else if (!word.includes(cl)) {
       err('Your word must contain the center letter.');
     } else if (correctWords.includes(word)) {
-      err('Youve already found this word');
+      err("You've already found this word");
     } else if (roundDict.includes(word)) {
       setCorrectWords([...correctWords, word]);
       // Score function

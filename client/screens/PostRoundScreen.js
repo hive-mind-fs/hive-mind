@@ -13,7 +13,7 @@ function PostRoundScreen({ practiceRound, navigation, createUserRound }) {
     },
     {
       title: 'Words Got',
-      stat: '34'
+      stat: `${practiceRound.words.length}`
     }
   ];
 
