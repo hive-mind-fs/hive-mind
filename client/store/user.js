@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { AsyncStorage } from 'react-native';
 
 // Action types
 const GET_USER = 'GET_USER';
@@ -36,6 +37,7 @@ export const auth = (email, password, method) => async dispatch => {
 
   try {
     dispatch(getUser(res.data));
+    await AsyncStorage.setItem('user', JSON.stringify(res.data));
   } catch (e) {
     console.error(e);
   }
@@ -44,6 +46,7 @@ export const auth = (email, password, method) => async dispatch => {
 export const logout = () => async dispatch => {
   try {
     await axios.post(`${BASE_URL}/auth/logout`);
+    await AsyncStorage.setItem('user', null);
     dispatch(removeUser());
   } catch (e) {
     console.error(e);
