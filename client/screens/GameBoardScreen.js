@@ -120,7 +120,7 @@ function GameBoardScreen(props) {
       <Input inputLetters={input} />
       <Hive
         centerLetter={cl} // comes from redux now
-        otherLetters={otherLetters} // comes from redux now
+        otherLetters={lettersOrdering} // comes from redux now
         onLetterPress={letter => handleLetterPress(letter)}
       />
       <View style={styles.flexRow}>
