@@ -36,8 +36,8 @@ router.post('/:userId', async (req, res, next) => {
 // Given userRound id, persist to database
 router.put('/:practiceRoundId', async (req, res, next) => {
     try {
+        console.log('REQ.BODY', req.body)
         let practiceRoundId = +req.params.practiceRoundId;
-
         const userRound = await UserRound.findByPk(practiceRoundId, {
             returning: true,
             where: { id: practiceRoundId },
@@ -50,10 +50,14 @@ router.put('/:practiceRoundId', async (req, res, next) => {
                 },
             ]
         })
-
-        const updatedRound = await userRound.update(req.body)
-
-        res.send(updatedRound)
+        const updatedPracticeRound = await userRound.update(req.body)
+        // Potential Optimization: Figure out a way to do the below  within the update above
+        const guessedWords = req.body.words.map(word => {
+            return { wordId: word.id, userRoundId: practiceRoundId }
+        })
+        await GuessedWord.bulkCreate(guessedWords)
+        //
+        res.send(updatedPracticeRound)
     } catch (err) {
         next(err);
     }
