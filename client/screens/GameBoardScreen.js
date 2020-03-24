@@ -59,14 +59,11 @@ function GameBoardScreen(props) {
   //   }
   // }, [gameTimer]);
 
-  // to do, come back here
-  //error function
   err = str => {
     setError([...error, str]);
   };
 
   handleDelete = () => {
-    // can't mutate state, need to copy
     setInput(input.slice(0, input.length - 1));
   };
 
@@ -87,7 +84,6 @@ function GameBoardScreen(props) {
     //Clear error message everytime enter is pressed
     setError(error.slice(0, error.length - 1));
 
-    // Too short word logic
     if (word.length < 4) {
       err('Your word is too short');
     } else if (!word.includes(cl)) {
@@ -99,9 +95,7 @@ function GameBoardScreen(props) {
 
       // Score function
       setScore(score + getScore(word, panagramList));
-    }
-    // Incorect word logic
-    else {
+    } else {
       err('Your word is not in our dictionary.');
     }
 
@@ -159,4 +153,4 @@ const mapState = state => {
   };
 };
 
-export default connect(mapState, null)(GameBoardScreen);
+export default connect(mapState)(GameBoardScreen);
