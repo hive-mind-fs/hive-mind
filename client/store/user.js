@@ -37,7 +37,6 @@ export const auth = (email, password, method) => async dispatch => {
 
   try {
     dispatch(getUser(res.data));
-    console.log(res.data);
     await AsyncStorage.setItem('user', JSON.stringify(res.data));
   } catch (e) {
     console.error(e);
