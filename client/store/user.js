@@ -8,7 +8,7 @@ const REMOVE_USER = 'REMOVE_USER';
 const defaultUser = {};
 
 // Action creators
-const getUser = user => ({ type: GET_USER, user });
+export const getUser = user => ({ type: GET_USER, user });
 const removeUser = () => ({ type: REMOVE_USER });
 
 const BASE_URL = 'http://localhost:8080';

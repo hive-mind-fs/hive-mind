@@ -6,7 +6,6 @@ import Hive from '../components/Hive';
 import Input from '../components/Input';
 import Error from '../components/Error';
 import CorrectWords from '../components/CorrectWords';
-import { shallowEqual } from '@babel/types';
 import { savePracticeRound } from '../store';
 
 import {
