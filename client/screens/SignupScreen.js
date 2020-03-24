@@ -9,7 +9,6 @@ const SignupScreen = ({ handleSubmit, navigation, user }) => {
   const [password, setPassword] = useState('');
 
   useEffect(() => {
-    console.log(user);
     if (user.id) {
       navigation.navigate('PlayScreen');
     }
