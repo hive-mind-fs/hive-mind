@@ -1,12 +1,18 @@
-import { Container, Header, Content, Form, Item, Input } from 'native-base';
-import React, { useState } from 'react';
-import { Button, Text } from 'react-native';
+import { Container, Content, Form, Item, Input } from 'native-base';
+import React, { useEffect, useState } from 'react';
+import { Button } from 'react-native';
 import { connect } from 'react-redux';
 import { auth } from '../store';
 
-const LoginScreen = ({ navigation, handleSubmit }) => {
+const LoginScreen = ({ handleSubmit, navigation, user }) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+
+  useEffect(() => {
+    if (user.id) {
+      navigation.navigate('PlayScreen');
+    }
+  });
 
   return (
     <Container>
@@ -15,12 +21,14 @@ const LoginScreen = ({ navigation, handleSubmit }) => {
           <Item>
             <Input
               placeholder="Email"
+              autoCapitalize="none"
               onChange={e => setEmail(e.nativeEvent.text)}
             />
           </Item>
           <Item last>
             <Input
               placeholder="Password"
+              autoCapitalize="none"
               secureTextEntry={true}
               onChange={e => setPassword(e.nativeEvent.text)}
             />
@@ -35,10 +43,16 @@ const LoginScreen = ({ navigation, handleSubmit }) => {
   );
 };
 
+const mapState = state => {
+  return {
+    user: state.user
+  };
+};
+
 const mapDispatch = dispatch => {
   return {
     handleSubmit: (email, password) => dispatch(auth(email, password, 'login'))
   };
 };
 
-export default connect(null, mapDispatch)(LoginScreen);
+export default connect(mapState, mapDispatch)(LoginScreen);

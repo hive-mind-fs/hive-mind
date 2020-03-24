@@ -15,12 +15,12 @@ export default function CountdownScreen({ navigation }) {
 
   useEffect(() => {
     setTimeout(() => {
-        if (countdownTimer > 0) {
-          setCountdownTimer(countdownTimer - 1) 
-          } else {
-            navigation.navigate("GameBoardScreen")
-          }
-      }, 1000)
+      if (countdownTimer > 0) {
+        setCountdownTimer(countdownTimer - 1);
+      } else {
+        navigation.navigate('GameBoardScreen');
+      }
+    }, 1000);
   });
 
   return (

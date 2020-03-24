@@ -55,7 +55,7 @@ router.put('/:practiceRoundId', async (req, res, next) => {
         const guessedWords = req.body.words.map(word => {
             return { wordId: word.id, userRoundId: practiceRoundId }
         })
-        await GuessedWord.bulkCreate(guessedWords)
+        GuessedWord.bulkCreate(guessedWords)
         //
         res.send(updatedPracticeRound)
     } catch (err) {
