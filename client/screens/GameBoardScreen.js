@@ -46,7 +46,6 @@ function GameBoardScreen(props) {
         setGameTimer(gameTimer - 1)
         } else {
           let userWords = roundDictObjs.filter(word => correctWords.includes(word.word));
-          console.log('userWORDS', userWords);
           props.savePracticeRound(props.practiceRound.id, score, userWords)
           props.navigation.navigate("PostRoundScreen")
         }

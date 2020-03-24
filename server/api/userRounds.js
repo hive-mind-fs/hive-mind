@@ -36,7 +36,6 @@ router.post('/:userId', async (req, res, next) => {
 // Given userRound id, persist to database
 router.put('/:practiceRoundId', async (req, res, next) => {
     try {
-        console.log('REQ.BODY', req.body)
         let practiceRoundId = +req.params.practiceRoundId;
         const userRound = await UserRound.findByPk(practiceRoundId, {
             returning: true,
@@ -55,7 +54,7 @@ router.put('/:practiceRoundId', async (req, res, next) => {
         const guessedWords = req.body.words.map(word => {
             return { wordId: word.id, userRoundId: practiceRoundId }
         })
-        GuessedWord.bulkCreate(guessedWords)
+        await GuessedWord.bulkCreate(guessedWords)
         //
         res.send(updatedPracticeRound)
     } catch (err) {
