@@ -92,7 +92,7 @@ const profile = <Stack.Screen name="ProfileScreen" component={ProfileScreen} />;
 
 export function App() {
   const [isReady, setIsReady] = useState(false);
-  const [user, setUser] = useState({});
+  const [user, setUser] = useState(null);
 
   useEffect(() => {
     if (!isReady) {
@@ -116,7 +116,8 @@ export function App() {
     return <AppLoading />;
   }
 
-  if (user.id) {
+  if (user) {
+    console.log('user is logged in', user);
     return (
       <Provider store={store}>
         <NavigationContainer>
@@ -134,25 +135,26 @@ export function App() {
         </NavigationContainer>
       </Provider>
     );
+  } else {
+    console.log('user is not logged in', user);
+    return (
+      <Provider store={store}>
+        <NavigationContainer>
+          <Stack.Navigator>
+            {landing}
+            {signup}
+            {play}
+            {rules}
+            {countdown}
+            {game}
+            {after}
+            {profile}
+            {login}
+          </Stack.Navigator>
+        </NavigationContainer>
+      </Provider>
+    );
   }
-
-  return (
-    <Provider store={store}>
-      <NavigationContainer>
-        <Stack.Navigator>
-          {play}
-          {rules}
-          {countdown}
-          {game}
-          {after}
-          {profile}
-          {landing}
-          {login}
-          {signup}
-        </Stack.Navigator>
-      </NavigationContainer>
-    </Provider>
-  );
 }
 
 export default registerRootComponent(App);
