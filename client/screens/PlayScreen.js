@@ -13,7 +13,7 @@ function PlayScreen({ navigation, createUserRound, userId, logout }) {
   };
 
   handleLogout = () => {
-    console.log('we are logging out');
+    logout();
     navigation.navigate('LandingScreen');
   };
 
