@@ -16,6 +16,7 @@ const benchmark = (t0, t1, name) => {
   );
 };
 
+// Save the unique letter set instead of the words
 const getPangrams = async letterCount => {
   const t0 = performance.now();
   const dict = await readFileAsync(__dirname + '/dictionary.txt', 'utf8');
@@ -60,6 +61,7 @@ const getHashMap = words => {
 
 const getPangramWords = async n => {
   const t0 = performance.now();
+  const nPangrams = n ? n : pangrams.length - 1;
 
   // Preprocessing & loading pangrams
   const dict = await readFileAsync(__dirname + '/dictionary.txt', 'utf8');
@@ -69,21 +71,19 @@ const getPangramWords = async n => {
   const pangrams = p.split('\n');
 
   // For each pangram, find words
-  const pangramObjects = pangrams
-    .slice(0, n ? n : pangrams.length - 1)
-    .reduce((pm, pangram) => {
-      const pKey = getWordKeyForWord(pangram);
-      pm.set(pKey, getWordsForPangram(wordsHashMap, pKey));
-      return pm;
-    }, new Map());
+  const pangramObjects = pangrams.slice(0, nPangrams).reduce((pm, pangram) => {
+    const pKey = getWordKeyForWord(pangram);
+    pm.set(pKey, getWordsForPangram(wordsHashMap, pKey));
+    return pm;
+  }, new Map());
 
   const t1 = performance.now();
-  benchmark(t0, t1, `getPangramWords:${pangrams.length}`);
+  benchmark(t0, t1, `getPangramWords:${nPangrams}`);
   return pangramObjects;
 };
 
 (async () => {
   await getPangrams(7);
   const pangramObjects = await getPangramWords(1000);
-  console.log(pangramObjects.size);
+  console.log(pangramObjects);
 })();
