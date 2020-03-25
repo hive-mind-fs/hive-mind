@@ -30,14 +30,14 @@ export default class FBLogin extends Component {
     <TouchableOpacity onPress={() => this.login()}>
       <View
         style={{
-          width: '50%',
+          width: '100%',
           alignSelf: 'center',
           borderRadius: 4,
           padding: 24,
           backgroundColor: '#3B5998',
         }}>
         <Text style={{ color: 'white', fontWeight: 'bold' }}>
-          Login to Facebook
+          Login with Facebook
         </Text>
       </View>
     </TouchableOpacity>
