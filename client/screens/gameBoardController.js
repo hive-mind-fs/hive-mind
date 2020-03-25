@@ -46,6 +46,13 @@ export const getInitialStateFromProps = props => {
   };
 };
 
+export const getMinutesAndSeconds = gameTimer => {
+  let minutes = Math.floor(gameTimer / 60);
+  let secondsCalc = gameTimer - minutes * 60;
+  let seconds = secondsCalc <= 9 ? '0' + secondsCalc : secondsCalc;
+  return { minutes, seconds };
+};
+
 /**
  * Functions
  **/
