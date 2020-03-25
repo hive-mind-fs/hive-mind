@@ -19,7 +19,10 @@ router.post('/:userId', async (req, res, next) => {
     const round = await Round.findByPk(51);
 
     const userRound = await UserRound.findOrCreate({
-      where: { userId: userId, roundId: round.id },
+      where: { userId: userId, roundId: round.id }
+    });
+
+    const userRoundWithAttributes = await UserRound.findByPk(userRound[0].id, {
       attributes: USERROUND_ATTRIBUTES,
       include: [
         { model: Word, attributes: WORD_ATTRIBUTES },
@@ -30,7 +33,8 @@ router.post('/:userId', async (req, res, next) => {
         }
       ]
     });
-    res.send(userRound[0]);
+
+    res.send(userRoundWithAttributes);
   } catch (err) {
     next(err);
   }

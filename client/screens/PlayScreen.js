@@ -8,7 +8,7 @@ import { logout } from '../store';
 
 function PlayScreen({ navigation, createUserRound, userId }) {
   const handleSubmit = () => {
-    createUserRound(8); // To do, replace with user id
+    createUserRound(userId);
     navigation.navigate('CountdownScreen');
   };
 
