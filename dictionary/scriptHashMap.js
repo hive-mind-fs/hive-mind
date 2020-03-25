@@ -63,7 +63,7 @@ const getWordsHashMap = words => {
 
 // An array of words for pangram
 // ~20 miliseconds per panagram
-const getWordsForPangram = (wordsHashMap, pKey) => {
+const getWordsForPangramInner = (wordsHashMap, pKey) => {
   let pWords = [];
   const pSet = new Set(pKey.split(''));
   wordsHashMap.forEach((words, wKey) => {
@@ -84,7 +84,7 @@ const getWordsForPangram = (wordsHashMap, pKey) => {
   return pWords;
 };
 
-const getPangramWords = async n => {
+const getWordsForPangram = async n => {
   const t0 = performance.now();
 
   // Preprocessing & loading pangrams
@@ -99,12 +99,12 @@ const getPangramWords = async n => {
 
   // For each pangram, find words
   const pangramObjects = pangrams.slice(0, nPangrams).reduce((pm, pKey) => {
-    pm.set(pKey, getWordsForPangram(wordsHashMap, pKey));
+    pm.set(pKey, getWordsForPangramInner(wordsHashMap, pKey));
     return pm;
   }, new Map());
 
   const t1 = performance.now();
-  benchmark(t0, t1, `getPangramWords: for ${nPangrams} pangrams`);
+  benchmark(t0, t1, `getWordsForPangram: for ${nPangrams} pangrams`);
   return pangramObjects;
 };
 
@@ -123,6 +123,6 @@ const persistPangramWords = async pangramObjects => {
 
 (async () => {
   await getUniqueLetterSets(7);
-  const pangramObjects = await getPangramWords();
+  const pangramObjects = await getWordsForPangram();
   await persistPangramWords(pangramObjects);
 })();
