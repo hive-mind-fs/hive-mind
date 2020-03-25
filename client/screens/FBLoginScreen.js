@@ -96,7 +96,8 @@ const styles = StyleSheet.create({
       backgroundColor: '#4267b2',
       paddingVertical: 10,
       paddingHorizontal: 20,
-      borderRadius: 20
+      borderRadius: 20,
+      top: 50
     },
     logoutBtn: {
       backgroundColor: '#4267b2',
