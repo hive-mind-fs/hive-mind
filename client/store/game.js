@@ -12,7 +12,7 @@ const defaultGame = {
  * ACTION TYPES
  */
 const SET_PRACTICE_ROUND = 'SET_PRACTICE_ROUND';
-const SAVED_PRACTICE_ROUND = 'SAVE_PRACTICE_ROUND';
+const SAVED_PRACTICE_ROUND = 'SAVED_PRACTICE_ROUND';
 
 /**
  * ACTION CREATORS
@@ -72,7 +72,7 @@ export default function(state = defaultGame, action) {
     case SET_PRACTICE_ROUND:
       return { ...state, practiceRound: action.practiceRound };
     case SAVED_PRACTICE_ROUND:
-      return { ...state, practiceRound: action.practiceRound }
+      return { ...state, practiceRound: action.practiceRound };
     default:
       return state;
   }
