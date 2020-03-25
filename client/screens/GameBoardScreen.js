@@ -12,7 +12,8 @@ import {
   shuffle,
   getScore,
   getRank,
-  getInitialStateFromProps
+  getInitialStateFromProps,
+  getMinutesAndSeconds
 } from './gameBoardController';
 
 function GameBoardScreen(props) {
@@ -31,23 +32,21 @@ function GameBoardScreen(props) {
   [score, setScore] = useState(0);
   [rank, setRank] = useState('Beginner');
   [error, setError] = useState([]);
-
-  // a little more complicated
-  [gameTimer, setGameTimer] = useState(10);
-  [isActive, toggleActive] = useState(true);
+  [gameTimer, setGameTimer] = useState(300);
 
   useEffect(() => {
     setTimeout(() => {
       if (gameTimer > 0) {
-        setGameTimer(gameTimer - 1)
-        } else {
-          let userWords = roundDictObjs.filter(word => correctWords.includes(word.word));
-          console.log('userWORDS', userWords);
-          props.savePracticeRound(props.practiceRound.id, score, userWords)
-          props.navigation.navigate("PostRoundScreen")
-        }
-    }, 1000)
-  }, [gameTimer])
+        setGameTimer(gameTimer - 1);
+      } else {
+        let userWords = roundDictObjs.filter(word =>
+          correctWords.includes(word.word)
+        );
+        props.savePracticeRound(props.practiceRound.id, score, userWords);
+        props.navigation.navigate('PostRoundScreen');
+      }
+    }, 1000);
+  }, [gameTimer]);
 
   err = str => {
     setError([...error, str]);
@@ -87,15 +86,12 @@ function GameBoardScreen(props) {
     setRank(getRank(score, possiblePoints));
   };
 
-  let minutes = Math.floor(gameTimer / 60);
-  let secondsCalc = gameTimer - minutes * 60;
-  let seconds = secondsCalc <= 9 ? '0' + secondsCalc : secondsCalc;
-  
+  let { minutes, seconds } = getMinutesAndSeconds(gameTimer);
+
   return (
     <Container style={styles.container}>
       <Text>
-        Score: {score} Rank: {rank}  Timer: { minutes }:{ seconds }
-        {/* Timer: { minutesAndSeconds } */}
+        Score: {score} Rank: {rank} Timer: {minutes}:{seconds}
       </Text>
       <Text>You've found {correctWords.length} correct Words:</Text>
       <CorrectWords words={correctWords.join(', ')} />
@@ -103,7 +99,7 @@ function GameBoardScreen(props) {
       <Input inputLetters={input} />
       <Hive
         centerLetter={cl} // comes from redux now
-        otherLetters={lettersOrdering} // comes from redux now
+        otherLetters={lettersOrdering}
         onLetterPress={letter => handleLetterPress(letter)}
       />
       <View style={styles.flexRow}>
