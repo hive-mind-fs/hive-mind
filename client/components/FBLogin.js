@@ -10,6 +10,7 @@ import {
 // import Expo  from 'expo';
 import * as Facebook from 'expo-facebook';
 
+
 export default function FBLogin() {
   const [isLoggedin, setLoggedinStatus] = useState(false);
   const [userData, setUserData] = useState([]);
@@ -81,12 +82,6 @@ export default function FBLogin() {
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#e9ebee',
-    alignItems: 'center',
-    justifyContent: 'center'
-  },
   loginBtn: {
     backgroundColor: '#4267b2',
     paddingVertical: 10,
