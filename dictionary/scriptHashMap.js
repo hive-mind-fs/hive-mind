@@ -169,8 +169,7 @@ const getRoundsFromPangramWords = (pangramWords, pangramObjects) => {
 (async () => {
   const pangramObjects = await getUniqueLetterSets(7);
   await persistKeyedObjects(pangramObjects, '/pangramSets.txt');
-  const pangramWords = await getWordsForPangram(10);
+  const pangramWords = await getWordsForPangram();
   await persistKeyedObjects(pangramWords, '/pangramWordSet.txt');
   const rounds = getRoundsFromPangramWords(pangramWords, pangramObjects);
-  console.log(rounds[9]);
 })();
