@@ -44,7 +44,6 @@ router.post('/:userId', async (req, res, next) => {
 // Given userRound id, persist to database
 router.put('/:userRoundId', async (req, res, next) => {
   try {
-    console.log('REQ.BODY', req.body);
     let userRoundId = +req.params.userRoundId;
     const userRound = await UserRound.findByPk(userRoundId, {
       returning: true,
