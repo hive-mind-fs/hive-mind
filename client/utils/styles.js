@@ -10,4 +10,4 @@ const colors = {
   WHITE
 };
 
-export default colors
+export default colors;
