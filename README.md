@@ -3,7 +3,7 @@
 We are using Expo to develop with React Native. We are using the “managed workflow” (similar to create-react-app) to minimize complexity.
 https://docs.expo.io/versions/v36.0.0/introduction/managed-vs-bare/.
 
-## Run the project locally
+### Run the project locally
 
 First, install the command line tools.
 
@@ -41,7 +41,9 @@ Run the project:
 npm start
 ```
 
-On the left panel, click “Run on iOS simulator”
+On the left panel, click “Run on iOS simulator”.
+
+You may have to download Xcode. Refer to errors in Expo DevTools console. running at http://localhost:19002
 
 When you make changes to the code, they will automatically show up in the simulator.
 
@@ -52,15 +54,17 @@ To debug in the iOS simulator:
 Debug Remote JS
 ```
 
-## Run the project remotely
+### Run the project remotely
 
-# Scoring
+## Algorithms
+
+### Scoring
 
 4-letter words are worth 1 point each.
 Longer words earn 1 point per letter.
 Each puzzle includes at least one “pangram” which uses every letter. These are worth 7 extra points!
 
-# Ranking
+### Ranking
 
 Ranks are based on a percentage of possible points in a puzzle. For our purposes the rankings will break down as follows,where x is a users points:
 
