@@ -8,6 +8,7 @@
   "main": "node_modules/expo/AppEntry.js",
   "scripts": {
     "android": "expo start --android",
+    "dev": "npm run start-server & npm run start-client",
     "eject": "expo eject",
     "ios": "expo start --ios",
     "lint": "eslint ./ --ignore-path .gitignore",
@@ -15,7 +16,6 @@
     "seed": "node script/seed.js",
     "start": "node server",
     "start-client": "expo start",
-    "start-dev": "npm run start-client & npm run start-server",
     "start-server": "nodemon server -e html,js,scss --ignore public --ignore client",
     "test": "npm run test-server & npm run test-client",
     "test-client": "jest ./client/**/*.spec.js",
