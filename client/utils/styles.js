@@ -3,9 +3,11 @@ const GOLD = '#F8CD05';
 const GRAY = '#e6e6e6';
 const WHITE = '#FFFFFF';
 
-export default colors = {
+const colors = {
   BLACK,
   GOLD,
   GRAY,
   WHITE
 };
+
+export default colors
