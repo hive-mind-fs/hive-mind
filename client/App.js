@@ -16,7 +16,8 @@ import {
   PostRoundScreen,
   ProfileScreen,
   RulesScreen,
-  SignupScreen
+  SignupScreen,
+  FBLoginScreen
 } from './screens';
 import store from './store';
 import colors from './utils/styles';
@@ -74,6 +75,14 @@ const login = (
     }}
   />
 );
+
+
+const fblogin = (
+  <Stack.Screen name="FbLoginScreen" component={FBLoginScreen}
+    options={{ headerShown: false }}
+  />
+);
+
 const signup = (
   <Stack.Screen
     name="SignupScreen"
@@ -122,6 +131,7 @@ export function App() {
             {after}
             {profile}
             {landing}
+            {fblogin}
             {login}
             {signup}
           </Stack.Navigator>
@@ -141,6 +151,7 @@ export function App() {
           {after}
           {profile}
           {landing}
+          {fblogin}
           {login}
           {signup}
         </Stack.Navigator>
