@@ -39,10 +39,10 @@ const play = (
   />
 );
 const rules = (
-  <Stack.Screen 
-    name="RulesScreen" 
-    component={RulesScreen} 
-    options={{ headerShown: false}}
+  <Stack.Screen
+    name="RulesScreen"
+    component={RulesScreen}
+    options={{ headerShown: false }}
   />
 );
 const countdown = (
