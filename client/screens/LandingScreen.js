@@ -54,7 +54,6 @@ export default function LandingScreen({ navigation }) {
       <Container
       style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}
     >
-      <View>
         <ActivityIndicator
           size="large"
           color="#0000ff"
@@ -75,9 +74,8 @@ export default function LandingScreen({ navigation }) {
           style={styles.logoutBtn}
           onPress={() => navigation.navigate('PlayScreen')}
         >
-          <Text style={{ color: '#fff' }}>Play</Text>
+          <Text style={{ color: '#ffff' }}>Play</Text>
         </TouchableOpacity>
-      </View>
       </Container>
     ) : null
   ) : (
@@ -106,7 +104,7 @@ const styles = StyleSheet.create({
     paddingVertical: 10,
     paddingHorizontal: 20,
     borderRadius: 20,
-    top: 50
+    top: 10
   },
   logoutBtn: {
     backgroundColor: '#4267b2',
@@ -114,7 +112,6 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     borderRadius: 20,
     position: 'absolute',
-    left: 35,
-    bottom: -50
+    bottom: 275
   }
 });
