@@ -2,8 +2,10 @@ import React from 'react';
 import { Button } from 'react-native';
 import { Container } from 'native-base';
 import { Logo } from '../components';
+import FBLogin from '../components/FBLogin';
 
 export default function LandingScreen({ navigation }) {
+
   return (
     <Container
       style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}
@@ -17,6 +19,7 @@ export default function LandingScreen({ navigation }) {
         title="Log In"
         onPress={() => navigation.navigate('LoginScreen')}
       />
+      <FBLogin />
     </Container>
   );
 }
