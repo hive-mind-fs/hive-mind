@@ -166,19 +166,6 @@ const getRoundsFromPangramWords = (pangramWords, pangramObjects) => {
   return rounds;
 };
 
-// (async () => {
-//   const pangramObjects = await getUniqueLetterSets(7);
-//   await persistKeyedObjects(pangramObjects, '/pangramSets.txt');
-//   const pangramWords = await getWordsForPangram();
-//   await persistKeyedObjects(pangramWords, '/pangramWordSet.txt');
-//   const rounds = getRoundsFromPangramWords(pangramWords, pangramObjects);
-//   await writeFileAsync(
-//     __dirname + '/allPossibleRounds.json',
-//     JSON.stringify(rounds),
-//     'utf8'
-//   );
-// })();
-
 function sortNumber(a, b) {
   return a - b;
 }
@@ -196,6 +183,19 @@ function quantile(array, percentile) {
   }
   return result;
 }
+
+// (async () => {
+//   const pangramObjects = await getUniqueLetterSets(7);
+//   await persistKeyedObjects(pangramObjects, '/pangramSets.txt');
+//   const pangramWords = await getWordsForPangram();
+//   await persistKeyedObjects(pangramWords, '/pangramWordSet.txt');
+//   const rounds = getRoundsFromPangramWords(pangramWords, pangramObjects);
+//   await writeFileAsync(
+//     __dirname + '/allPossibleRounds.json',
+//     JSON.stringify(rounds),
+//     'utf8'
+//   );
+// })();
 
 (async () => {
   const roundsFile = await readFileAsync(
@@ -218,4 +218,9 @@ function quantile(array, percentile) {
       round.possiblePoints <= maxRoundPoints
   );
   console.log(`of ${rounds.length} there are ${goodRounds.length} good rounds`);
+  await writeFileAsync(
+    __dirname + '/goodRounds.json',
+    JSON.stringify(goodRounds),
+    'utf8'
+  );
 })();
