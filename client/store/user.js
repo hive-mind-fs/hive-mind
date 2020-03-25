@@ -45,7 +45,7 @@ export const auth = (email, password, method) => async dispatch => {
 export const logout = () => async dispatch => {
   try {
     await axios.post(`${BASE_URL}/auth/logout`);
-    await AsyncStorage.setItem('user', null);
+    await AsyncStorage.removeItem('user');
     dispatch(removeUser());
   } catch (e) {
     console.error(e);
