@@ -166,10 +166,56 @@ const getRoundsFromPangramWords = (pangramWords, pangramObjects) => {
   return rounds;
 };
 
+// (async () => {
+//   const pangramObjects = await getUniqueLetterSets(7);
+//   await persistKeyedObjects(pangramObjects, '/pangramSets.txt');
+//   const pangramWords = await getWordsForPangram();
+//   await persistKeyedObjects(pangramWords, '/pangramWordSet.txt');
+//   const rounds = getRoundsFromPangramWords(pangramWords, pangramObjects);
+//   await writeFileAsync(
+//     __dirname + '/allPossibleRounds.json',
+//     JSON.stringify(rounds),
+//     'utf8'
+//   );
+// })();
+
+function sortNumber(a, b) {
+  return a - b;
+}
+
+function quantile(array, percentile) {
+  array.sort(sortNumber);
+  let index = (percentile / 100) * (array.length - 1);
+  let result;
+  if (Math.floor(index) == index) {
+    result = array[index];
+  } else {
+    let i = Math.floor(index);
+    let fraction = index - i;
+    result = array[i] + (array[i + 1] - array[i]) * fraction;
+  }
+  return result;
+}
+
 (async () => {
-  const pangramObjects = await getUniqueLetterSets(7);
-  await persistKeyedObjects(pangramObjects, '/pangramSets.txt');
-  const pangramWords = await getWordsForPangram();
-  await persistKeyedObjects(pangramWords, '/pangramWordSet.txt');
-  const rounds = getRoundsFromPangramWords(pangramWords, pangramObjects);
+  const roundsFile = await readFileAsync(
+    __dirname + '/allPossibleRounds.json',
+    'utf8'
+  );
+  const rounds = JSON.parse(roundsFile);
+  const possiblePoints = rounds.map(round => round.possiblePoints);
+  const QUANTILES = [0, 25, 33, 50, 66, 75, 100];
+  const pointsQuantiles = QUANTILES.map(element =>
+    quantile(possiblePoints, element)
+  );
+  const MIN_QUANTILE = 25;
+  const MAX_QUANTILE = 75;
+  const minRoundPoints = pointsQuantiles[QUANTILES.indexOf(MIN_QUANTILE)];
+  const maxRoundPoints = pointsQuantiles[QUANTILES.indexOf(MAX_QUANTILE)];
+  const goodRounds = rounds.filter(
+    round =>
+      round.possiblePoints >= minRoundPoints &&
+      round.possiblePoints <= maxRoundPoints
+  );
+  console.log(`of ${rounds.length} there are ${goodRounds.length} good rounds`);
 })();
