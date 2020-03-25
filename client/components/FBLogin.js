@@ -7,11 +7,10 @@ import {
   StyleSheet,
   ActivityIndicator
 } from 'react-native';
-// import Expo  from 'expo';
 import * as Facebook from 'expo-facebook';
 
 
-export default function FBLogin() {
+const FBLogin = () => {
   const [isLoggedin, setLoggedinStatus] = useState(false);
   const [userData, setUserData] = useState([]);
   const [isImageLoading, setImageLoadStatus] = useState(false);
@@ -31,7 +30,7 @@ export default function FBLogin() {
           .then(data => {
             setLoggedinStatus(true);
             setUserData(data);
-            setImageLoadStatus(true)
+            setImageLoadStatus(true);
           })
           .catch(e => console.log(e));
       } else {
@@ -81,20 +80,25 @@ export default function FBLogin() {
   );
 }
 
+
+
 const styles = StyleSheet.create({
-  loginBtn: {
-    backgroundColor: '#4267b2',
-    paddingVertical: 10,
-    paddingHorizontal: 20,
-    borderRadius: 20
-  },
-  logoutBtn: {
-    backgroundColor: '#4267b2',
-    paddingVertical: 10,
-    paddingHorizontal: 20,
-    borderRadius: 20,
-    position: 'absolute',
-    left: 35,
-    bottom: -50
-  }
-});
+    loginBtn: {
+      backgroundColor: '#4267b2',
+      paddingVertical: 10,
+      paddingHorizontal: 20,
+      borderRadius: 20
+    },
+    logoutBtn: {
+      backgroundColor: '#4267b2',
+      paddingVertical: 10,
+      paddingHorizontal: 20,
+      borderRadius: 20,
+      position: 'absolute',
+      left: 35,
+      bottom: -50
+    }
+  });
+
+
+  export default FBLogin;
