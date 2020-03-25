@@ -39,10 +39,10 @@ function GameBoardScreen(props) {
       if (gameTimer > 0) {
         setGameTimer(gameTimer - 1);
       } else {
-        let guessedWords = roundDictObjs.filter(word =>
+        let userWords = roundDictObjs.filter(word =>
           correctWords.includes(word.word)
         );
-        props.savePracticeRound(props.practiceRound.id, score, guessedWords);
+        props.savePracticeRound(props.practiceRound.id, score, userWords);
         props.navigation.navigate('PostRoundScreen');
       }
     }, 1000);
