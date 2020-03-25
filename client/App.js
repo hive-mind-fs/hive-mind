@@ -38,7 +38,13 @@ const play = (
     options={{ headerShown: false }}
   />
 );
-const rules = <Stack.Screen name="RulesScreen" component={RulesScreen} />;
+const rules = (
+  <Stack.Screen 
+    name="RulesScreen" 
+    component={RulesScreen} 
+    options={{ headerShown: false}}
+  />
+);
 const countdown = (
   <Stack.Screen
     name="CountdownScreen"
