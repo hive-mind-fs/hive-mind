@@ -6,10 +6,15 @@ import { Logo } from '../components';
 import { fetchPracticeRound } from '../store/game';
 import { logout } from '../store';
 
-function PlayScreen({ navigation, createUserRound, userId }) {
-  const handleSubmit = () => {
+function PlayScreen({ navigation, createUserRound, userId, logout }) {
+  handleSubmit = () => {
     createUserRound(userId);
     navigation.navigate('CountdownScreen');
+  };
+
+  handleLogout = () => {
+    console.log('we are logging out');
+    navigation.navigate('LandingScreen');
   };
 
   return (
@@ -24,10 +29,7 @@ function PlayScreen({ navigation, createUserRound, userId }) {
         title="Rules"
         onPress={() => navigation.navigate('RulesScreen')}
       />
-      <Button
-        title="Logout"
-        onPress={() => navigation.navigate('LandingScreen')}
-      />
+      <Button title="Logout" onPress={() => handleLogout()} />
     </Container>
   );
 }
@@ -40,7 +42,8 @@ const mapState = state => {
 
 const mapDispatch = dispatch => {
   return {
-    createUserRound: userId => dispatch(fetchPracticeRound(userId))
+    createUserRound: userId => dispatch(fetchPracticeRound(userId)),
+    logout: () => dispatch(logout())
   };
 };
 
