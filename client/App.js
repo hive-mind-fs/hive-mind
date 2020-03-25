@@ -16,8 +16,7 @@ import {
   PostRoundScreen,
   ProfileScreen,
   RulesScreen,
-  SignupScreen,
-  FBLoginScreen
+  SignupScreen
 } from './screens';
 import store from './store';
 import colors from './utils/styles';
@@ -39,7 +38,13 @@ const play = (
     options={{ headerShown: false }}
   />
 );
-const rules = <Stack.Screen name="RulesScreen" component={RulesScreen} />;
+const rules = (
+  <Stack.Screen
+    name="RulesScreen"
+    component={RulesScreen}
+    options={{ headerShown: false }}
+  />
+);
 const countdown = (
   <Stack.Screen
     name="CountdownScreen"
@@ -76,13 +81,6 @@ const login = (
   />
 );
 
-
-const fblogin = (
-  <Stack.Screen name="FbLoginScreen" component={FBLoginScreen}
-    options={{ headerShown: false }}
-  />
-);
-
 const signup = (
   <Stack.Screen
     name="SignupScreen"
@@ -95,7 +93,7 @@ const profile = <Stack.Screen name="ProfileScreen" component={ProfileScreen} />;
 
 export function App() {
   const [isReady, setIsReady] = useState(false);
-  const [user, setUser] = useState({});
+  const [user, setUser] = useState(null);
 
   useEffect(() => {
     if (!isReady) {
@@ -119,7 +117,8 @@ export function App() {
     return <AppLoading />;
   }
 
-  if (user.id) {
+  if (user) {
+    console.log('user is logged in', user);
     return (
       <Provider store={store}>
         <NavigationContainer>
@@ -131,33 +130,32 @@ export function App() {
             {after}
             {profile}
             {landing}
-            {fblogin}
             {login}
             {signup}
           </Stack.Navigator>
         </NavigationContainer>
       </Provider>
     );
+  } else {
+    console.log('user is not logged in', user);
+    return (
+      <Provider store={store}>
+        <NavigationContainer>
+          <Stack.Navigator>
+            {landing}
+            {signup}
+            {play}
+            {rules}
+            {countdown}
+            {game}
+            {after}
+            {profile}
+            {login}
+          </Stack.Navigator>
+        </NavigationContainer>
+      </Provider>
+    );
   }
-
-  return (
-    <Provider store={store}>
-      <NavigationContainer>
-        <Stack.Navigator>
-          {play}
-          {rules}
-          {countdown}
-          {game}
-          {after}
-          {profile}
-          {landing}
-          {fblogin}
-          {login}
-          {signup}
-        </Stack.Navigator>
-      </NavigationContainer>
-    </Provider>
-  );
 }
 
 export default registerRootComponent(App);

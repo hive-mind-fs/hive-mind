@@ -12,8 +12,7 @@ import {
   shuffle,
   getScore,
   getRank,
-  getInitialStateFromProps,
-  getMinutesAndSeconds
+  getInitialStateFromProps
 } from './gameBoardController';
 
 function GameBoardScreen(props) {
@@ -32,7 +31,8 @@ function GameBoardScreen(props) {
   [score, setScore] = useState(0);
   [rank, setRank] = useState('Beginner');
   [error, setError] = useState([]);
-  [gameTimer, setGameTimer] = useState(300);
+  [gameTimer, setGameTimer] = useState(10);
+  [isActive, toggleActive] = useState(true);
 
   useEffect(() => {
     setTimeout(() => {
@@ -86,12 +86,14 @@ function GameBoardScreen(props) {
     setRank(getRank(score, possiblePoints));
   };
 
-  let { minutes, seconds } = getMinutesAndSeconds(gameTimer);
-
+  let minutes = Math.floor(gameTimer / 60);
+  let secondsCalc = gameTimer - minutes * 60;
+  let seconds = secondsCalc <= 9 ? '0' + secondsCalc : secondsCalc;
+  
   return (
     <Container style={styles.container}>
       <Text>
-        Score: {score} Rank: {rank} Timer: {minutes}:{seconds}
+        Score: {score} Rank: {rank}  Timer: { minutes }:{ seconds }
       </Text>
       <Text>You've found {correctWords.length} correct Words:</Text>
       <CorrectWords words={correctWords.join(', ')} />
