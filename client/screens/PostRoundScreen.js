@@ -13,11 +13,11 @@ function PostRoundScreen({ practiceRound, navigation, createUserRound }) {
     },
     {
       title: 'Words Got',
-      stat: '34'
+      stat: `${practiceRound.words.length}`
     }
   ];
 
-  const words = ['stuff', 'things', 'lorem', 'ipsup thooo', 'these', 'arent', 'real', 'words', 'yet', 'also', 'words', 'you', 'got', 'should', 'be', 'bold'];
+  const words = practiceRound.words.map(word => word.word);
   
   return (
     <Container

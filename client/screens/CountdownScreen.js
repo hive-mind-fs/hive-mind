@@ -5,8 +5,8 @@ import { Container, H1 } from 'native-base';
 export default function CountdownScreen({ navigation }) {
   const [countdownTimer, setCountdownTimer] = useState(3);
 
-  // Reset state when screen is loaded
-  React.useEffect(() => {
+  // Reset timer when screen is loaded
+  useEffect(() => {
     const unsubscribe = navigation.addListener('focus', () => {
       setCountdownTimer(3);
     });

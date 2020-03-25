@@ -49,11 +49,13 @@ export const savePracticeRound = (practiceRoundId, score, correctWords) => async
     let practiceRound;
     try {
       practiceRound = await axios.put(`http://localhost:8080/api/userRounds/${practiceRoundId}`, {
-        score: score
+        score: score,
+        words: correctWords
       });
     } catch (error) {
       practiceRound = await axios.put(`/api/userRounds/${practiceRoundId}`, {
-        score: score
+        score: score,
+        words: correctWords
       });
     }
     dispatch(savedPracticeRound(practiceRound.data));

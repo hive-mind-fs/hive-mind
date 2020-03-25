@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
 import { Button, StyleSheet, View, Text } from 'react-native';
 import { Container } from 'native-base';
@@ -12,7 +12,6 @@ import {
   shuffle,
   getScore,
   getRank,
-  getMinutesAndSeconds,
   getInitialStateFromProps
 } from './gameBoardController';
 
@@ -21,6 +20,7 @@ function GameBoardScreen(props) {
     cl,
     otherLetters,
     roundDict,
+    roundDictObjs,
     panagramList,
     possiblePoints
   } = getInitialStateFromProps(props);
@@ -33,31 +33,21 @@ function GameBoardScreen(props) {
   [error, setError] = useState([]);
 
   // a little more complicated
-  [gameTimer, setGameTime] = useState(300);
+  [gameTimer, setGameTimer] = useState(10);
   [isActive, toggleActive] = useState(true);
-  [minutesAndSeconds, setMinutesAndSeconds] = useState(
-    getMinutesAndSeconds(300)
-  );
 
-  // chose to fire only when this.state.gameTimer has changed
-  // gameOver, when that has changed then fire this effect
-  // update game timer?
-  // update minutes and seconds?
-  // useEffect(() => {
-  //   if (this.state.gameTimer > 0) {
-  //     // Update gameTimer state
-  //     setTimeout(() => {
-  //       this.setState({ gameTimer: this.state.gameTimer - 1 });
-  //       this.tick();
-  //     }, 1000);
-  //   } else {
-  //     // Redirect to PostRound
-  //     setTimeout(() => {
-  //       this.props.savePracticeRound(this.props.practiceRound.id, this.state.score, this.state.correctWords)
-  //       this.props.navigation.navigate('PostRoundScreen');
-  //     }, 1000);
-  //   }
-  // }, [gameTimer]);
+  useEffect(() => {
+    setTimeout(() => {
+      if (gameTimer > 0) {
+        setGameTimer(gameTimer - 1)
+        } else {
+          let userWords = roundDictObjs.filter(word => correctWords.includes(word.word));
+          console.log('userWORDS', userWords);
+          props.savePracticeRound(props.practiceRound.id, score, userWords)
+          props.navigation.navigate("PostRoundScreen")
+        }
+    }, 1000)
+  }, [gameTimer])
 
   err = str => {
     setError([...error, str]);
@@ -66,11 +56,9 @@ function GameBoardScreen(props) {
   handleDelete = () => {
     setInput(input.slice(0, input.length - 1));
   };
-
   handleShuffle = () => {
     setLettersOrdering(shuffle(lettersOrdering));
   };
-
   handleLetterPress = letter => {
     setError(error.slice(0, error.length - 1));
     setInput([...input, letter]);
@@ -80,31 +68,34 @@ function GameBoardScreen(props) {
     let word = input.join('');
     // Clear input
     setInput([]);
-
     //Clear error message everytime enter is pressed
     setError(error.slice(0, error.length - 1));
-
     if (word.length < 4) {
       err('Your word is too short');
     } else if (!word.includes(cl)) {
       err('Your word must contain the center letter.');
     } else if (correctWords.includes(word)) {
-      err('Youve already found this word');
+      err("You've already found this word");
     } else if (roundDict.includes(word)) {
       setCorrectWords([...correctWords, word]);
-
       // Score function
       setScore(score + getScore(word, panagramList));
     } else {
       err('Your word is not in our dictionary.');
     }
+
     setRank(getRank(score, possiblePoints));
   };
 
+  let minutes = Math.floor(gameTimer / 60);
+  let secondsCalc = gameTimer - minutes * 60;
+  let seconds = secondsCalc <= 9 ? '0' + secondsCalc : secondsCalc;
+  
   return (
     <Container style={styles.container}>
       <Text>
-        Score: {score} Rank: {rank}
+        Score: {score} Rank: {rank}  Timer: { minutes }:{ seconds }
+        {/* Timer: { minutesAndSeconds } */}
       </Text>
       <Text>You've found {correctWords.length} correct Words:</Text>
       <CorrectWords words={correctWords.join(', ')} />

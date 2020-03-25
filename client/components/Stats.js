@@ -26,7 +26,7 @@ export default function Stats(props, {navigation}) {
         {props.words && 
         <ListItem>
           <Text>{props.words.map(word => (
-            word + '  '
+            word + '   '
           ))}</Text>
         </ListItem>}
     </List>
