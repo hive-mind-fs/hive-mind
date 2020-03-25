@@ -31,22 +31,22 @@ function GameBoardScreen(props) {
   [score, setScore] = useState(0);
   [rank, setRank] = useState('Beginner');
   [error, setError] = useState([]);
-
-  // a little more complicated
   [gameTimer, setGameTimer] = useState(10);
   [isActive, toggleActive] = useState(true);
 
   useEffect(() => {
     setTimeout(() => {
       if (gameTimer > 0) {
-        setGameTimer(gameTimer - 1)
-        } else {
-          let userWords = roundDictObjs.filter(word => correctWords.includes(word.word));
-          props.savePracticeRound(props.practiceRound.id, score, userWords)
-          props.navigation.navigate("PostRoundScreen")
-        }
-    }, 1000)
-  }, [gameTimer])
+        setGameTimer(gameTimer - 1);
+      } else {
+        let userWords = roundDictObjs.filter(word =>
+          correctWords.includes(word.word)
+        );
+        props.savePracticeRound(props.practiceRound.id, score, userWords);
+        props.navigation.navigate('PostRoundScreen');
+      }
+    }, 1000);
+  }, [gameTimer]);
 
   err = str => {
     setError([...error, str]);
@@ -94,7 +94,6 @@ function GameBoardScreen(props) {
     <Container style={styles.container}>
       <Text>
         Score: {score} Rank: {rank}  Timer: { minutes }:{ seconds }
-        {/* Timer: { minutesAndSeconds } */}
       </Text>
       <Text>You've found {correctWords.length} correct Words:</Text>
       <CorrectWords words={correctWords.join(', ')} />
@@ -102,7 +101,7 @@ function GameBoardScreen(props) {
       <Input inputLetters={input} />
       <Hive
         centerLetter={cl} // comes from redux now
-        otherLetters={lettersOrdering} // comes from redux now
+        otherLetters={lettersOrdering}
         onLetterPress={letter => handleLetterPress(letter)}
       />
       <View style={styles.flexRow}>
