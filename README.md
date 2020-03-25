@@ -3,7 +3,7 @@
 We are using Expo to develop with React Native. We are using the “managed workflow” (similar to create-react-app) to minimize complexity.
 https://docs.expo.io/versions/v36.0.0/introduction/managed-vs-bare/.
 
-### Run the project locally
+### Build the project locally
 
 First, install the command line tools.
 
@@ -54,7 +54,7 @@ To debug in the iOS simulator:
 Debug Remote JS
 ```
 
-### Run the project remotely
+### Build the project remotely
 
 ## Algorithms
 
