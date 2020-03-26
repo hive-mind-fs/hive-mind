@@ -83,6 +83,7 @@ const LandingScreen = ({ navigation, handleFBLogin }) => {
           bordered
           marginTop
           onPress={() => navigation.navigate('PlayScreen')}
+        >
           <Text>Play</Text>
         </Button>
       </Container>
@@ -169,4 +170,3 @@ const mapDispatch = dispatch => {
 };
 
 export default connect(mapState, mapDispatch)(LandingScreen);
-

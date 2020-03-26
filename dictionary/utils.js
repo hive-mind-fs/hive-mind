@@ -43,12 +43,12 @@ const read = async file => {
   return await readFileAsync(__dirname + `/${file}`, 'utf8');
 };
 
-const getScore = (word, panagramList) => {
+const getScore = (word, pangramList) => {
   const wordLength = word.length;
   let score;
   if (wordLength === 4) {
     score = 1;
-  } else if (panagramList.includes(word)) {
+  } else if (pangramList.includes(word)) {
     score = wordLength + 7;
   } else {
     score = wordLength;
@@ -56,9 +56,9 @@ const getScore = (word, panagramList) => {
   return score;
 };
 
-const getPossiblePoints = (roundDict, panagramList) => {
+const getPossiblePoints = (roundDict, pangramList) => {
   return roundDict
-    .map(word => getScore(word, panagramList))
+    .map(word => getScore(word, pangramList))
     .reduce((a, b) => a + b, 0);
 };
 

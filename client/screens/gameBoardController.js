@@ -2,19 +2,16 @@
  * Getters from practice round object
  **/
 
-const getCoreLetter = round => round.coreLetter;
 const getOtherLetters = (round, cl) => round.letters.replace(cl, '').split('');
 const getRoundDictObjs = round => round.words;
 const getRoundDict = round => round.words.map(word => word.word);
-const getPanagramList = roundDict =>
-  roundDict.filter(word => new Set(word.split('')).size === 7);
 
-export const getScore = (word, panagramList) => {
+export const getScore = (word, pangramList) => {
   const wordLength = word.length;
   let score;
   if (wordLength === 4) {
     score = 1;
-  } else if (panagramList.includes(word)) {
+  } else if (pangramList.includes(word)) {
     score = wordLength + 7;
   } else {
     score = wordLength;
@@ -22,26 +19,20 @@ export const getScore = (word, panagramList) => {
   return score;
 };
 
-const getPossiblePoints = (roundDict, panagramList) => {
-  return roundDict
-    .map(word => getScore(word, panagramList))
-    .reduce((a, b) => a + b, 0);
-};
-
 export const getInitialStateFromProps = props => {
   const round = props.practiceRound.round;
-  const cl = getCoreLetter(round);
+  const cl = round.coreLetter;
   const otherLetters = getOtherLetters(round, cl);
   const roundDictObjs = getRoundDictObjs(round);
   const roundDict = getRoundDict(round);
-  const panagramList = getPanagramList(roundDict);
-  const possiblePoints = getPossiblePoints(roundDict, panagramList);
+  const pangramList = round.pangramList;
+  const possiblePoints = round.possiblePoints;
   return {
     cl,
     otherLetters,
     roundDictObjs,
     roundDict,
-    panagramList,
+    pangramList,
     possiblePoints
   };
 };
