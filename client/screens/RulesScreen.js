@@ -21,13 +21,17 @@ export default function RulesScreen({ navigation }) {
       <View style={styles.container}>
         <H1 style={styles.H1}>How To Play</H1>
         <H3 style={styles.H3}>Create words using letters from the hive.</H3>
-        {howToBullets1.map(bullet => (
-          <Text style={styles.Text}>- {bullet}</Text>
+        {howToBullets1.map((bullet, idx) => (
+          <Text key={idx} style={styles.Text}>
+            - {bullet}
+          </Text>
         ))}
 
         <H3 style={styles.H3}>Score points to increase your rating.</H3>
-        {howToBullets2.map(bullet => (
-          <Text style={styles.Text}>- {bullet}</Text>
+        {howToBullets2.map((bullet, idx) => (
+          <Text key={idx} style={styles.Text}>
+            - {bullet}
+          </Text>
         ))}
 
         <Button
