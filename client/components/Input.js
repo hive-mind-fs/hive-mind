@@ -4,16 +4,17 @@ import { StyleSheet } from 'react-native';
 
 const styles = StyleSheet.create({
   letter: {
-    position: 'absolute',
+    // position: 'absolute',
     textAlign: 'center',
     fontSize: 40,
-    fontWeight: 'bold'
+    fontWeight: 'bold',
+    marginTop: 40
   }
 });
 
 const Input = ({ inputLetters }) => {
   return (
-    <View style={{ width: 300, height: 100 }}>
+    <View style={{ width: 300, height: 100, display: 'flex', alignItems: 'center' }}>
       <Text style={styles.letter}>{inputLetters}</Text>
     </View>
   );

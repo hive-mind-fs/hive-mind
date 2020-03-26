@@ -1,14 +1,16 @@
 import React, { useState, useEffect } from 'react';
-import { Button, Text } from 'react-native';
-import { Container, H1 } from 'native-base';
+import { StyleSheet } from 'react-native';
+import { Container, H1, H3 } from 'native-base';
 
 export default function CountdownScreen({ navigation }) {
-  const [countdownTimer, setCountdownTimer] = useState(3);
+  const preGameTimer = 3;
+
+  const [countdownTimer, setCountdownTimer] = useState(preGameTimer);
 
   // Reset timer when screen is loaded
   useEffect(() => {
     const unsubscribe = navigation.addListener('focus', () => {
-      setCountdownTimer(3);
+      setCountdownTimer(preGameTimer);
     });
     return unsubscribe;
   }, [navigation]);
@@ -24,11 +26,16 @@ export default function CountdownScreen({ navigation }) {
   });
 
   return (
-    <Container
-      style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}
-    >
-      <Text>Game Starts In</Text>
-      <H1>{countdownTimer === 0 ? 'Go!' : countdownTimer}</H1>
+    <Container>
+      <H3>Game Starts In</H3>
+      <H1 style={ styles.countdown }>{countdownTimer === 0 ? 'Go!' : countdownTimer}</H1>
     </Container>
   );
 }
+
+const styles = StyleSheet.create({
+  countdown: {
+    fontSize: 100,
+    lineHeight: 120,
+  },
+});

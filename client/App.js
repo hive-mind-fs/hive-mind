@@ -20,6 +20,9 @@ import {
 } from './screens';
 import store from './store';
 import colors from './utils/styles';
+import { StyleProvider } from 'native-base';
+import getTheme from './native-base-theme/components';
+import customMaterial from './native-base-theme/variables/customMaterial';
 
 const Stack = createStackNavigator();
 
@@ -39,10 +42,10 @@ const play = (
   />
 );
 const rules = (
-  <Stack.Screen 
-    name="RulesScreen" 
-    component={RulesScreen} 
-    options={{ headerShown: false}}
+  <Stack.Screen
+    name="RulesScreen"
+    component={RulesScreen}
+    options={{ headerShown: false }}
   />
 );
 const countdown = (
@@ -119,25 +122,28 @@ export function App() {
   if (user.id) {
     return (
       <Provider store={store}>
-        <NavigationContainer>
-          <Stack.Navigator>
-            {play}
-            {rules}
-            {countdown}
-            {game}
-            {after}
-            {profile}
-            {landing}
-            {login}
-            {signup}
-          </Stack.Navigator>
-        </NavigationContainer>
-      </Provider>
+        <StyleProvider style={getTheme(customMaterial)}>
+          <NavigationContainer>
+            <Stack.Navigator>
+              {play}
+              {rules}
+              {countdown}
+              {game}
+              {after}
+              {profile}
+              {landing}
+              {login}
+              {signup}
+            </Stack.Navigator>
+          </NavigationContainer>
+      </StyleProvider>
+        </Provider>
     );
   }
 
   return (
     <Provider store={store}>
+      <StyleProvider style={getTheme(customMaterial)}>
       <NavigationContainer>
         <Stack.Navigator>
           {play}
@@ -151,6 +157,7 @@ export function App() {
           {signup}
         </Stack.Navigator>
       </NavigationContainer>
+      </StyleProvider>
     </Provider>
   );
 }
