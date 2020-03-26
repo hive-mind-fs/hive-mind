@@ -14,8 +14,8 @@ const DICT_FILE = 'dictionary.txt';
 const PANGRAMS_FILE = 'pangramLetterSets.txt';
 const PANGRAM_WORDS_FILE = 'pangramWords.txt';
 
-const MIN_QUANTILE = 25;
-const MAX_QUANTILE = 75;
+const MIN_QUANTILE = 50;
+const MAX_QUANTILE = 55;
 const QUANTILES = [MIN_QUANTILE, MAX_QUANTILE];
 
 const getWordSet = word => new Set(word.split('').sort());
@@ -150,13 +150,17 @@ const getRoundsFromPangramWords = async pangramObjects => {
   return rounds;
 };
 
-const filterGoodRounds = allPossibleRounds => {
+const filterGoodRounds = (
+  allPossibleRounds,
+  minQuantile = MIN_QUANTILE,
+  maxQuantile = MAX_QUANTILE
+) => {
   const possiblePoints = allPossibleRounds.map(round => round.possiblePoints);
   const pointsQuantiles = QUANTILES.map(element =>
     quantile(possiblePoints, element)
   );
-  const minRoundPoints = pointsQuantiles[QUANTILES.indexOf(MIN_QUANTILE)];
-  const maxRoundPoints = pointsQuantiles[QUANTILES.indexOf(MAX_QUANTILE)];
+  const minRoundPoints = pointsQuantiles[QUANTILES.indexOf(minQuantile)];
+  const maxRoundPoints = pointsQuantiles[QUANTILES.indexOf(maxQuantile)];
   const goodRounds = allPossibleRounds.filter(
     round =>
       round.possiblePoints >= minRoundPoints &&
@@ -168,10 +172,13 @@ const filterGoodRounds = allPossibleRounds => {
   return goodRounds;
 };
 
-const generateRounds = async () => {
+const generateRounds = async (
+  minQuantile = MIN_QUANTILE,
+  maxQuantile = MAX_QUANTILE
+) => {
   const pangramObjects = await getUniqueLetterSets(PANGRAM_NUM); // this takes 1 sec
   const allPossibleRounds = await getRoundsFromPangramWords(pangramObjects); // this takes 7 seconds secs
-  const rounds = filterGoodRounds(allPossibleRounds);
+  const rounds = filterGoodRounds(allPossibleRounds, minQuantile, maxQuantile);
   return rounds;
 };
 

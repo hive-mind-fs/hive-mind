@@ -14,6 +14,8 @@ const {
 
 const dummyUsers = require('../server/db/dummyData/dummyUsers.js');
 const dummyGames = require('../server/db/dummyData/dummyGames.js');
+const MIN_QUANTILE = 50;
+const MAX_QUANTILE = 55;
 
 async function seed() {
   await db.sync({ force: true });
@@ -22,8 +24,7 @@ async function seed() {
   await Game.bulkCreate(dummyGames);
 
   // To do: Need to find a way to create & insert rounds and words concurrently
-  const generatedRounds = await generateRounds();
-  console.log(generatedRounds[0]);
+  const generatedRounds = await generateRounds(MIN_QUANTILE, MAX_QUANTILE);
   console.log(`inserting ${generatedRounds.length} rounds`);
   const generatedRoundsWithWords = generatedRounds.map(round => {
     const wordsObjects = round.words.map(word => ({ word: word }));
