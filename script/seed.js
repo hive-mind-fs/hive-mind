@@ -1,6 +1,7 @@
 'use strict';
 
 const db = require('../server/db');
+const { generateRounds, getWords } = require('../dictionary');
 
 const {
   User,
@@ -12,17 +13,19 @@ const {
 } = require('../server/db/models');
 
 const dummyUsers = require('../server/db/dummyData/dummyUsers.js');
-const dummyRounds = require('../server/db/dummyData/dummyRounds.js');
 const dummyGames = require('../server/db/dummyData/dummyGames.js');
-const dummyWords = require('../server/db/dummyData/dummyWords.js');
 
 async function seed() {
   await db.sync({ force: true });
   console.log('db synced!');
   await User.bulkCreate(dummyUsers);
-  await Round.bulkCreate(dummyRounds);
   await Game.bulkCreate(dummyGames);
-  await Word.bulkCreate(dummyWords);
+
+  // To do: Need to find a way to create & insert rounds and words concurrently
+  const generatedRounds = await generateRounds();
+  console.log(generatedRounds[0]);
+  console.log(`inserting ${generatedRounds.length} rounds`);
+  const rounds = await Round.bulkCreate(generatedRounds);
 
   //seed associations
   for (let i = 1; i <= 50; i++) {
@@ -38,17 +41,17 @@ async function seed() {
   }
 
   //Seed the roundWords thru table
-    //Create round with real letters
-    const round51 = await Round.create({
-      letters: 'ABCHKNU',
-      coreLetter: 'A',
-      gameDate: new Date()
-    });
-    let game51 = await Game.findByPk(51);
-    await game51.setWinner(1);
-    await game51.addRound(round51);
-    let user1 = await User.findByPk(1);
-    await round51.setWinner(user1);
+  //Create round with real letters
+  const round51 = await Round.create({
+    letters: 'ABCHKNU',
+    coreLetter: 'A',
+    gameDate: new Date()
+  });
+  let game51 = await Game.findByPk(51);
+  await game51.setWinner(1);
+  await game51.addRound(round51);
+  let user1 = await User.findByPk(1);
+  await round51.setWinner(user1);
 
   for (let i = 1; i <= 51; i++) {
     let word = await Word.findByPk(i);
@@ -65,10 +68,10 @@ async function seed() {
     { userId: 1, roundId: 50 } //This UserRound will get id 3
   ]);
 
-  // Seedeing a user who guessed all words in a round
+  // Seeding a user who guessed all words in a round
   for (let i = 1; i <= 50; i++) {
-  await GuessedWord.bulkCreate([{ wordId: i, userRoundId: 1 }]);
-}
+    await GuessedWord.bulkCreate([{ wordId: i, userRoundId: 1 }]);
+  }
 }
 
 // We've separated the `seed` function from the `runSeed` function.
