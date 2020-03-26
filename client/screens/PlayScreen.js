@@ -4,7 +4,7 @@ import { Container, H1, Button, Text } from 'native-base';
 import { Logo } from '../components';
 import { fetchPracticeRound } from '../store/game';
 
-function PlayScreen({ navigation, createUserRound, userId, logout }) {
+function PlayScreen({ navigation, createUserRound, userId }) {
   handleSubmit = () => {
     createUserRound(1);
     navigation.navigate('CountdownScreen');
