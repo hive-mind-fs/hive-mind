@@ -49,6 +49,9 @@ const SignupScreen = ({ handleSubmit, navigation, user }) => {
       Alert.alert('Your password must contain at least one special character');
     } else {
       handleSubmit(email, password);
+      if (user.error) {
+        Alert.alert('This email is already in use');
+      }
     }
   };
 
