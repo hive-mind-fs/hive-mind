@@ -38,7 +38,7 @@ npm run seed
 Run the project:
 
 ```
-npm start
+npm run dev
 ```
 
 On the left panel, click “Run on iOS simulator”.
