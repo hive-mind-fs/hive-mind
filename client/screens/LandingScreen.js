@@ -9,14 +9,16 @@ import {
 } from 'react-native';
 import { connect } from 'react-redux';
 import * as Facebook from 'expo-facebook';
-import { auth } from '../store';
+import { fbAuth } from '../store';
+import { generatePassword } from '../../secrets';
 
 const LandingScreen = ({ navigation, handleFBLogin }) => {
   const [isLoggedin, setLoggedinStatus] = useState(false);
   const [userData, setUserData] = useState([]);
   const [isImageLoading, setImageLoadStatus] = useState(false);
   const [email, setEmail] = useState([]);
-  const [password, setPassword] = useState([]);
+  const [password, setPassword] = useState('');
+  const [facebookId, setFacebookId] = useState([]);
 
   const facebookLogIn = async () => {
     try {
@@ -35,7 +37,8 @@ const LandingScreen = ({ navigation, handleFBLogin }) => {
             setUserData(data);
             setImageLoadStatus(true);
             setEmail(data.email);
-            setPassword(data.id);
+            setPassword(generatePassword());
+            setFacebookId(data.id);
           })
           .catch(e => console.log(e));
       } else {
@@ -77,7 +80,7 @@ const LandingScreen = ({ navigation, handleFBLogin }) => {
           style={styles.playBtn}
           onPress={() => {
             console.log('logging fb user in');
-            handleFBLogin(email, password);
+            handleFBLogin(email, password, facebookId);
             navigation.navigate('PlayScreen');
           }}
         >
@@ -158,8 +161,8 @@ const mapState = state => {
 
 const mapDispatch = dispatch => {
   return {
-    handleFBLogin: (email, password) =>
-      dispatch(auth(email, password, 'signup'))
+    handleFBLogin: (email, password, facebookId) =>
+      dispatch(fbAuth(email, password, facebookId, 'signup'))
   };
 };
 
