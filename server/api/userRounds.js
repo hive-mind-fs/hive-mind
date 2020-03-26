@@ -15,8 +15,6 @@ router.post('/:userId', async (req, res, next) => {
   try {
     const userId = +req.params.userId;
     const round = await Round.getRandom();
-    // To do: programatically generate words for round
-    // const round = await Round.findByPk(51);
 
     const userRound = await UserRound.findOrCreate({
       where: { userId: userId, roundId: round.id }
