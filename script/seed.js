@@ -33,7 +33,7 @@ async function seed() {
   });
 
   // Insert rounds 200 at a time
-  const maxInserts = 200;
+  const maxInserts = 10;
   for (let i = maxInserts; i <= generatedRounds.length; i = i + maxInserts) {
     console.log('slice from', i - maxInserts, 'to', i);
     const rounds = await Round.bulkCreate(
