@@ -31,7 +31,7 @@ const LoginScreen = ({ handleSubmit, navigation, user }) => {
     } else {
       handleSubmit(email, password);
       if (user.error) {
-        Alert.alert('These credentials do not exist');
+        Alert.alert('These credentials are incorrect');
       }
     }
   };
