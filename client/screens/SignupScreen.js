@@ -22,7 +22,7 @@ const SignupScreen = ({ handleSubmit, navigation, user }) => {
     }
   });
 
-  const onLogin = () => {
+  const handleSignup = () => {
     let emailReg = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
     let passLengthReg = new RegExp('(?=.{8,})');
     let numericReg = new RegExp('(?=.*[0-9])');
@@ -79,7 +79,7 @@ const SignupScreen = ({ handleSubmit, navigation, user }) => {
             marginTopL
             title="Sign Up"
             onPress={() => {
-              onLogin();
+              handleSignup();
             }}
           >
             <Text>Sign Up</Text>

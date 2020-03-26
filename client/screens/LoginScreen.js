@@ -8,6 +8,7 @@ import {
   Label,
   Text
 } from 'native-base';
+import { Alert } from 'react-native';
 import React, { useEffect, useState } from 'react';
 import { connect } from 'react-redux';
 import { auth } from '../store';
@@ -21,6 +22,16 @@ const LoginScreen = ({ handleSubmit, navigation, user }) => {
       navigation.navigate('PlayScreen');
     }
   });
+
+  const handleLogin = () => {
+    if (email.length === 0) {
+      Alert.alert('You must enter an email');
+    } else if (password.length === 0) {
+      Alert.alert('You must enter a password');
+    } else {
+      handleSubmit(email, password);
+    }
+  };
 
   return (
     <Container form>
@@ -48,7 +59,7 @@ const LoginScreen = ({ handleSubmit, navigation, user }) => {
             block
             marginTopL
             title="Log In"
-            onPress={() => handleSubmit(email, password)}
+            onPress={() => handleLogin()}
           >
             <Text>Log In</Text>
           </Button>
