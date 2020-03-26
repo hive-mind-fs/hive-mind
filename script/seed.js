@@ -32,8 +32,8 @@ async function seed() {
     return round;
   });
 
-  // Insert rounds 100 at a time
-  const maxInserts = 100;
+  // Insert rounds 200 at a time
+  const maxInserts = 200;
   const allRounds = [];
   for (let i = maxInserts; i <= generatedRounds.length; i = i + maxInserts) {
     console.log('slice from', i - maxInserts, 'to', i);
@@ -62,9 +62,8 @@ async function seed() {
   //Seed the roundWords thru table
   //Create round with real letters
   const round51 = await Round.create({
-    letters: 'ABCHKNU',
-    coreLetter: 'A',
-    gameDate: new Date()
+    letters: 'AMNOSUY',
+    coreLetter: 'M'
   });
   let game51 = await Game.findByPk(51);
   await game51.setWinner(1);
