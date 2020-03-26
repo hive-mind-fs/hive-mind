@@ -80,6 +80,7 @@ const login = (
     }}
   />
 );
+
 const signup = (
   <Stack.Screen
     name="SignupScreen"

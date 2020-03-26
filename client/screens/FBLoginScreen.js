@@ -1,6 +1,4 @@
 import React, { useState } from 'react';
-import { Container } from 'native-base';
-import { Logo } from '../components';
 import {
   Text,
   TouchableOpacity,
@@ -8,11 +6,11 @@ import {
   Image,
   StyleSheet,
   ActivityIndicator,
-  Button
 } from 'react-native';
 import * as Facebook from 'expo-facebook';
 
-export default function LandingScreen({ navigation }) {
+
+const FBLoginScreen = ({navigation}) => {
   const [isLoggedin, setLoggedinStatus] = useState(false);
   const [userData, setUserData] = useState([]);
   const [isImageLoading, setImageLoadStatus] = useState(false);
@@ -49,12 +47,18 @@ export default function LandingScreen({ navigation }) {
   //   setImageLoadStatus(false);
   // };
 
-  return isLoggedin ? (
-    userData && isImageLoading ? (
-      <Container
-      style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}
-    >
-        <ActivityIndicator
+  // useEffect(() => {
+  //   if (userData) {
+  //     navigation.navigate('PlayScreen');
+  //   }
+  // });
+
+  return (
+
+    isLoggedin ?
+        userData && isImageLoading ?
+      <View>
+         <ActivityIndicator
           size="large"
           color="#0000ff"
           animating={!isImageLoading}
@@ -70,48 +74,41 @@ export default function LandingScreen({ navigation }) {
           Hi {userData.name}!
         </Text>
 
-        <TouchableOpacity
-          style={styles.logoutBtn}
-          onPress={() => navigation.navigate('PlayScreen')}
-        >
-          <Text style={{ color: '#ffff' }}>Play</Text>
+        <TouchableOpacity style={styles.logoutBtn}  onPress={() => navigation.navigate('PlayScreen')}>
+          <Text style={{ color: '#fff' }}>Play</Text>
         </TouchableOpacity>
-      </Container>
-    ) : null
-  ) : (
-    <Container
-      style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}
-    >
-      <Logo />
-      <Button
-        title="Sign Up"
-        onPress={() => navigation.navigate('SignupScreen')}
-      />
-      <Button
-        title="Log In"
-        onPress={() => navigation.navigate('LoginScreen')}
-      />
+      </View>
+     :
+      null
+  :
+    <View style={styles.container}>
       <TouchableOpacity style={styles.loginBtn} onPress={() => facebookLogIn()}>
         <Text style={{ color: '#fff' }}>Login with Facebook</Text>
       </TouchableOpacity>
-    </Container>
+    </View>
   );
-}
+};
+
+
 
 const styles = StyleSheet.create({
-  loginBtn: {
-    backgroundColor: '#4267b2',
-    paddingVertical: 10,
-    paddingHorizontal: 20,
-    borderRadius: 20,
-    top: 10
-  },
-  logoutBtn: {
-    backgroundColor: '#4267b2',
-    paddingVertical: 10,
-    paddingHorizontal: 20,
-    borderRadius: 20,
-    position: 'absolute',
-    bottom: 275
-  }
-});
+    loginBtn: {
+      backgroundColor: '#4267b2',
+      paddingVertical: 10,
+      paddingHorizontal: 20,
+      borderRadius: 20,
+      top: 50
+    },
+    logoutBtn: {
+      backgroundColor: '#4267b2',
+      paddingVertical: 10,
+      paddingHorizontal: 20,
+      borderRadius: 20,
+      position: 'absolute',
+      left: 35,
+      bottom: -50
+    }
+  });
+
+
+  export default FBLoginScreen;
