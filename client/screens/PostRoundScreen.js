@@ -28,23 +28,27 @@ function PostRoundScreen({ practiceRound, navigation, createUserRound }) {
       <Card></Card>
 
       <Button
-        block rounded
+        block
+        rounded
         title="Play Again"
         onPress={() => {
           createUserRound(7); // To do, replace with user id
-          navigation.navigate('CountdownScreen');
+          navigation.navigate('Countdown');
         }}
       >
         <Text>Play Again</Text>
       </Button>
 
-      <Button 
-        block bordered rounded marginTop
-        title="Quit" 
-        onPress={() => navigation.navigate('HomeScreen')}>
+      <Button
+        block
+        bordered
+        rounded
+        marginTop
+        title="Quit"
+        onPress={() => navigation.navigate('Play')}
+      >
         <Text>Quit</Text>
       </Button>
-      
     </Container>
   );
 }

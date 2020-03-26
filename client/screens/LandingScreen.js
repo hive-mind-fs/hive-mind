@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Button, Container, H1, Text } from 'native-base';
+import { Button, Container, Icon, H1, Text } from 'native-base';
 import { Logo } from '../components';
 import {
   TouchableOpacity,
@@ -67,12 +67,16 @@ export default function LandingScreen({ navigation }) {
           Hi {userData.name}!
         </Text>
 
-        <TouchableOpacity
-          style={styles.logoutBtn}
+        <Button
+          rounded
+          block
+          iconLeft
+          bordered
+          marginTop
           onPress={() => navigation.navigate('PlayScreen')}
         >
-          <Text style={{ color: '#ffff' }}>Play</Text>
-        </TouchableOpacity>
+          <Text>Play</Text>
+        </Button>
       </Container>
     ) : null
   ) : (
@@ -102,27 +106,21 @@ export default function LandingScreen({ navigation }) {
         <Text>Log In</Text>
       </Button>
 
-      <TouchableOpacity style={styles.loginBtn} onPress={() => facebookLogIn()}>
+      <Button
+        rounded
+        block
+        iconLeft
+        bordered
+        marginTop
+        onPress={() => facebookLogIn()}
+      >
+        <Icon name="logo-facebook" />
+        <Text>Log In With Facebook</Text>
+      </Button>
+
+      {/* <TouchableOpacity style={styles.loginBtn} >
         <Text style={{ color: '#fff' }}>Login with Facebook</Text>
-      </TouchableOpacity>
+      </TouchableOpacity> */}
     </Container>
   );
 }
-
-const styles = StyleSheet.create({
-  loginBtn: {
-    backgroundColor: '#4267b2',
-    paddingVertical: 10,
-    paddingHorizontal: 20,
-    borderRadius: 20,
-    top: 10
-  },
-  logoutBtn: {
-    backgroundColor: '#4267b2',
-    paddingVertical: 10,
-    paddingHorizontal: 20,
-    borderRadius: 20,
-    position: 'absolute',
-    bottom: 275
-  }
-});

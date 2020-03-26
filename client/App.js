@@ -71,9 +71,9 @@ const game = (
   />
 );
 const after = (
-  <Stack.Screen 
-    name="PostRoundScreen" 
-    component={PostRoundScreen} 
+  <Stack.Screen
+    name="PostRoundScreen"
+    component={PostRoundScreen}
     options={{ headerShown: false }}
   />
 );
@@ -140,12 +140,12 @@ export function App() {
           <NavigationContainer>
             <Stack.Navigator>
               {home}
-              {play}
+              {/* {play} */}
               {rules}
               {countdown}
               {game}
               {after}
-              {profile}
+              {/* {profile} */}
               {landing}
               {login}
               {signup}
@@ -164,12 +164,12 @@ export function App() {
               {landing}
               {signup}
               {home}
-              {play}
+              {/* {play} */}
               {rules}
               {countdown}
               {game}
               {after}
-              {profile}
+              {/* {profile} */}
               {login}
             </Stack.Navigator>
           </NavigationContainer>

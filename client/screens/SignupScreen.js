@@ -1,5 +1,14 @@
 import React, { useEffect, useState } from 'react';
-import { Button, Container, Content, Form, Item, Input, Label, Text } from 'native-base';
+import {
+  Button,
+  Container,
+  Content,
+  Form,
+  Item,
+  Input,
+  Label,
+  Text
+} from 'native-base';
 import { connect } from 'react-redux';
 import { auth } from '../store';
 
@@ -9,7 +18,7 @@ const SignupScreen = ({ handleSubmit, navigation, user }) => {
 
   useEffect(() => {
     if (user.id) {
-      navigation.navigate('HomeScreen');
+      navigation.navigate('PlayScreen');
     }
   });
 
@@ -35,7 +44,9 @@ const SignupScreen = ({ handleSubmit, navigation, user }) => {
             />
           </Item>
           <Button
-            rounded block marginTopL
+            rounded
+            block
+            marginTopL
             title="Sign Up"
             onPress={() => handleSubmit(email, password)}
           >
