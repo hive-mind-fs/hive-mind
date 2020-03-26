@@ -1,4 +1,12 @@
-const ROUND_ATTRIBUTES = ['id', 'letters', 'coreLetter', 'winnerId', 'gameId'];
+const ROUND_ATTRIBUTES = [
+  'id',
+  'letters',
+  'coreLetter',
+  'winnerId',
+  'gameId',
+  'possiblePoints',
+  'pangramList'
+];
 
 const USERROUND_ATTRIBUTES = ['id', 'userId', 'roundId', 'score'];
 
