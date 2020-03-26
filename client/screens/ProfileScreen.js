@@ -9,10 +9,11 @@ import {
   TabHeading,
   Text
 } from 'native-base';
+import { connect } from 'react-redux';
 import { Stats, Logo } from '../components';
 import { logout } from '../store';
 
-export default function ProfileScreen({ navigation }) {
+const ProfileScreen = ({ navigation }) => {
   const stats = [
     {
       title: 'Total Score',
@@ -79,13 +80,16 @@ export default function ProfileScreen({ navigation }) {
         block
         marginTop
         title="Log Out"
-        onPress={() => handleLogout()}
+        onPress={() => {
+          console.log('attempting to logout');
+          handleLogout();
+        }}
       >
         <Text>Log Out</Text>
       </Button>
     </Container>
   );
-}
+};
 
 const styles = StyleSheet.create({
   Logo: {
@@ -95,3 +99,17 @@ const styles = StyleSheet.create({
     marginTop: 30
   }
 });
+
+const mapState = state => {
+  return {
+    user: state.user
+  };
+};
+
+const mapDispatch = dispatch => {
+  return {
+    handleLogout: () => dispatch(logout())
+  };
+};
+
+export default connect(mapState, mapDispatch)(ProfileScreen);

@@ -47,6 +47,7 @@ export const logout = () => async dispatch => {
     await axios.post(`${BASE_URL}/auth/logout`);
     await AsyncStorage.removeItem('user');
     dispatch(removeUser());
+    console.log('dispatch remove user');
   } catch (e) {
     console.error(e);
   }
