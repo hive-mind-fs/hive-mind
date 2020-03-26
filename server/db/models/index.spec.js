@@ -1,23 +1,23 @@
-const { expect } = require("chai");
-const { db, Word, Round, Game, User, UserRound } = require("../models");
+const { expect } = require('chai');
+const { db, Word, Round, Game, User, UserRound } = require('../models');
 
-describe("Game >-< Round Association", () => {
+describe('Game >-< Round Association', () => {
   beforeEach(() => db.sync({ force: true }));
 
-  describe("Round magic methods", () => {
-    it("a round belongs to exactly one game", async () => {
+  describe('Round magic methods', () => {
+    it('a round belongs to exactly one game', async () => {
       const round = await Round.create({
-        letters: "abcd",
-        coreLetter: "a",
+        letters: 'abcd',
+        coreLetter: 'a',
         gameDate: new Date()
       });
       const game1 = await Game.create({
         date: new Date(),
-        mode: "1v1"
+        mode: '1v1'
       });
       const game2 = await Game.create({
         date: new Date(),
-        mode: "competition"
+        mode: 'competition'
       });
       await round.setGame(game1);
       await round.setGame(game2);
@@ -27,21 +27,21 @@ describe("Game >-< Round Association", () => {
     });
   });
 
-  describe("Game magic methods", () => {
-    it("a game can have many rounds", async () => {
+  describe('Game magic methods', () => {
+    it('a game can have many rounds', async () => {
       const round1 = await Round.create({
-        letters: "abcd",
-        coreLetter: "a",
+        letters: 'abcd',
+        coreLetter: 'a',
         gameDate: new Date()
       });
       const round2 = await Round.create({
-        letters: "abcd",
-        coreLetter: "c",
+        letters: 'abcd',
+        coreLetter: 'c',
         gameDate: new Date()
       });
       const game = await Game.create({
         date: new Date(),
-        mode: "1v1"
+        mode: '1v1'
       });
       await game.addRound(round1);
       await game.addRound(round2);
@@ -52,18 +52,18 @@ describe("Game >-< Round Association", () => {
   });
 });
 
-describe("Game/Round >-< User Association", () => {
+describe('Game/Round >-< User Association', () => {
   beforeEach(() => db.sync({ force: true }));
 
-  describe("Game winner", () => {
-    it("Each game has a winner", async () => {
+  describe('Game winner', () => {
+    it('Each game has a winner', async () => {
       const game = await Game.create({
         date: new Date(),
-        mode: "1v1"
+        mode: '1v1'
       });
       const user = await User.create({
-        email: "cody@email.com",
-        password: "123"
+        email: 'cody@email.com',
+        password: '123'
       });
       await game.setWinner(user);
       game.getWinner().then(winner => {
@@ -72,16 +72,16 @@ describe("Game/Round >-< User Association", () => {
     });
   });
 
-  describe("Round winner", () => {
-    it("Each round has a winner", async () => {
+  describe('Round winner', () => {
+    it('Each round has a winner', async () => {
       const round = await Round.create({
-        letters: "abcd",
-        coreLetter: "c",
+        letters: 'abcd',
+        coreLetter: 'c',
         gameDate: new Date()
       });
       const user = await User.create({
-        email: "cody@email.com",
-        password: "123"
+        email: 'cody@email.com',
+        password: '123'
       });
       await round.setWinner(user);
       round.getWinner().then(winner => {
@@ -91,23 +91,23 @@ describe("Game/Round >-< User Association", () => {
   });
 });
 
-describe("Round >-< User Association", () => {
+describe('Round >-< User Association', () => {
   beforeEach(() => db.sync({ force: true }));
 
-  describe("User magic methods", () => {
-    it("Each user can play many rounds", async () => {
+  describe('User magic methods', () => {
+    it('Each user can play many rounds', async () => {
       const user = await User.create({
-        email: "cody@email.com",
-        password: "123"
+        email: 'cody@email.com',
+        password: '123'
       });
       const round1 = await Round.create({
-        letters: "abcd",
-        coreLetter: "a",
+        letters: 'abcd',
+        coreLetter: 'a',
         gameDate: new Date()
       });
       const round2 = await Round.create({
-        letters: "abcd",
-        coreLetter: "c",
+        letters: 'abcd',
+        coreLetter: 'c',
         gameDate: new Date()
       });
       await user.addRounds([round1, round2]);
@@ -117,20 +117,20 @@ describe("Round >-< User Association", () => {
       });
     });
 
-    describe("User magic methods pt 2", () => {
-      it("Users can get their user rounds", async () => {
+    describe('User magic methods pt 2', () => {
+      it('Users can get their user rounds', async () => {
         const user = await User.create({
-          email: "cody@email.com",
-          password: "123"
+          email: 'cody@email.com',
+          password: '123'
         });
         const round1 = await Round.create({
-          letters: "abcd",
-          coreLetter: "a",
+          letters: 'abcd',
+          coreLetter: 'a',
           gameDate: new Date()
         });
         const round2 = await Round.create({
-          letters: "abcd",
-          coreLetter: "c",
+          letters: 'abcd',
+          coreLetter: 'c',
           gameDate: new Date()
         });
         await user.addRounds([round1, round2]);
@@ -142,20 +142,20 @@ describe("Round >-< User Association", () => {
     });
   });
 
-  describe("Round magic methods", () => {
-    it("Each round can have many users", async () => {
+  describe('Round magic methods', () => {
+    it('Each round can have many users', async () => {
       const round = await Round.create({
-        letters: "abcd",
-        coreLetter: "a",
+        letters: 'abcd',
+        coreLetter: 'a',
         gameDate: new Date()
       });
       const user1 = await User.create({
-        email: "cody@email.com",
-        password: "123"
+        email: 'cody@email.com',
+        password: '123'
       });
       const user2 = await User.create({
-        email: "murphy@email.com",
-        password: "123"
+        email: 'murphy@email.com',
+        password: '123'
       });
 
       await round.addUsers([user1, user2]);
@@ -166,20 +166,20 @@ describe("Round >-< User Association", () => {
     });
   });
 
-  describe("Round magic method pt 2", () => {
-    it("Rounds can get their user rounds", async () => {
+  describe('Round magic method pt 2', () => {
+    it('Rounds can get their user rounds', async () => {
       const round = await Round.create({
-        letters: "abcd",
-        coreLetter: "a",
+        letters: 'abcd',
+        coreLetter: 'a',
         gameDate: new Date()
       });
       const user1 = await User.create({
-        email: "cody@email.com",
-        password: "123"
+        email: 'cody@email.com',
+        password: '123'
       });
       const user2 = await User.create({
-        email: "murphy@email.com",
-        password: "123"
+        email: 'murphy@email.com',
+        password: '123'
       });
       await round.addUsers([user1, user2]);
 
@@ -189,17 +189,17 @@ describe("Round >-< User Association", () => {
     });
   });
 
-  describe("User round magic methods", () => {
-    it("User rounds can set and get their user ", async () => {
+  describe('User round magic methods', () => {
+    it('User rounds can set and get their user ', async () => {
       const userRound = await UserRound.create({});
       const round1 = await Round.create({
-        letters: "abcd",
-        coreLetter: "a",
+        letters: 'abcd',
+        coreLetter: 'a',
         gameDate: new Date()
       });
       const user1 = await User.create({
-        email: "cody@email.com",
-        password: "123"
+        email: 'cody@email.com',
+        password: '123'
       });
       await userRound.setUser(user1);
       await userRound.setRound(round1);
@@ -210,17 +210,17 @@ describe("Round >-< User Association", () => {
     });
   });
 
-  describe("User round magic methods", () => {
-    it("User rounds can set and get their round", async () => {
+  describe('User round magic methods', () => {
+    it('User rounds can set and get their round', async () => {
       const userRound = await UserRound.create({});
       const round1 = await Round.create({
-        letters: "abcd",
-        coreLetter: "a",
+        letters: 'abcd',
+        coreLetter: 'a',
         gameDate: new Date()
       });
       const user1 = await User.create({
-        email: "cody@email.com",
-        password: "123"
+        email: 'cody@email.com',
+        password: '123'
       });
       await userRound.setUser(user1);
       await userRound.setRound(round1);
@@ -232,22 +232,22 @@ describe("Round >-< User Association", () => {
   });
 });
 
-describe("Word >-< Round Association", () => {
+describe('Word >-< Round Association', () => {
   beforeEach(() => db.sync({ force: true }));
 
-  describe("Round magic methods", () => {
-    it("Each round has many words", async () => {
+  describe('Round magic methods', () => {
+    it('Each round has many words', async () => {
       const round = await Round.create({
-        letters: "abcd",
-        coreLetter: "a",
+        letters: 'abcd',
+        coreLetter: 'a',
         gameDate: new Date()
       });
 
       await round.addWords([
-        await Word.create({ word: "i" }),
-        await Word.create({ word: "love" }),
-        await Word.create({ word: "my" }),
-        await Word.create({ word: "team" })
+        await Word.create({ word: 'i' }),
+        await Word.create({ word: 'love' }),
+        await Word.create({ word: 'my' }),
+        await Word.create({ word: 'team' })
       ]);
 
       round.getWords().then(words => {
@@ -256,21 +256,21 @@ describe("Word >-< Round Association", () => {
     });
   });
 
-  describe("Word magic methods", () => {
-    it("Each word can be used in many rounds", async () => {
+  describe('Word magic methods', () => {
+    it('Each word can be used in many rounds', async () => {
       const word = await Word.create({
-        word: "panagram"
+        word: 'panagram'
       });
 
       await word.addRounds([
         await Round.create({
-          letters: "abcd",
-          coreLetter: "a",
+          letters: 'abcd',
+          coreLetter: 'a',
           gameDate: new Date()
         }),
         await Round.create({
-          letters: "abcd",
-          coreLetter: "a",
+          letters: 'abcd',
+          coreLetter: 'a',
           gameDate: new Date()
         })
       ]);
@@ -282,19 +282,19 @@ describe("Word >-< Round Association", () => {
   });
 });
 
-describe("Word >-< UserRound Association", () => {
+describe('Word >-< UserRound Association', () => {
   beforeEach(() => db.sync({ force: true }));
 
-  describe("Word magic methods", () => {
-    it("Each user round has many words", async () => {
+  describe('Word magic methods', () => {
+    it('Each user round has many words', async () => {
       const userRounds = await Round.create(
         {
-          letters: "abcd",
-          coreLetter: "a",
+          letters: 'abcd',
+          coreLetter: 'a',
           gameDate: new Date(),
           users: [
-            { email: "cody@email.com", password: "123" },
-            { email: "murphy@email.com", password: "123" }
+            { email: 'cody@email.com', password: '123' },
+            { email: 'murphy@email.com', password: '123' }
           ]
         },
         {
@@ -305,8 +305,8 @@ describe("Word >-< UserRound Association", () => {
       const userRound = userRounds[0];
 
       await userRound.addWords([
-        await Word.create({ word: "hi" }),
-        await Word.create({ word: "there" })
+        await Word.create({ word: 'hi' }),
+        await Word.create({ word: 'there' })
       ]);
 
       userRound
@@ -315,20 +315,20 @@ describe("Word >-< UserRound Association", () => {
     });
   });
 
-  describe("Word magic methods", () => {
-    it.only("Each word can be used in many user rounds", async () => {
+  describe('Word magic methods', () => {
+    it('Each word can be used in many user rounds', async () => {
       const word = await Word.create({
-        word: "panagram"
+        word: 'panagram'
       });
 
       const userRounds = await Round.create(
         {
-          letters: "abcd",
-          coreLetter: "a",
+          letters: 'abcd',
+          coreLetter: 'a',
           gameDate: new Date(),
           users: [
-            { email: "cody@email.com", password: "123" },
-            { email: "murphy@email.com", password: "123" }
+            { email: 'cody@email.com', password: '123' },
+            { email: 'murphy@email.com', password: '123' }
           ]
         },
         {

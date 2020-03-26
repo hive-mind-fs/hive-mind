@@ -14,12 +14,12 @@ const Round = db.define('round', {
 
   possiblePoints: {
     type: Sequelize.INTEGER,
-    allowNull: false
+    allowNull: true
   },
 
   panagramList: {
     type: Sequelize.ARRAY(Sequelize.STRING),
-    allowNull: false
+    allowNull: true
   },
 
   gameDate: {
