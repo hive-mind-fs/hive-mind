@@ -21,7 +21,7 @@ function GameBoardScreen(props) {
     otherLetters,
     roundDict,
     roundDictObjs,
-    panagramList,
+    pangramList,
     possiblePoints
   } = getInitialStateFromProps(props);
 
@@ -81,7 +81,7 @@ function GameBoardScreen(props) {
     } else if (roundDict.includes(word)) {
       setCorrectWords([...correctWords, word]);
       // Score function
-      setScore(score + getScore(word, panagramList));
+      setScore(score + getScore(word, pangramList));
     } else {
       err('Your word is not in our dictionary.');
     }
