@@ -1,7 +1,7 @@
 'use strict';
 
 const db = require('../server/db');
-const { generateRounds, getWords } = require('../dictionary');
+const { generateRounds } = require('../dictionary');
 
 const {
   User,
