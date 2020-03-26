@@ -2,13 +2,10 @@ import React, { useState } from 'react';
 import { Button, Container, H1, Text } from 'native-base';
 import { Logo } from '../components';
 import {
-  Text,
   TouchableOpacity,
-  View,
   Image,
   StyleSheet,
   ActivityIndicator,
-  Button
 } from 'react-native';
 import * as Facebook from 'expo-facebook';
 
@@ -50,7 +47,7 @@ export default function LandingScreen({ navigation }) {
   // };
 
   return isLoggedin ? (
-    userData && isImageLoading ? (      
+    userData && isImageLoading ? (
     <Container>
       <Logo xlarge />
       <H1>Hive Mind</H1>
@@ -71,7 +68,7 @@ export default function LandingScreen({ navigation }) {
         </Text>
 
         <TouchableOpacity
-          style={styles.logoutBtn}
+          style={styles.playBtn}
           onPress={() => navigation.navigate('PlayScreen')}
         >
           <Text style={{ color: '#ffff' }}>Play</Text>
@@ -121,5 +118,13 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     position: 'absolute',
     bottom: 275
+  },
+  playBtn: {
+    backgroundColor: '#4267b2',
+    paddingVertical: 10,
+    paddingHorizontal: 20,
+    borderRadius: 20,
+    position: 'absolute',
+    bottom: 200
   }
 });
