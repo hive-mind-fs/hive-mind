@@ -25,7 +25,14 @@ async function seed() {
   const generatedRounds = await generateRounds();
   console.log(generatedRounds[0]);
   console.log(`inserting ${generatedRounds.length} rounds`);
-  const rounds = await Round.bulkCreate(generatedRounds);
+  const generatedRoundsWithWords = generatedRounds.map(round => {
+    const wordsObjects = round.words.map(word => ({ word: word }));
+    round.words = wordsObjects;
+    return round;
+  });
+  const rounds = await Round.bulkCreate(generatedRounds, {
+    include: [{ model: Word }]
+  });
 
   //seed associations
   for (let i = 1; i <= 50; i++) {
