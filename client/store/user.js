@@ -31,6 +31,7 @@ export const auth = (email, password, method) => async dispatch => {
       password
     });
   } catch (e) {
+    console.log('error');
     return dispatch(getUser({ error: e }));
   }
 

@@ -30,6 +30,9 @@ const LoginScreen = ({ handleSubmit, navigation, user }) => {
       Alert.alert('You must enter a password');
     } else {
       handleSubmit(email, password);
+      if (user.error) {
+        Alert.alert('These credentials do not exist');
+      }
     }
   };
 
