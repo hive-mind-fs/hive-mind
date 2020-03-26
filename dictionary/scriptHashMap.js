@@ -14,6 +14,10 @@ const DICT_FILE = 'dictionary.txt';
 const PANGRAMS_FILE = 'pangramLetterSets.txt';
 const PANGRAM_WORDS_FILE = 'pangramWords.txt';
 
+const MIN_QUANTILE = 25;
+const MAX_QUANTILE = 75;
+const QUANTILES = [MIN_QUANTILE, MAX_QUANTILE];
+
 const getWordSet = word => new Set(word.split('').sort());
 
 const getWordKey = wSet => {
@@ -26,11 +30,17 @@ const addKVToMap = (hashMap, key, value) => {
   hashMap.has(key) ? hashMap.get(key).push(value) : hashMap.set(key, [value]);
 };
 
+const getWords = async () => {
+  const dict = await read(DICT_FILE);
+  const words = dict.split('\n');
+  return words;
+};
+
 // There are only 20k unique letter sets corresponding to pangrams
 const getUniqueLetterSets = async letterCount => {
   const t0 = performance.now();
-  const dict = await read(DICT_FILE);
-  const words = dict.split('\n');
+
+  const words = await getWords();
   const letterSets = new Set();
   const pangramObjects = new Map();
   words.forEach(word => {
@@ -140,37 +150,37 @@ const getRoundsFromPangramWords = async pangramObjects => {
   return rounds;
 };
 
-(async () => {
-  const pangramObjects = await getUniqueLetterSets(PANGRAM_NUM); // this is fast
-  //await getWordsForPangram(); // this takes 2 min
-  const rounds = getRoundsFromPangramWords(pangramObjects);
-  // await persist('allPossibleRounds.json', JSON.stringify(rounds));
-})();
+const filterGoodRounds = allPossibleRounds => {
+  const possiblePoints = allPossibleRounds.map(round => round.possiblePoints);
+  const pointsQuantiles = QUANTILES.map(element =>
+    quantile(possiblePoints, element)
+  );
+  const minRoundPoints = pointsQuantiles[QUANTILES.indexOf(MIN_QUANTILE)];
+  const maxRoundPoints = pointsQuantiles[QUANTILES.indexOf(MAX_QUANTILE)];
+  const goodRounds = allPossibleRounds.filter(
+    round =>
+      round.possiblePoints >= minRoundPoints &&
+      round.possiblePoints <= maxRoundPoints
+  );
+  console.log(
+    `of ${allPossibleRounds.length} there are ${goodRounds.length} good rounds`
+  );
+  return goodRounds;
+};
 
+const generateRounds = async () => {
+  const pangramObjects = await getUniqueLetterSets(PANGRAM_NUM); // this takes 1 sec
+  const allPossibleRounds = await getRoundsFromPangramWords(pangramObjects); // this takes 7 seconds secs
+  const rounds = filterGoodRounds(allPossibleRounds);
+  return rounds;
+};
+
+// Run this if you want to recreate pangrams for new dictionary
 // (async () => {
-//   const roundsFile = await readFileAsync(
-//     __dirname + '/allPossibleRounds.json',
-//     'utf8'
-//   );
-//   const rounds = JSON.parse(roundsFile);
-//   const possiblePoints = rounds.map(round => round.possiblePoints);
-//   const QUANTILES = [0, 25, 33, 50, 66, 75, 100];
-//   const pointsQuantiles = QUANTILES.map(element =>
-//     quantile(possiblePoints, element)
-//   );
-//   const MIN_QUANTILE = 25;
-//   const MAX_QUANTILE = 75;
-//   const minRoundPoints = pointsQuantiles[QUANTILES.indexOf(MIN_QUANTILE)];
-//   const maxRoundPoints = pointsQuantiles[QUANTILES.indexOf(MAX_QUANTILE)];
-//   const goodRounds = rounds.filter(
-//     round =>
-//       round.possiblePoints >= minRoundPoints &&
-//       round.possiblePoints <= maxRoundPoints
-//   );
-//   console.log(`of ${rounds.length} there are ${goodRounds.length} good rounds`);
-//   await writeFileAsync(
-//     __dirname + '/goodRounds.json',
-//     JSON.stringify(goodRounds),
-//     'utf8'
-//   );
+//   await getUniqueLetterSets(PANGRAM_NUM); // this is fast
+//   await getWordsForPangram(); // this takes 2 min
 // })();
+
+//generateRounds();
+
+module.exports = { generateRounds, getWords };

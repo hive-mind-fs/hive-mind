@@ -1,6 +1,7 @@
 const router = require('express').Router();
-const { Round, Word, User, UserRound, GuessedWord } = require('../db/models');
+const { Round, Word, UserRound } = require('../db/models');
 const { isAdmin, isCorrectUser, isSession } = require('./gateway');
+const { WORD_ATTRIBUTES } = require('./utils');
 
 module.exports = router;
 
