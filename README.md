@@ -17,6 +17,12 @@ Install dangling expo dep:
 expo install react-native-svg
 ```
 
+Install nodemon (this is used to run the server and watch for changes)
+
+```
+npm install -g nodemon
+```
+
 Install project dependencies:
 
 ```
@@ -38,7 +44,9 @@ npm run seed
 Run the project:
 
 ```
+
 npm run dev
+
 ```
 
 On the left panel, click “Run on iOS simulator”.
@@ -50,8 +58,10 @@ When you make changes to the code, they will automatically show up in the simula
 To debug in the iOS simulator:
 
 ```
+
 ⌘ + D
 Debug Remote JS
+
 ```
 
 ### Build the project remotely
@@ -77,3 +87,7 @@ Nice: 25% < x < 40%
 Great: 40% < x < 55%
 Amazing: 55% < x < 75%
 Genius: 75% < x < 100%
+
+```
+
+```

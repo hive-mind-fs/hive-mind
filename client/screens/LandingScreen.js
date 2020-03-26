@@ -7,12 +7,18 @@ import {
   StyleSheet,
   ActivityIndicator
 } from 'react-native';
+import { connect } from 'react-redux';
 import * as Facebook from 'expo-facebook';
+import { fbAuth } from '../store';
+import { generatePassword } from '../../secrets';
 
-export default function LandingScreen({ navigation }) {
+const LandingScreen = ({ navigation, handleFBLogin }) => {
   const [isLoggedin, setLoggedinStatus] = useState(false);
   const [userData, setUserData] = useState([]);
   const [isImageLoading, setImageLoadStatus] = useState(false);
+  const [email, setEmail] = useState([]);
+  const [password, setPassword] = useState('');
+  const [facebookId, setFacebookId] = useState([]);
 
   const facebookLogIn = async () => {
     try {
@@ -30,6 +36,9 @@ export default function LandingScreen({ navigation }) {
             setLoggedinStatus(true);
             setUserData(data);
             setImageLoadStatus(true);
+            setEmail(data.email);
+            setPassword(generatePassword());
+            setFacebookId(data.id);
           })
           .catch(e => console.log(e));
       } else {
@@ -74,7 +83,6 @@ export default function LandingScreen({ navigation }) {
           bordered
           marginTop
           onPress={() => navigation.navigate('PlayScreen')}
-        >
           <Text>Play</Text>
         </Button>
       </Container>
@@ -117,10 +125,48 @@ export default function LandingScreen({ navigation }) {
         <Icon name="logo-facebook" />
         <Text>Log In With Facebook</Text>
       </Button>
-
-      {/* <TouchableOpacity style={styles.loginBtn} >
-        <Text style={{ color: '#fff' }}>Login with Facebook</Text>
-      </TouchableOpacity> */}
     </Container>
   );
-}
+};
+
+const styles = StyleSheet.create({
+  loginBtn: {
+    backgroundColor: '#4267b2',
+    paddingVertical: 10,
+    paddingHorizontal: 20,
+    borderRadius: 20,
+    top: 10
+  },
+  logoutBtn: {
+    backgroundColor: '#4267b2',
+    paddingVertical: 10,
+    paddingHorizontal: 20,
+    borderRadius: 20,
+    position: 'absolute',
+    bottom: 275
+  },
+  playBtn: {
+    backgroundColor: '#4267b2',
+    paddingVertical: 10,
+    paddingHorizontal: 20,
+    borderRadius: 20,
+    position: 'absolute',
+    bottom: 200
+  }
+});
+
+const mapState = state => {
+  return {
+    user: state.user
+  };
+};
+
+const mapDispatch = dispatch => {
+  return {
+    handleFBLogin: (email, password, facebookId) =>
+      dispatch(fbAuth(email, password, facebookId, 'signup'))
+  };
+};
+
+export default connect(mapState, mapDispatch)(LandingScreen);
+

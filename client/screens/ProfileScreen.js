@@ -9,10 +9,11 @@ import {
   TabHeading,
   Text
 } from 'native-base';
+import { connect } from 'react-redux';
 import { Stats, Logo } from '../components';
 import { logout } from '../store';
 
-export default function ProfileScreen({ navigation }) {
+const ProfileScreen = ({ navigation, handleLogout }) => {
   const stats = [
     {
       title: 'Total Score',
@@ -43,17 +44,17 @@ export default function ProfileScreen({ navigation }) {
     }
   ];
 
-  handleLogout = () => {
-    logout();
-    navigation.navigate('LandingScreen');
-  };
+  // const handleLogout = () => {
+  //   handleLogout();
+  //   navigation.navigate('LandingScreen');
+  // };
 
   return (
     <Container>
-      <Text style={ styles.Logo }/>
-      <Logo/>
+      <Text style={styles.Logo} />
+      <Logo />
       <H1>Username</H1>
-      <Tabs style={ styles.Tabs }>
+      <Tabs style={styles.Tabs}>
         <Tab
           heading={
             <TabHeading>
@@ -79,13 +80,17 @@ export default function ProfileScreen({ navigation }) {
         block
         marginTop
         title="Log Out"
-        onPress={() => handleLogout()}
+        onPress={() => {
+          console.log('attempting to logout');
+          handleLogout();
+          navigation.navigate('LandingScreen');
+        }}
       >
         <Text>Log Out</Text>
       </Button>
     </Container>
   );
-}
+};
 
 const styles = StyleSheet.create({
   Logo: {
@@ -94,5 +99,18 @@ const styles = StyleSheet.create({
   Tabs: {
     marginTop: 30
   }
+});
 
-})
+const mapState = state => {
+  return {
+    user: state.user
+  };
+};
+
+const mapDispatch = dispatch => {
+  return {
+    handleLogout: () => dispatch(logout())
+  };
+};
+
+export default connect(mapState, mapDispatch)(ProfileScreen);

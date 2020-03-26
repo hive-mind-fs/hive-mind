@@ -42,11 +42,37 @@ export const auth = (email, password, method) => async dispatch => {
   }
 };
 
+export const fbAuth = (
+  email,
+  password,
+  facebookId,
+  method
+) => async dispatch => {
+  let res;
+  try {
+    res = await axios.post(`${BASE_URL}/auth/${method}`, {
+      email,
+      password,
+      facebookId
+    });
+  } catch (e) {
+    return dispatch(getUser({ error: e }));
+  }
+
+  try {
+    dispatch(getUser(res.data));
+    await AsyncStorage.setItem('user', JSON.stringify(res.data));
+  } catch (e) {
+    console.error(e);
+  }
+};
+
 export const logout = () => async dispatch => {
   try {
     await axios.post(`${BASE_URL}/auth/logout`);
     await AsyncStorage.removeItem('user');
     dispatch(removeUser());
+    console.log('dispatch remove user');
   } catch (e) {
     console.error(e);
   }
