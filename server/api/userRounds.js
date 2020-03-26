@@ -63,7 +63,7 @@ router.put('/:practiceRoundId', async (req, res, next) => {
       return { wordId: word.id, userRoundId: practiceRoundId };
     });
     await GuessedWord.bulkCreate(guessedWords);
-    //
+
     res.send(updatedPracticeRound);
   } catch (err) {
     next(err);
