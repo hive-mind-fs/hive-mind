@@ -5,7 +5,7 @@ import { Logo } from '../components';
 import { fetchPracticeRound } from '../store/game';
 
 function PlayScreen({ navigation, createUserRound, userId }) {
-  handleSubmit = () => {
+  const handleSubmit = () => {
     createUserRound(userId);
     navigation.navigate('CountdownScreen');
   };

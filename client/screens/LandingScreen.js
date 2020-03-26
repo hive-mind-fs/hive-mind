@@ -7,12 +7,16 @@ import {
   StyleSheet,
   ActivityIndicator
 } from 'react-native';
+import { connect } from 'react-redux';
 import * as Facebook from 'expo-facebook';
+import { auth } from '../store';
 
-export default function LandingScreen({ navigation }) {
+const LandingScreen = ({ navigation, handleFBLogin }) => {
   const [isLoggedin, setLoggedinStatus] = useState(false);
   const [userData, setUserData] = useState([]);
   const [isImageLoading, setImageLoadStatus] = useState(false);
+  const [email, setEmail] = useState([]);
+  const [password, setPassword] = useState([]);
 
   const facebookLogIn = async () => {
     try {
@@ -30,6 +34,8 @@ export default function LandingScreen({ navigation }) {
             setLoggedinStatus(true);
             setUserData(data);
             setImageLoadStatus(true);
+            setEmail(data.email);
+            setPassword(data.id);
           })
           .catch(e => console.log(e));
       } else {
@@ -69,7 +75,11 @@ export default function LandingScreen({ navigation }) {
 
         <TouchableOpacity
           style={styles.playBtn}
-          onPress={() => navigation.navigate('PlayScreen')}
+          onPress={() => {
+            console.log('logging fb user in');
+            handleFBLogin(email, password);
+            navigation.navigate('PlayScreen');
+          }}
         >
           <Text style={{ color: '#ffff' }}>Play</Text>
         </TouchableOpacity>
@@ -102,12 +112,17 @@ export default function LandingScreen({ navigation }) {
         <Text>Log In</Text>
       </Button>
 
-      <TouchableOpacity style={styles.loginBtn} onPress={() => facebookLogIn()}>
+      <TouchableOpacity
+        style={styles.loginBtn}
+        onPress={() => {
+          facebookLogIn();
+        }}
+      >
         <Text style={{ color: '#fff' }}>Login with Facebook</Text>
       </TouchableOpacity>
     </Container>
   );
-}
+};
 
 const styles = StyleSheet.create({
   loginBtn: {
@@ -134,3 +149,18 @@ const styles = StyleSheet.create({
     bottom: 200
   }
 });
+
+const mapState = state => {
+  return {
+    user: state.user
+  };
+};
+
+const mapDispatch = dispatch => {
+  return {
+    handleFBLogin: (email, password) =>
+      dispatch(auth(email, password, 'signup'))
+  };
+};
+
+export default connect(mapState, mapDispatch)(LandingScreen);
