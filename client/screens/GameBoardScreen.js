@@ -31,7 +31,7 @@ function GameBoardScreen(props) {
   [score, setScore] = useState(0);
   [rank, setRank] = useState('Beginner');
   [error, setError] = useState([]);
-  [gameTimer, setGameTimer] = useState(10);
+  [gameTimer, setGameTimer] = useState(300);
   [isActive, toggleActive] = useState(true);
 
   useEffect(() => {
