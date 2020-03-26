@@ -10,6 +10,7 @@ import { Provider } from 'react-redux';
 import {
   CountdownScreen,
   GameBoardScreen,
+  HomeScreen,
   LandingScreen,
   LoginScreen,
   PlayScreen,
@@ -34,6 +35,14 @@ const navStyle = {
   headerTintColor: colors.GOLD
 };
 
+
+const home = (
+  <Stack.Screen
+    name="HomeScreen"
+    component={HomeScreen}
+    options={{ headerShown: false }}
+  />
+);
 const play = (
   <Stack.Screen
     name="PlayScreen"
@@ -95,7 +104,7 @@ const profile = <Stack.Screen name="ProfileScreen" component={ProfileScreen} />;
 
 export function App() {
   const [isReady, setIsReady] = useState(false);
-  const [user, setUser] = useState({});
+  const [user, setUser] = useState(null);
 
   useEffect(() => {
     if (!isReady) {
@@ -119,12 +128,14 @@ export function App() {
     return <AppLoading />;
   }
 
-  if (user.id) {
+  if (user) {
+    console.log('user is logged in', user);
     return (
       <Provider store={store}>
         <StyleProvider style={getTheme(customMaterial)}>
           <NavigationContainer>
             <Stack.Navigator>
+              {home}
               {play}
               {rules}
               {countdown}
@@ -139,27 +150,27 @@ export function App() {
       </StyleProvider>
         </Provider>
     );
+  } else {
+    console.log('user is not logged in', user);
+    return (
+      <Provider store={store}>
+        <NavigationContainer>
+          <Stack.Navigator>
+            {landing}
+            {signup}
+            {home}
+            {play}
+            {rules}
+            {countdown}
+            {game}
+            {after}
+            {profile}
+            {login}
+          </Stack.Navigator>
+        </NavigationContainer>
+      </Provider>
+    );
   }
-
-  return (
-    <Provider store={store}>
-      <StyleProvider style={getTheme(customMaterial)}>
-      <NavigationContainer>
-        <Stack.Navigator>
-          {play}
-          {rules}
-          {countdown}
-          {game}
-          {after}
-          {profile}
-          {landing}
-          {login}
-          {signup}
-        </Stack.Navigator>
-      </NavigationContainer>
-      </StyleProvider>
-    </Provider>
-  );
 }
 
 export default registerRootComponent(App);

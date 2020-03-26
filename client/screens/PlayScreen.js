@@ -7,8 +7,8 @@ import { fetchPracticeRound } from '../store/game';
 import { logout } from '../store';
 
 function PlayScreen({ navigation, createUserRound, userId }) {
-  const handleSubmit = () => {
-    createUserRound(1); //userId);
+  handleSubmit = () => {
+    createUserRound(userId);
     navigation.navigate('CountdownScreen');
   };
 
@@ -32,13 +32,6 @@ function PlayScreen({ navigation, createUserRound, userId }) {
       >
         <Text>How To Play</Text>
       </Button>
-      {/* <Button
-        transparent marginTop
-        title="Logout"
-        onPress={() => navigation.navigate('LandingScreen')}
-      >
-        <Text>Log Out</Text>
-      </Button>  */}
     </Container>
   );
 }
@@ -51,7 +44,8 @@ const mapState = state => {
 
 const mapDispatch = dispatch => {
   return {
-    createUserRound: userId => dispatch(fetchPracticeRound(userId))
+    createUserRound: userId => dispatch(fetchPracticeRound(userId)),
+    logout: () => dispatch(logout())
   };
 };
 

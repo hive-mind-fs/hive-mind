@@ -1,5 +1,6 @@
 import axios from 'axios';
 import { AsyncStorage } from 'react-native';
+import { BASE_URL } from '../utils/constants';
 
 // Action types
 const GET_USER = 'GET_USER';
@@ -11,8 +12,6 @@ const defaultUser = {};
 // Action creators
 export const getUser = user => ({ type: GET_USER, user });
 const removeUser = () => ({ type: REMOVE_USER });
-
-const BASE_URL = 'http://localhost:8080';
 
 // Thunk creators
 export const me = () => async dispatch => {
@@ -46,7 +45,7 @@ export const auth = (email, password, method) => async dispatch => {
 export const logout = () => async dispatch => {
   try {
     await axios.post(`${BASE_URL}/auth/logout`);
-    await AsyncStorage.setItem('user', null);
+    await AsyncStorage.removeItem('user');
     dispatch(removeUser());
   } catch (e) {
     console.error(e);
