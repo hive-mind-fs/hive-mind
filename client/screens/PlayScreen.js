@@ -1,14 +1,12 @@
 import React from 'react';
 import { connect } from 'react-redux';
-// import { Button, Text } from 'react-native';
-import { Container, H1, H3, Button, Text } from 'native-base';
+import { Container, H1, Button, Text } from 'native-base';
 import { Logo } from '../components';
 import { fetchPracticeRound } from '../store/game';
-import { logout } from '../store';
 
 function PlayScreen({ navigation, createUserRound, userId }) {
   handleSubmit = () => {
-    createUserRound(userId);
+    createUserRound(1);
     navigation.navigate('CountdownScreen');
   };
 

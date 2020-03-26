@@ -1,6 +1,6 @@
 import React from 'react';
-import { StyleSheet, Text } from 'react-native';
-import { Button, Container, H1, H3 } from 'native-base';
+import { StyleSheet } from 'react-native';
+import { Button, Container, H1, H3, View, Text } from 'native-base';
 
 export default function RulesScreen({ navigation }) {
   const howToBullets1 = [
@@ -17,52 +17,51 @@ export default function RulesScreen({ navigation }) {
   ];
 
   return (
-    <Container style={styles.container}>
-      <H1 style={styles.H1}>How To Play</H1>
-      <H3 style={styles.H3}>Create words using letters from the hive.</H3>
-      {howToBullets1.map(bullet => (
-        <Text style={styles.Text}>- {bullet}</Text>
-      ))}
+    <Container>
+      <View style={styles.container}>
+        <H1 style={styles.H1}>How To Play</H1>
+        <H3 style={styles.H3}>Create words using letters from the hive.</H3>
+        {howToBullets1.map(bullet => (
+          <Text style={styles.Text}>- {bullet}</Text>
+        ))}
 
-      <H3 style={styles.H3}>Score points to increase your rating.</H3>
-      {howToBullets2.map(bullet => (
-        <Text style={styles.Text}>- {bullet}</Text>
-      ))}
+        <H3 style={styles.H3}>Score points to increase your rating.</H3>
+        {howToBullets2.map(bullet => (
+          <Text style={styles.Text}>- {bullet}</Text>
+        ))}
 
-      <Button
-        style={ styles.Button }
-        warning
-        title="I Got It"
-        onPress={() => navigation.navigate('PlayScreen')}
-      >
-        <Text style={ styles.buttonText }>I Got It</Text>
-      </Button>
+        <Button
+          primary
+          rounded
+          block
+          marginTopL
+          title="I Got It"
+          onPress={() => navigation.navigate('PlayScreen')}
+        >
+          <Text style={styles.buttonText}>I Got It</Text>
+        </Button>
+      </View>
     </Container>
   );
 }
 
 const styles = StyleSheet.create({
+  container: {
+    padding: 20,
+    flex: 1
+  },
   H1: {
     textAlign: 'center'
   },
   H3: {
-    marginTop: 30
+    marginTop: 30,
+    textAlign: 'left'
   },
   Text: {
-    marginTop: 7
+    marginTop: 7,
+    textAlign: 'left'
   },
   container: {
-    flex: 1,
-    justifyContent: 'center',
-    padding: 20
-  },
-  Button: {
-    justifyContent: 'center',
-    marginTop: 30
-  },
-  buttonText: {
-    color: 'white',
-    textAlign: 'center',
-    fontSize: 18  
+    alignContent: 'flex-start'
   }
 });

@@ -35,7 +35,6 @@ const navStyle = {
   headerTintColor: colors.GOLD
 };
 
-
 const home = (
   <Stack.Screen
     name="HomeScreen"
@@ -72,7 +71,11 @@ const game = (
   />
 );
 const after = (
-  <Stack.Screen name="PostRoundScreen" component={PostRoundScreen} />
+  <Stack.Screen 
+    name="PostRoundScreen" 
+    component={PostRoundScreen} 
+    options={{ headerShown: false }}
+  />
 );
 
 const landing = (
@@ -148,27 +151,29 @@ export function App() {
               {signup}
             </Stack.Navigator>
           </NavigationContainer>
-      </StyleProvider>
-        </Provider>
+        </StyleProvider>
+      </Provider>
     );
   } else {
     console.log('user is not logged in', user);
     return (
       <Provider store={store}>
-        <NavigationContainer>
-          <Stack.Navigator>
-            {landing}
-            {signup}
-            {home}
-            {play}
-            {rules}
-            {countdown}
-            {game}
-            {after}
-            {profile}
-            {login}
-          </Stack.Navigator>
-        </NavigationContainer>
+        <StyleProvider style={getTheme(customMaterial)}>
+          <NavigationContainer>
+            <Stack.Navigator>
+              {landing}
+              {signup}
+              {home}
+              {play}
+              {rules}
+              {countdown}
+              {game}
+              {after}
+              {profile}
+              {login}
+            </Stack.Navigator>
+          </NavigationContainer>
+        </StyleProvider>
       </Provider>
     );
   }

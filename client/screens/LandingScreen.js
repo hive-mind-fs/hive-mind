@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Container } from 'native-base';
+import { Button, Container, H1, Text } from 'native-base';
 import { Logo } from '../components';
 import {
   Text,
@@ -50,10 +50,10 @@ export default function LandingScreen({ navigation }) {
   // };
 
   return isLoggedin ? (
-    userData && isImageLoading ? (
-      <Container
-      style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}
-    >
+    userData && isImageLoading ? (      
+    <Container>
+      <Logo xlarge />
+      <H1>Hive Mind</H1>
         <ActivityIndicator
           size="large"
           color="#0000ff"
@@ -83,14 +83,22 @@ export default function LandingScreen({ navigation }) {
       style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}
     >
       <Logo />
+
       <Button
+        rounded block marginTop bordered
         title="Sign Up"
         onPress={() => navigation.navigate('SignupScreen')}
-      />
+      >
+        <Text>Sign Up</Text>
+      </Button>
       <Button
+        rounded block marginTop bordered
         title="Log In"
         onPress={() => navigation.navigate('LoginScreen')}
-      />
+      >
+        <Text>Log In</Text>
+      </Button>
+
       <TouchableOpacity style={styles.loginBtn} onPress={() => facebookLogIn()}>
         <Text style={{ color: '#fff' }}>Login with Facebook</Text>
       </TouchableOpacity>
