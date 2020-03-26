@@ -1,10 +1,10 @@
 import React from 'react';
-import { Text } from 'react-native';
 import {
   List,
   ListItem,
   Left,
   Right,
+  Text
 } from 'native-base';
 
 export default function Stats(props, {navigation}) {

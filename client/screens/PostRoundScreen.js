@@ -1,7 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { Button } from 'react-native';
-import { Card, Container, H1 } from 'native-base';
+import { Button, Card, Container, H1, Text } from 'native-base';
 import { Stats, Logo } from '../components';
 import { fetchPracticeRound } from '../store/game';
 
@@ -18,31 +17,34 @@ function PostRoundScreen({ practiceRound, navigation, createUserRound }) {
   ];
 
   const words = practiceRound.words.map(word => word.word);
-  
+
   return (
-    <Container
-      style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}
-    >
+    <Container>
       <Logo />
-      <H1>Username</H1>
-      <Card>
-        <Stats stats={postRound} words={words}/>
+      <H1>Round Over</H1>
+      <Card style={{ marginTop: 20 }}>
+        <Stats stats={postRound} words={words} />
       </Card>
-      <Card>
-
-      </Card>
+      <Card></Card>
 
       <Button
-        title="Quit"
-        onPress={() => navigation.navigate('PlayScreen')}
-      />
-      <Button
+        block rounded
         title="Play Again"
         onPress={() => {
-          createUserRound(7) // To do, replace with user id
-          navigation.navigate('CountdownScreen')
+          createUserRound(7); // To do, replace with user id
+          navigation.navigate('CountdownScreen');
         }}
-      />
+      >
+        <Text>Play Again</Text>
+      </Button>
+
+      <Button 
+        block bordered rounded marginTop
+        title="Quit" 
+        onPress={() => navigation.navigate('PlayScreen')}>
+        <Text>Quit</Text>
+      </Button>
+      
     </Container>
   );
 }
@@ -56,7 +58,7 @@ const mapState = state => {
 
 const mapDispatch = dispatch => {
   return {
-    createUserRound: (userId) => dispatch(fetchPracticeRound(userId))
+    createUserRound: userId => dispatch(fetchPracticeRound(userId))
   };
 };
 

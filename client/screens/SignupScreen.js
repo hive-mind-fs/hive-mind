@@ -9,7 +9,7 @@ const SignupScreen = ({ handleSubmit, navigation, user }) => {
 
   useEffect(() => {
     if (user.id) {
-      navigation.navigate('PlayScreen');
+      navigation.navigate('HomeScreen');
     }
   });
 

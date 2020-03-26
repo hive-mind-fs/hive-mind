@@ -6,7 +6,7 @@ import { fetchPracticeRound } from '../store/game';
 
 function PlayScreen({ navigation, createUserRound, userId, logout }) {
   handleSubmit = () => {
-    createUserRound(userId);
+    createUserRound(1);
     navigation.navigate('CountdownScreen');
   };
 

@@ -71,7 +71,11 @@ const game = (
   />
 );
 const after = (
-  <Stack.Screen name="PostRoundScreen" component={PostRoundScreen} />
+  <Stack.Screen 
+    name="PostRoundScreen" 
+    component={PostRoundScreen} 
+    options={{ headerShown: false }}
+  />
 );
 
 const landing = (
