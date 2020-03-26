@@ -50,12 +50,16 @@ export const fbAuth = (
 ) => async dispatch => {
   let res;
   try {
+    console.log('Hit thunk--------------------------------------');
+    let userEmail = await axios.get(`/api/users`, email);
+    console.log('email', userEmail);
     res = await axios.post(`${BASE_URL}/auth/${method}`, {
       email,
       password,
       facebookId
     });
   } catch (e) {
+    console.error(e);
     return dispatch(getUser({ error: e }));
   }
 
