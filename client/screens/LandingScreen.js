@@ -11,7 +11,7 @@ import { connect } from 'react-redux';
 import * as Facebook from 'expo-facebook';
 import { fbAuth } from '../store';
 import { generatePassword } from '../../secrets';
-
+//hello
 const LandingScreen = ({ navigation, handleFBLogin }) => {
   const [isLoggedin, setLoggedinStatus] = useState(false);
   const [userData, setUserData] = useState([]);
