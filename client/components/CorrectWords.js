@@ -6,8 +6,9 @@ const styles = StyleSheet.create({
   letter: {
     position: 'absolute',
     textAlign: 'center',
-    fontSize: 12,
-    fontWeight: 'bold'
+    fontSize: 20,
+    fontWeight: 'bold',
+    marginTop: 5
   }
 });
 

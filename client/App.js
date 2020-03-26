@@ -10,6 +10,7 @@ import { Provider } from 'react-redux';
 import {
   CountdownScreen,
   GameBoardScreen,
+  HomeScreen,
   LandingScreen,
   LoginScreen,
   PlayScreen,
@@ -20,6 +21,9 @@ import {
 } from './screens';
 import store from './store';
 import colors from './utils/styles';
+import { StyleProvider } from 'native-base';
+import getTheme from './native-base-theme/components';
+import customMaterial from './native-base-theme/variables/customMaterial';
 
 const Stack = createStackNavigator();
 
@@ -31,6 +35,13 @@ const navStyle = {
   headerTintColor: colors.GOLD
 };
 
+const home = (
+  <Stack.Screen
+    name="HomeScreen"
+    component={HomeScreen}
+    options={{ headerShown: false }}
+  />
+);
 const play = (
   <Stack.Screen
     name="PlayScreen"
@@ -120,38 +131,44 @@ export function App() {
     console.log('user is logged in', user);
     return (
       <Provider store={store}>
-        <NavigationContainer>
-          <Stack.Navigator>
-            {play}
-            {rules}
-            {countdown}
-            {game}
-            {after}
-            {profile}
-            {landing}
-            {login}
-            {signup}
-          </Stack.Navigator>
-        </NavigationContainer>
+        <StyleProvider style={getTheme(customMaterial)}>
+          <NavigationContainer>
+            <Stack.Navigator>
+              {home}
+              {play}
+              {rules}
+              {countdown}
+              {game}
+              {after}
+              {profile}
+              {landing}
+              {login}
+              {signup}
+            </Stack.Navigator>
+          </NavigationContainer>
+        </StyleProvider>
       </Provider>
     );
   } else {
     console.log('user is not logged in', user);
     return (
       <Provider store={store}>
-        <NavigationContainer>
-          <Stack.Navigator>
-            {landing}
-            {signup}
-            {play}
-            {rules}
-            {countdown}
-            {game}
-            {after}
-            {profile}
-            {login}
-          </Stack.Navigator>
-        </NavigationContainer>
+        <StyleProvider style={getTheme(customMaterial)}>
+          <NavigationContainer>
+            <Stack.Navigator>
+              {landing}
+              {signup}
+              {home}
+              {play}
+              {rules}
+              {countdown}
+              {game}
+              {after}
+              {profile}
+              {login}
+            </Stack.Navigator>
+          </NavigationContainer>
+        </StyleProvider>
       </Provider>
     );
   }

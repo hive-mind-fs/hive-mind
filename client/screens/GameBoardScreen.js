@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
-import { Button, StyleSheet, View, Text } from 'react-native';
-import { Container } from 'native-base';
+import { StyleSheet, View } from 'react-native';
+import { Button, Container, Text, Icon } from 'native-base';
 import Hive from '../components/Hive';
 import Input from '../components/Input';
 import Error from '../components/Error';
@@ -92,46 +92,99 @@ function GameBoardScreen(props) {
   
   return (
     <Container style={styles.container}>
-      <Text>
-        Score: {score} Rank: {rank}  Timer: { minutes }:{ seconds }
-      </Text>
-      <Text>You've found {correctWords.length} correct Words:</Text>
-      <CorrectWords words={correctWords.join(', ')} />
-      <Error error={error} />
-      <Input inputLetters={input} />
+      <View style={ styles.topBar }>
+        <Text style={ styles.topBarItem }>
+          <Icon classes={ styles.topBarIcon } name='alarm' />
+          {'  '}{ minutes }:{ seconds }
+        </Text>
+        <Text style={ styles.topBarItem }>
+          <Icon classes={ styles.topBarIcon } name='trophy' />
+          {'  '}{score}
+        </Text>
+        <Text style={ styles.topBarItem }>
+          <Icon classes={ styles.topBarIcon } name='school' />
+          {'  '}{rank}
+        </Text> 
+      </View>
+      <View style={ styles.correctWordsCont }>
+        <Text marginT10>You've found {correctWords.length} correct words</Text>
+        <CorrectWords words={correctWords.join('   ')} />
+      </View>
+      <View style={ styles.inputCont }>
+        <Input style={ styles.textCenter } inputLetters={input} />
+        <Error error={error} />
+      </View>
       <Hive
+        style={ styles.gameBoard }
         centerLetter={cl} // comes from redux now
         otherLetters={lettersOrdering}
         onLetterPress={letter => handleLetterPress(letter)}
       />
       <View style={styles.flexRow}>
-        <Button title="Delete" onPress={() => handleDelete()} />
-        <Button title="Shuffle" onPress={() => handleShuffle()} />
-        <Button title="Enter" onPress={() => handleEnter()} />
+        <Button style={ styles.gameButtons } block bordered rounded large title="Delete" onPress={() => handleDelete()}>
+          <Text>Delete</Text>
+        </Button>
+        <Button style={ styles.gameButtons } block bordered rounded large title="Shuffle" onPress={() => handleShuffle()}>
+          <Text>Shuffle</Text>
+        </Button>
+        <Button style={ styles.gameButtons } block bordered rounded large title="Enter" onPress={() => handleEnter()}>
+          <Text>Enter</Text>
+        </Button>
       </View>
     </Container>
   );
 }
 
 const styles = StyleSheet.create({
-  flexRow: {
-    flexDirection: 'row',
-    justifyContent: 'space-around'
+  topBar: {
+    position: 'absolute',
+    top: 70,
+    // flex: 2,
+    display: 'flex',
+    justifyContent: 'space-around',
+    flexDirection: 'row'
+  },
+  topBarItem: {
+    flex: 1,
+    textAlign: 'center'
+  },
+  topBarIcon: {
+    paddingRight: 15
+  },
+  correctWordsCont: {
+    // flex: 1
+    // width: 100
+    position: 'absolute',
+    top: 130,
+    alignItems: 'center'
+  },
+  inputCont: {
+    // flex: 4,
+    position: 'absolute',
+    top: 200
   },
   gameBoard: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    // flex: 5,
+    position: 'absolute',
+    bottom: 200
+  },
+  flexRow: {
+    display: 'flex',
     flexDirection: 'row',
     justifyContent: 'space-around',
-    padding: 20,
-    margin: 10
+    position: 'absolute',
+    bottom: 40,
+    // flex: 1
   },
   gameButtons: {
-    paddingLeft: 10,
-    marginRight: 10
-  },
-  container: {
     flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center'
+    marginLeft: 5,
+    marginRight: 5
+  },
+  textCenter: {
+    textAlign: 'center'
   }
 });
 

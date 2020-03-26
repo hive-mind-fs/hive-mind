@@ -17,7 +17,7 @@ router.post('/:userId', async (req, res, next) => {
     // const round = await Round.getRandom()
     // To do: programatically generate words for round
     const round = await Round.findByPk(51);
-    
+
     const userRound = await UserRound.findOrCreate({
       where: { userId: userId, roundId: round.id }
     });
@@ -40,33 +40,32 @@ router.post('/:userId', async (req, res, next) => {
   }
 });
 
-
 // Update
 // Given userRound id, persist to database
 router.put('/:practiceRoundId', async (req, res, next) => {
-    try {
-        let practiceRoundId = +req.params.practiceRoundId;
-        const userRound = await UserRound.findByPk(practiceRoundId, {
-            returning: true,
-            where: { id: practiceRoundId },
-            include: [
-                { model: Word, attributes: WORD_ATTRIBUTES },
-                {
-                    model: Round,
-                    attributes: ROUND_ATTRIBUTES,
-                    include : [{model: Word}]
-                },
-            ]
-        })
-        const updatedPracticeRound = await userRound.update(req.body)
-        // Potential Optimization: Figure out a way to do the below  within the update above
-        const guessedWords = req.body.words.map(word => {
-            return { wordId: word.id, userRoundId: practiceRoundId }
-        })
-        await GuessedWord.bulkCreate(guessedWords)
-        //
-        res.send(updatedPracticeRound)
-    } catch (err) {
-        next(err);
-    }
+  try {
+    let practiceRoundId = +req.params.practiceRoundId;
+    const userRound = await UserRound.findByPk(practiceRoundId, {
+      returning: true,
+      where: { id: practiceRoundId },
+      include: [
+        { model: Word, attributes: WORD_ATTRIBUTES },
+        {
+          model: Round,
+          attributes: ROUND_ATTRIBUTES,
+          include: [{ model: Word }]
+        }
+      ]
+    });
+    const updatedPracticeRound = await userRound.update(req.body);
+    // Potential Optimization: Figure out a way to do the below  within the update above
+    const guessedWords = req.body.words.map(word => {
+      return { wordId: word.id, userRoundId: practiceRoundId };
+    });
+    await GuessedWord.bulkCreate(guessedWords);
+    //
+    res.send(updatedPracticeRound);
+  } catch (err) {
+    next(err);
+  }
 });

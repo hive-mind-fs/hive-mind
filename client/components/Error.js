@@ -4,16 +4,16 @@ import { StyleSheet } from 'react-native';
 
 const styles = StyleSheet.create({
   letter: {
-    position: 'absolute',
+    // position: 'absolute',
     textAlign: 'center',
-    fontSize: 40,
+    fontSize: 20,
     fontWeight: 'bold'
   }
 });
 
 const Error = ({ error }) => {
   return (
-    <View style={{ width: 300, height: 100 }}>
+    <View style={{ height: 50 }}>
       <Text style={styles.letter}>{error}</Text>
     </View>
   );
