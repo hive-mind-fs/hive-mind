@@ -4,19 +4,20 @@ import { Button, Card, Container, H1, Text } from 'native-base';
 import { Stats, Logo } from '../components';
 import { fetchPracticeRound } from '../store/game';
 
-function PostRoundScreen({ practiceRound, navigation, createUserRound }) {
+function PostRoundScreen({ route, navigation, createUserRound, user }) {
+  const words = route.params.words;
+  const score = route.params.score;
+
   const postRound = [
     {
       title: 'Total Score',
-      stat: `${practiceRound.score}`
+      stat: `${score}`
     },
     {
       title: 'Words Got',
-      stat: `${practiceRound.words.length}`
+      stat: `${words.length}`
     }
   ];
-
-  const words = practiceRound.words.map(word => word.word);
 
   return (
     <Container>
@@ -28,30 +29,33 @@ function PostRoundScreen({ practiceRound, navigation, createUserRound }) {
       <Card></Card>
 
       <Button
-        block rounded
+        block
+        rounded
         title="Play Again"
         onPress={() => {
-          createUserRound(7); // To do, replace with user id
+          createUserRound(user.id);
           navigation.navigate('CountdownScreen');
         }}
       >
         <Text>Play Again</Text>
       </Button>
 
-      <Button 
-        block bordered rounded marginTop
-        title="Quit" 
-        onPress={() => navigation.navigate('HomeScreen')}>
+      <Button
+        block
+        bordered
+        rounded
+        marginTop
+        title="Quit"
+        onPress={() => navigation.navigate('HomeScreen')}
+      >
         <Text>Quit</Text>
       </Button>
-      
     </Container>
   );
 }
 
 const mapState = state => {
   return {
-    practiceRound: state.game.practiceRound,
     user: state.user
   };
 };
