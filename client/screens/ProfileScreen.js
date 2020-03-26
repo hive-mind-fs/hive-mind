@@ -43,17 +43,17 @@ export default function ProfileScreen({ navigation }) {
     }
   ];
 
-  handleLogout = () => {
+  const handleLogout = () => {
     logout();
     navigation.navigate('LandingScreen');
   };
 
   return (
     <Container>
-      <Text style={ styles.Logo }/>
-      <Logo/>
+      <Text style={styles.Logo} />
+      <Logo />
       <H1>Username</H1>
-      <Tabs style={ styles.Tabs }>
+      <Tabs style={styles.Tabs}>
         <Tab
           heading={
             <TabHeading>
@@ -94,5 +94,4 @@ const styles = StyleSheet.create({
   Tabs: {
     marginTop: 30
   }
-
-})
+});

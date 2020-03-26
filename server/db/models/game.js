@@ -1,7 +1,7 @@
-const Sequelize = require("sequelize");
-const db = require("../db");
+const Sequelize = require('sequelize');
+const db = require('../db');
 
-const Game = db.define("game", {
+const Game = db.define('game', {
   date: {
     type: Sequelize.DATE,
     allowNull: false

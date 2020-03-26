@@ -5,7 +5,7 @@ import {
   TouchableOpacity,
   Image,
   StyleSheet,
-  ActivityIndicator,
+  ActivityIndicator
 } from 'react-native';
 import * as Facebook from 'expo-facebook';
 
@@ -48,9 +48,9 @@ export default function LandingScreen({ navigation }) {
 
   return isLoggedin ? (
     userData && isImageLoading ? (
-    <Container>
-      <Logo xlarge />
-      <H1>Hive Mind</H1>
+      <Container>
+        <Logo xlarge />
+        <H1>Hive Mind</H1>
         <ActivityIndicator
           size="large"
           color="#0000ff"
@@ -82,14 +82,20 @@ export default function LandingScreen({ navigation }) {
       <Logo />
 
       <Button
-        rounded block marginTop bordered
+        rounded
+        block
+        marginTop
+        bordered
         title="Sign Up"
         onPress={() => navigation.navigate('SignupScreen')}
       >
         <Text>Sign Up</Text>
       </Button>
       <Button
-        rounded block marginTop bordered
+        rounded
+        block
+        marginTop
+        bordered
         title="Log In"
         onPress={() => navigation.navigate('LoginScreen')}
       >
