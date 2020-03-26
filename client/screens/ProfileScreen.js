@@ -13,7 +13,7 @@ import { connect } from 'react-redux';
 import { Stats, Logo } from '../components';
 import { logout } from '../store';
 
-const ProfileScreen = ({ navigation }) => {
+const ProfileScreen = ({ navigation, handleLogout }) => {
   const stats = [
     {
       title: 'Total Score',
@@ -44,10 +44,10 @@ const ProfileScreen = ({ navigation }) => {
     }
   ];
 
-  const handleLogout = () => {
-    logout();
-    navigation.navigate('LandingScreen');
-  };
+  // const handleLogout = () => {
+  //   handleLogout();
+  //   navigation.navigate('LandingScreen');
+  // };
 
   return (
     <Container>
@@ -83,6 +83,7 @@ const ProfileScreen = ({ navigation }) => {
         onPress={() => {
           console.log('attempting to logout');
           handleLogout();
+          navigation.navigate('LandingScreen');
         }}
       >
         <Text>Log Out</Text>
