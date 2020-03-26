@@ -43,7 +43,10 @@ function GameBoardScreen(props) {
           correctWords.includes(word.word)
         );
         props.savePracticeRound(props.practiceRound.id, score, userWords);
-        props.navigation.navigate('PostRoundScreen');
+        props.navigation.navigate('PostRoundScreen', {
+          words: userWords,
+          score: score
+        });
       }
     }, 1000);
   }, [gameTimer]);
@@ -89,45 +92,72 @@ function GameBoardScreen(props) {
   let minutes = Math.floor(gameTimer / 60);
   let secondsCalc = gameTimer - minutes * 60;
   let seconds = secondsCalc <= 9 ? '0' + secondsCalc : secondsCalc;
-  
+
   return (
     <Container style={styles.container}>
-      <View style={ styles.topBar }>
-        <Text style={ styles.topBarItem }>
-          <Icon classes={ styles.topBarIcon } name='alarm' />
-          {'  '}{ minutes }:{ seconds }
+      <View style={styles.topBar}>
+        <Text style={styles.topBarItem}>
+          <Icon classes={styles.topBarIcon} name="alarm" />
+          {'  '}
+          {minutes}:{seconds}
         </Text>
-        <Text style={ styles.topBarItem }>
-          <Icon classes={ styles.topBarIcon } name='trophy' />
-          {'  '}{score}
+        <Text style={styles.topBarItem}>
+          <Icon classes={styles.topBarIcon} name="trophy" />
+          {'  '}
+          {score}
         </Text>
-        <Text style={ styles.topBarItem }>
-          <Icon classes={ styles.topBarIcon } name='school' />
-          {'  '}{rank}
-        </Text> 
+        <Text style={styles.topBarItem}>
+          <Icon classes={styles.topBarIcon} name="school" />
+          {'  '}
+          {rank}
+        </Text>
       </View>
-      <View style={ styles.correctWordsCont }>
+      <View style={styles.correctWordsCont}>
         <Text marginT10>You've found {correctWords.length} correct words</Text>
         <CorrectWords words={correctWords.join('   ')} />
       </View>
-      <View style={ styles.inputCont }>
-        <Input style={ styles.textCenter } inputLetters={input} />
+      <View style={styles.inputCont}>
+        <Input style={styles.textCenter} inputLetters={input} />
         <Error error={error} />
       </View>
       <Hive
-        style={ styles.gameBoard }
+        style={styles.gameBoard}
         centerLetter={cl} // comes from redux now
         otherLetters={lettersOrdering}
         onLetterPress={letter => handleLetterPress(letter)}
       />
       <View style={styles.flexRow}>
-        <Button style={ styles.gameButtons } block bordered rounded large title="Delete" onPress={() => handleDelete()}>
+        <Button
+          style={styles.gameButtons}
+          block
+          bordered
+          rounded
+          large
+          title="Delete"
+          onPress={() => handleDelete()}
+        >
           <Text>Delete</Text>
         </Button>
-        <Button style={ styles.gameButtons } block bordered rounded large title="Shuffle" onPress={() => handleShuffle()}>
+        <Button
+          style={styles.gameButtons}
+          block
+          bordered
+          rounded
+          large
+          title="Shuffle"
+          onPress={() => handleShuffle()}
+        >
           <Text>Shuffle</Text>
         </Button>
-        <Button style={ styles.gameButtons } block bordered rounded large title="Enter" onPress={() => handleEnter()}>
+        <Button
+          style={styles.gameButtons}
+          block
+          bordered
+          rounded
+          large
+          title="Enter"
+          onPress={() => handleEnter()}
+        >
           <Text>Enter</Text>
         </Button>
       </View>
@@ -175,7 +205,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-around',
     position: 'absolute',
-    bottom: 40,
+    bottom: 40
     // flex: 1
   },
   gameButtons: {
