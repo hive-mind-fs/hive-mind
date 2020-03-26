@@ -46,7 +46,7 @@ function PostRoundScreen({ route, navigation, createUserRound, user }) {
         rounded
         marginTop
         title="Quit"
-        onPress={() => navigation.navigate('HomeScreen')}
+        onPress={() => navigation.navigate('Play')}
       >
         <Text>Quit</Text>
       </Button>

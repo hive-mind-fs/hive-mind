@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Button, Container, H1, Text } from 'native-base';
+import { Button, Container, Icon, H1, Text } from 'native-base';
 import { Logo } from '../components';
 import {
   TouchableOpacity,
@@ -76,16 +76,15 @@ const LandingScreen = ({ navigation, handleFBLogin }) => {
           Hi {userData.name}!
         </Text>
 
-        <TouchableOpacity
-          style={styles.playBtn}
-          onPress={() => {
-            console.log('logging fb user in');
-            handleFBLogin(email, password, facebookId);
-            navigation.navigate('PlayScreen');
-          }}
-        >
-          <Text style={{ color: '#ffff' }}>Play</Text>
-        </TouchableOpacity>
+        <Button
+          rounded
+          block
+          iconLeft
+          bordered
+          marginTop
+          onPress={() => navigation.navigate('PlayScreen')}
+          <Text>Play</Text>
+        </Button>
       </Container>
     ) : null
   ) : (
@@ -115,14 +114,17 @@ const LandingScreen = ({ navigation, handleFBLogin }) => {
         <Text>Log In</Text>
       </Button>
 
-      <TouchableOpacity
-        style={styles.loginBtn}
-        onPress={() => {
-          facebookLogIn();
-        }}
+      <Button
+        rounded
+        block
+        iconLeft
+        bordered
+        marginTop
+        onPress={() => facebookLogIn()}
       >
-        <Text style={{ color: '#fff' }}>Login with Facebook</Text>
-      </TouchableOpacity>
+        <Icon name="logo-facebook" />
+        <Text>Log In With Facebook</Text>
+      </Button>
     </Container>
   );
 };
@@ -167,3 +169,4 @@ const mapDispatch = dispatch => {
 };
 
 export default connect(mapState, mapDispatch)(LandingScreen);
+

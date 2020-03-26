@@ -1,7 +1,7 @@
 import React from 'react';
 import { Icon } from 'native-base';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { DashboardScreen, PlayScreen, ProfileScreen } from '.';
+import { PlayScreen, ProfileScreen } from '.';
 
 const Tab = createBottomTabNavigator();
 
@@ -23,7 +23,7 @@ export default function Nav() {
       }}
     >
       <Tab.Screen
-        name="Play"
+        name="PlayScreen"
         component={PlayScreen}
         options={{
           tabBarLabel: 'Play',
@@ -33,7 +33,7 @@ export default function Nav() {
         }}
       />
       <Tab.Screen
-        name="Profile"
+        name="ProfileScreen"
         component={ProfileScreen}
         options={{
           showLabel: false,

@@ -1,4 +1,13 @@
-import { Button, Container, Content, Form, Item, Input, Label, Text } from 'native-base';
+import {
+  Button,
+  Container,
+  Content,
+  Form,
+  Item,
+  Input,
+  Label,
+  Text
+} from 'native-base';
 import React, { useEffect, useState } from 'react';
 import { connect } from 'react-redux';
 import { auth } from '../store';
@@ -9,7 +18,7 @@ const LoginScreen = ({ handleSubmit, navigation, user }) => {
 
   useEffect(() => {
     if (user.id) {
-      navigation.navigate('HomeScreen');
+      navigation.navigate('PlayScreen');
     }
   });
 
@@ -17,7 +26,7 @@ const LoginScreen = ({ handleSubmit, navigation, user }) => {
     <Container form>
       <Content>
         <Form style={{ width: 360 }}>
-        <Item floatingLabel>
+          <Item floatingLabel>
             <Label>Email</Label>
             <Input
               placeholder="Email"
@@ -35,7 +44,9 @@ const LoginScreen = ({ handleSubmit, navigation, user }) => {
             />
           </Item>
           <Button
-            rounded block marginTopL
+            rounded
+            block
+            marginTopL
             title="Log In"
             onPress={() => handleSubmit(email, password)}
           >
