@@ -12,7 +12,7 @@ import * as Facebook from 'expo-facebook';
 import { fbAuth } from '../store';
 import { generatePassword } from '../../secrets';
 //hello
-const LandingScreen = ({ navigation, handleFBLogin }) => {
+const LandingScreen = ({ navigation, handleFBLogin, userId }) => {
   const [isLoggedin, setLoggedinStatus] = useState(false);
   const [userData, setUserData] = useState([]);
   const [isImageLoading, setImageLoadStatus] = useState(false);
@@ -49,11 +49,11 @@ const LandingScreen = ({ navigation, handleFBLogin }) => {
     }
   };
 
-  // const logout = () => {
-  //   setLoggedinStatus(false);
-  //   setUserData(null);
-  //   setImageLoadStatus(false);
-  // };
+  const logout = () => {
+    setLoggedinStatus(false);
+    setUserData(null);
+    setImageLoadStatus(false);
+  };
 
   return isLoggedin ? (
     userData && isImageLoading ? (
@@ -85,6 +85,14 @@ const LandingScreen = ({ navigation, handleFBLogin }) => {
           }}
         >
           <Text style={{ color: '#ffff' }}>Play</Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={styles.logoutBtn}
+          onPress={() => {
+            logout();
+          }}
+        >
+          <Text style={{ color: '#ffff' }}>Logout</Text>
         </TouchableOpacity>
       </Container>
     ) : null
@@ -141,12 +149,12 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     borderRadius: 20,
     position: 'absolute',
-    bottom: 275
+    bottom: 140
   },
   playBtn: {
     backgroundColor: '#4267b2',
     paddingVertical: 10,
-    paddingHorizontal: 20,
+    paddingHorizontal: 30,
     borderRadius: 20,
     position: 'absolute',
     bottom: 200
