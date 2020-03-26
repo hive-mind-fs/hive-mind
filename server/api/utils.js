@@ -2,9 +2,10 @@ const ROUND_ATTRIBUTES = [
   'id',
   'letters',
   'coreLetter',
-  'gameDate',
   'winnerId',
-  'gameId'
+  'gameId',
+  'possiblePoints',
+  'pangramList'
 ];
 
 const USERROUND_ATTRIBUTES = ['id', 'userId', 'roundId', 'score'];
