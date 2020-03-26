@@ -26,11 +26,13 @@ async function seed() {
   // To do: Need to find a way to create & insert rounds and words concurrently
   const generatedRounds = await generateRounds(MIN_QUANTILE, MAX_QUANTILE);
   console.log(`inserting ${generatedRounds.length} rounds total`);
-  const generatedRoundsWithWords = generatedRounds.map(round => {
-    const wordsObjects = round.words.map(word => ({ word: word }));
-    round.words = wordsObjects;
-    return round;
-  });
+  const generatedRoundsWithWords = generatedRounds
+    .map(round => {
+      const wordsObjects = round.words.map(word => ({ word: word }));
+      round.words = wordsObjects;
+      return round;
+    })
+    .slice(0, 1000);
 
   // Insert rounds 200 at a time
   const maxInserts = 200;
@@ -46,7 +48,7 @@ async function seed() {
     allRounds.push([...rounds]);
   }
 
-  //seed associations
+  // Seed game & winner associations for first 50 rounds
   for (let i = 1; i <= 50; i++) {
     //A game can have many rounds
     let game = await Game.findByPk(i);
@@ -59,26 +61,17 @@ async function seed() {
     await round.setWinner(user);
   }
 
-  //Seed the roundWords thru table
-  //Create round with real letters
-  const round51 = await Round.create({
-    letters: 'AMNOSUY',
-    coreLetter: 'M'
-  });
+  // Create default round 'ANONYMOUS'
+  const defaultRound = await Round.findByPk(368);
   let game51 = await Game.findByPk(51);
   await game51.setWinner(1);
-  await game51.addRound(round51);
+  await game51.addRound(defaultRound);
   let user1 = await User.findByPk(1);
-  await round51.setWinner(user1);
-
-  for (let i = 1; i <= 51; i++) {
-    let word = await Word.findByPk(i);
-    await round51.addWords(word);
-  }
+  await defaultRound.setWinner(user1);
 
   //Seed userRounds thru table
   const user2 = await User.findByPk(2);
-  await round51.addUsers([user1, user2]);
+  await defaultRound.addUsers([user1, user2]);
 
   //Seed UserRoundWords thru table aka "GuessedWords"
   //Start by defining which users were in which rounds.
