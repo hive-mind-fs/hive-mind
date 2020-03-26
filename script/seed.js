@@ -34,7 +34,6 @@ async function seed() {
 
   // Insert rounds 200 at a time
   const maxInserts = 200;
-  const allRounds = [];
   for (let i = maxInserts; i <= generatedRounds.length; i = i + maxInserts) {
     console.log('slice from', i - maxInserts, 'to', i);
     const rounds = await Round.bulkCreate(
@@ -43,7 +42,6 @@ async function seed() {
         include: [{ model: Word }]
       }
     );
-    allRounds.push([...rounds]);
   }
 
   // Seed game & winner associations for first 50 rounds
@@ -60,7 +58,8 @@ async function seed() {
   }
 
   // Create default round 'ANONYMOUS'
-  const defaultRound = await Round.findByPk(368);
+  const DEFAULT_ROUND_ID = 368;
+  const defaultRound = await Round.findByPk(DEFAULT_ROUND_ID);
   let game51 = await Game.findByPk(51);
   await game51.setWinner(1);
   await game51.addRound(defaultRound);
