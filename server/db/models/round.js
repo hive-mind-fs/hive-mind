@@ -16,6 +16,11 @@ const Round = db.define('round', {
     type: Sequelize.DATE,
     allowNull: false
   }
+
+  score: {
+    type: Sequelize.INTEGER,
+    defaultValue: 0
+  }
 });
 
 /**
