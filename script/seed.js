@@ -25,15 +25,26 @@ async function seed() {
 
   // To do: Need to find a way to create & insert rounds and words concurrently
   const generatedRounds = await generateRounds(MIN_QUANTILE, MAX_QUANTILE);
-  console.log(`inserting ${generatedRounds.length} rounds`);
+  console.log(`inserting ${generatedRounds.length} rounds total`);
   const generatedRoundsWithWords = generatedRounds.map(round => {
     const wordsObjects = round.words.map(word => ({ word: word }));
     round.words = wordsObjects;
     return round;
   });
-  const rounds = await Round.bulkCreate(generatedRounds, {
-    include: [{ model: Word }]
-  });
+
+  // Insert rounds 100 at a time
+  const maxInserts = 100;
+  const allRounds = [];
+  for (let i = maxInserts; i <= generatedRounds.length; i = i + maxInserts) {
+    console.log('slice from', i - maxInserts, 'to', i);
+    const rounds = await Round.bulkCreate(
+      generatedRounds.slice(i - maxInserts, i),
+      {
+        include: [{ model: Word }]
+      }
+    );
+    allRounds.push([...rounds]);
+  }
 
   //seed associations
   for (let i = 1; i <= 50; i++) {
