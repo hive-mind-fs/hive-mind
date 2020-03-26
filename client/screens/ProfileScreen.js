@@ -58,7 +58,7 @@ export default function ProfileScreen({ navigation }) {
           heading={
             <TabHeading>
               <Text>Stats</Text>
-            </TabHeading>q
+            </TabHeading>
           }
         >
           <Stats stats={stats} />
