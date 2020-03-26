@@ -6,7 +6,7 @@ import { fetchPracticeRound } from '../store/game';
 
 function PlayScreen({ navigation, createUserRound, userId }) {
   handleSubmit = () => {
-    createUserRound(1);
+    createUserRound(userId);
     navigation.navigate('CountdownScreen');
   };
 
@@ -14,18 +14,26 @@ function PlayScreen({ navigation, createUserRound, userId }) {
     <Container>
       <Logo />
       <H1>Spelling Bee</H1>
-      <Text marginT5 center>How many words can you make{"\n"}with 7 letters?</Text>
-      <Button 
-        primary block rounded marginTopL
-        title="Start Playing" 
+      <Text marginT5 center>
+        How many words can you make{'\n'}with 7 letters?
+      </Text>
+      <Button
+        primary
+        block
+        rounded
+        marginTopL
+        title="Start Playing"
         onPress={() => handleSubmit()}
       >
         <Text>Start Playing</Text>
       </Button>
-      
-      <Button 
-        light block rounded marginTop
-        title="Rules" 
+
+      <Button
+        light
+        block
+        rounded
+        marginTop
+        title="Rules"
         onPress={() => navigation.navigate('RulesScreen')}
       >
         <Text>How To Play</Text>
