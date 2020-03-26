@@ -1,4 +1,4 @@
-const { Round, Word } = require("../server/db/models");
+const { Round, Word } = require('../server/db/models');
 
 // deserialize hash map
 

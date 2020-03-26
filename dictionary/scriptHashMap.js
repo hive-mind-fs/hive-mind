@@ -1,48 +1,18 @@
-const fs = require('fs');
-const { promisify } = require('util');
 const { performance } = require('perf_hooks');
-const colors = require('colors');
+const {
+  benchmark,
+  persist,
+  read,
+  persistKeyedObjects,
+  readKeyedObjects,
+  quantile,
+  getPossiblePoints
+} = require('./utils');
 
-const readFileAsync = promisify(fs.readFile);
-const writeFileAsync = promisify(fs.writeFile);
-
-const benchmark = (t0, t1, name) => {
-  console.log(
-    '⏱ ',
-    name.cyan,
-    'took',
-    (t1 - t0).toFixed(3).green,
-    'milliseconds.'
-  );
-};
-
-// There are only 20k unique letter sets corresponding to pangrams
-const getUniqueLetterSets = async letterCount => {
-  const t0 = performance.now();
-  const dict = await readFileAsync(__dirname + '/dictionary.txt', 'utf8');
-  const words = dict.split('\n');
-  const letterSets = new Set();
-  const pangramObjects = new Map();
-  words.forEach(word => {
-    const letterSet = getWordSet(word);
-
-    if (letterSet.size === letterCount) {
-      const pKey = getWordKey(letterSet);
-      letterSets.add(pKey);
-      pangramObjects.has(pKey)
-        ? pangramObjects.get(pKey).push(word)
-        : pangramObjects.set(pKey, [word]);
-    }
-  });
-  await writeFileAsync(
-    __dirname + '/pangramLetterSets.txt',
-    Array.from(letterSets),
-    'utf8'
-  );
-  const t1 = performance.now();
-  benchmark(t0, t1, `getUniqueLetterSets count ${letterSets.size}`);
-  return pangramObjects;
-};
+const PANGRAM_NUM = 7;
+const DICT_FILE = 'dictionary.txt';
+const PANGRAMS_FILE = 'pangramLetterSets.txt';
+const PANGRAM_WORDS_FILE = 'pangramWords.txt';
 
 const getWordSet = word => new Set(word.split('').sort());
 
@@ -52,15 +22,41 @@ const getWordKey = wSet => {
   return wKey;
 };
 
+const addKVToMap = (hashMap, key, value) => {
+  hashMap.has(key) ? hashMap.get(key).push(value) : hashMap.set(key, [value]);
+};
+
+// There are only 20k unique letter sets corresponding to pangrams
+const getUniqueLetterSets = async letterCount => {
+  const t0 = performance.now();
+  const dict = await read(DICT_FILE);
+  const words = dict.split('\n');
+  const letterSets = new Set();
+  const pangramObjects = new Map();
+  words.forEach(word => {
+    const letterSet = getWordSet(word);
+
+    if (letterSet.size === letterCount) {
+      const pKey = getWordKey(letterSet);
+      letterSets.add(pKey);
+      addKVToMap(pangramObjects, pKey, word);
+    }
+  });
+  await persist(PANGRAMS_FILE, Array.from(letterSets));
+  const t1 = performance.now();
+  benchmark(t0, t1, `getUniqueLetterSets count ${letterSets.size}`);
+  return pangramObjects;
+};
+
 // ~ 800 miliseconds to preprocess
 // 300k -> 100k
 const getWordsHashMap = words => {
   const t0 = performance.now();
-  const wordObjects = words.reduce((wm, word) => {
+  const wordObjects = new Map();
+  words.forEach(word => {
     const wKey = getWordKey(getWordSet(word));
-    wm.has(wKey) ? wm.get(wKey).push(word) : wm.set(wKey, [word]);
-    return wm;
-  }, new Map());
+    addKVToMap(wordObjects, wKey, word);
+  });
   const t1 = performance.now();
   benchmark(t0, t1, `getWordsHashMap: count ${wordObjects.size}`);
   return wordObjects;
@@ -93,60 +89,38 @@ const getWordsForPangram = async n => {
   const t0 = performance.now();
 
   // Preprocessing words hash map
-  const dict = await readFileAsync(__dirname + '/dictionary.txt', 'utf8');
+  const dict = await read(DICT_FILE);
   const words = dict.split('\n');
   const wordsHashMap = getWordsHashMap(words); // 1-2 sec, 3x reduction
 
   // Load all pangrams
-  const p = await readFileAsync(__dirname + '/pangramLetterSets.txt', 'utf8');
+  const p = await read(PANGRAMS_FILE);
   const pangrams = p.split(',');
   const nPangrams = n ? n : pangrams.length - 1;
-  console.log('processing', nPangrams, 'pangrams');
 
   // For each pangram, find words
-  const pangramWordObjects = pangrams.slice(0, nPangrams).reduce((pm, pKey) => {
-    pm.set(pKey, getWordsForPangramInner(wordsHashMap, pKey));
-    return pm;
-  }, new Map());
-
-  const t1 = performance.now();
-  benchmark(t0, t1, `getWordsForPangram: for ${nPangrams} pangrams`);
-  return pangramWordObjects;
-};
-
-const persistKeyedObjects = async (keyedObjects, fileName) => {
-  let objectsStr = '';
-  keyedObjects.forEach((words, pKey) => {
-    const pKeyWordsStr = `${pKey}:` + words.join(',') + '\n';
-    objectsStr += pKeyWordsStr;
+  const pangramWordObjects = new Map();
+  pangrams.slice(0, nPangrams).forEach(pKey => {
+    const wordsForPangram = getWordsForPangramInner(wordsHashMap, pKey);
+    pangramWordObjects.set(pKey, wordsForPangram);
   });
-  await writeFileAsync(__dirname + fileName, objectsStr, 'utf8');
+
+  await persistKeyedObjects(PANGRAM_WORDS_FILE, pangramWordObjects);
+  const t1 = performance.now();
+  benchmark(
+    t0,
+    t1,
+    `getWordsForPangram: for ${pangramWordObjects.size} pangrams`
+  );
 };
 
-const getScore = (word, panagramList) => {
-  const wordLength = word.length;
-  let score;
-  if (wordLength === 4) {
-    score = 1;
-  } else if (panagramList.includes(word)) {
-    score = wordLength + 7;
-  } else {
-    score = wordLength;
-  }
-  return score;
-};
-
-const getPossiblePoints = (roundDict, panagramList) => {
-  return roundDict
-    .map(word => getScore(word, panagramList))
-    .reduce((a, b) => a + b, 0);
-};
-
-const getRoundsFromPangramWords = (pangramWords, pangramObjects) => {
+const getRoundsFromPangramWords = async pangramObjects => {
   const t0 = performance.now();
 
+  const pangramWordsObjects = await readKeyedObjects(PANGRAM_WORDS_FILE);
+
   const rounds = [];
-  pangramWords.forEach((words, pKey) => {
+  pangramWordsObjects.forEach((words, pKey) => {
     for (cl of pKey) {
       const roundWords = words.filter(word => word.includes(cl));
       const pangramList = pangramObjects.get(pKey);
@@ -167,9 +141,36 @@ const getRoundsFromPangramWords = (pangramWords, pangramObjects) => {
 };
 
 (async () => {
-  const pangramObjects = await getUniqueLetterSets(7);
-  await persistKeyedObjects(pangramObjects, '/pangramSets.txt');
-  const pangramWords = await getWordsForPangram();
-  await persistKeyedObjects(pangramWords, '/pangramWordSet.txt');
-  const rounds = getRoundsFromPangramWords(pangramWords, pangramObjects);
+  const pangramObjects = await getUniqueLetterSets(PANGRAM_NUM); // this is fast
+  //await getWordsForPangram(); // this takes 2 min
+  const rounds = getRoundsFromPangramWords(pangramObjects);
+  // await persist('allPossibleRounds.json', JSON.stringify(rounds));
 })();
+
+// (async () => {
+//   const roundsFile = await readFileAsync(
+//     __dirname + '/allPossibleRounds.json',
+//     'utf8'
+//   );
+//   const rounds = JSON.parse(roundsFile);
+//   const possiblePoints = rounds.map(round => round.possiblePoints);
+//   const QUANTILES = [0, 25, 33, 50, 66, 75, 100];
+//   const pointsQuantiles = QUANTILES.map(element =>
+//     quantile(possiblePoints, element)
+//   );
+//   const MIN_QUANTILE = 25;
+//   const MAX_QUANTILE = 75;
+//   const minRoundPoints = pointsQuantiles[QUANTILES.indexOf(MIN_QUANTILE)];
+//   const maxRoundPoints = pointsQuantiles[QUANTILES.indexOf(MAX_QUANTILE)];
+//   const goodRounds = rounds.filter(
+//     round =>
+//       round.possiblePoints >= minRoundPoints &&
+//       round.possiblePoints <= maxRoundPoints
+//   );
+//   console.log(`of ${rounds.length} there are ${goodRounds.length} good rounds`);
+//   await writeFileAsync(
+//     __dirname + '/goodRounds.json',
+//     JSON.stringify(goodRounds),
+//     'utf8'
+//   );
+// })();

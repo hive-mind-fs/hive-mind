@@ -1,10 +1,18 @@
 import React from 'react';
-import { Button, Text } from 'react-native';
-import { Container, H1, Tab, Tabs, TabHeading } from 'native-base';
+import { StyleSheet } from 'react-native';
+import {
+  Button,
+  Container,
+  H1,
+  Tab,
+  Tabs,
+  TabHeading,
+  Text
+} from 'native-base';
 import { Stats, Logo } from '../components';
+import { logout } from '../store';
 
 export default function ProfileScreen({ navigation }) {
-
   const stats = [
     {
       title: 'Total Score',
@@ -35,24 +43,56 @@ export default function ProfileScreen({ navigation }) {
     }
   ];
 
+  handleLogout = () => {
+    logout();
+    navigation.navigate('LandingScreen');
+  };
+
   return (
-    <Container
-      style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}
-    >
-      <Logo />
+    <Container>
+      <Text style={ styles.Logo }/>
+      <Logo/>
       <H1>Username</H1>
-      <Tabs>
-          <Tab heading={ <TabHeading><Text>Stats</Text></TabHeading>}>
-            <Stats stats={stats}/>
-          </Tab>
-          <Tab heading={ <TabHeading><Text>Game Log</Text></TabHeading>}>
-            <Stats stats={games}/>
-          </Tab>
-        </Tabs>
+      <Tabs style={ styles.Tabs }>
+        <Tab
+          heading={
+            <TabHeading>
+              <Text>Stats</Text>
+            </TabHeading>
+          }
+        >
+          <Stats stats={stats} />
+        </Tab>
+        <Tab
+          heading={
+            <TabHeading>
+              <Text>Game Log</Text>
+            </TabHeading>
+          }
+        >
+          <Stats stats={games} />
+        </Tab>
+      </Tabs>
       <Button
-        title="Logout"
-        onPress={() => navigation.navigate('DashboardScreen')}
-      />
+        rounded
+        bordered
+        block
+        marginTop
+        title="Log Out"
+        onPress={() => handleLogout()}
+      >
+        <Text>Log Out</Text>
+      </Button>
     </Container>
   );
 }
+
+const styles = StyleSheet.create({
+  Logo: {
+    marginTop: 60
+  },
+  Tabs: {
+    marginTop: 30
+  }
+
+})

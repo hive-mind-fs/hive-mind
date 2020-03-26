@@ -23,16 +23,6 @@ export default function Nav() {
       }}
     >
       <Tab.Screen
-        name="TempNav"
-        component={DashboardScreen}
-        options={{
-          tabBarLabel: 'TempNav',
-          tabBarIcon: ({ color }) => (
-            <Icon active name="home" style={{ fontSize: 36, color }} />
-          )
-        }}
-      />
-      <Tab.Screen
         name="Play"
         component={PlayScreen}
         options={{

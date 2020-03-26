@@ -1,6 +1,5 @@
-import { Container, Content, Form, Item, Input } from 'native-base';
+import { Button, Container, Content, Form, Item, Input, Label, Text } from 'native-base';
 import React, { useEffect, useState } from 'react';
-import { Button } from 'react-native';
 import { connect } from 'react-redux';
 import { auth } from '../store';
 
@@ -10,22 +9,24 @@ const LoginScreen = ({ handleSubmit, navigation, user }) => {
 
   useEffect(() => {
     if (user.id) {
-      navigation.navigate('PlayScreen');
+      navigation.navigate('HomeScreen');
     }
   });
 
   return (
-    <Container>
+    <Container form>
       <Content>
-        <Form>
-          <Item>
+        <Form style={{ width: 360 }}>
+        <Item floatingLabel>
+            <Label>Email</Label>
             <Input
               placeholder="Email"
               autoCapitalize="none"
               onChange={e => setEmail(e.nativeEvent.text)}
             />
           </Item>
-          <Item last>
+          <Item floatingLabel last>
+            <Label>Password</Label>
             <Input
               placeholder="Password"
               autoCapitalize="none"
@@ -34,9 +35,12 @@ const LoginScreen = ({ handleSubmit, navigation, user }) => {
             />
           </Item>
           <Button
+            rounded block marginTopL
             title="Log In"
             onPress={() => handleSubmit(email, password)}
-          />
+          >
+            <Text>Log In</Text>
+          </Button>
         </Form>
       </Content>
     </Container>
