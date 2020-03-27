@@ -140,7 +140,7 @@ export function App() {
           <NavigationContainer>
             <Stack.Navigator>
               {home}
-              {/* {play} */}
+              {play}
               {rules}
               {countdown}
               {game}
@@ -164,7 +164,7 @@ export function App() {
               {landing}
               {signup}
               {home}
-              {/* {play} */}
+              {play}
               {rules}
               {countdown}
               {game}

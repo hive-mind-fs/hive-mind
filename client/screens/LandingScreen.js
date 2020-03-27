@@ -49,45 +49,59 @@ const LandingScreen = ({ navigation, handleFBLogin }) => {
     }
   };
 
-  // const logout = () => {
-  //   setLoggedinStatus(false);
-  //   setUserData(null);
-  //   setImageLoadStatus(false);
-  // };
+  const logout = () => {
+    setLoggedinStatus(false);
+    setUserData(null);
+    setImageLoadStatus(false);
+  };
 
-  return isLoggedin ? (
-    userData && isImageLoading ? (
-      <Container>
-        <Logo xlarge />
-        <H1>Hive Mind</H1>
-        <ActivityIndicator
-          size="large"
-          color="#0000ff"
-          animating={!isImageLoading}
-          style={{ position: 'absolute' }}
-        />
-        <Image
-          style={{ width: 200, height: 200, borderRadius: 50 }}
-          source={{ uri: userData.picture.data.url }}
-        />
+  return userData && isImageLoading ? (
+    <Container>
+      <Logo xlarge />
+      <H1>Hive Mind</H1>
+      <ActivityIndicator
+        size="large"
+        color="#0000ff"
+        animating={!isImageLoading}
+        style={{ position: 'absolute' }}
+      />
+      <Image
+        style={{ width: 200, height: 200, borderRadius: 50 }}
+        source={{ uri: userData.picture.data.url }}
+      />
 
-        <Text style={{ fontSize: 22, marginVertical: 10 }}>
-          {' '}
-          Hi {userData.name}!
-        </Text>
+      <Text style={{ fontSize: 22, marginVertical: 10 }}>
+        {' '}
+        Hi {userData.name}!
+      </Text>
 
-        <Button
-          rounded
-          block
-          iconLeft
-          bordered
-          marginTop
-          onPress={() => navigation.navigate('PlayScreen')}
-        >
-          <Text>Play</Text>
-        </Button>
-      </Container>
-    ) : null
+      <Button
+        rounded
+        block
+        iconLeft
+        bordered
+        marginTop
+        onPress={() => {
+          handleFBLogin(email, password, facebookId);
+          navigation.navigate('PlayScreen');
+        }}
+      >
+        <Text>Play</Text>
+      </Button>
+
+      <Button
+        rounded
+        block
+        iconLeft
+        bordered
+        marginTop
+        onPress={() => {
+          logout();
+        }}
+      >
+        <Text>Logout</Text>
+      </Button>
+    </Container>
   ) : (
     <Container
       style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}
