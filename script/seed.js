@@ -14,8 +14,6 @@ const {
 
 const dummyUsers = require('../server/db/dummyData/dummyUsers.js');
 const dummyGames = require('../server/db/dummyData/dummyGames.js');
-const MIN_QUANTILE = 50;
-const MAX_QUANTILE = 55;
 
 async function seed() {
   await db.sync({ force: true });
@@ -23,26 +21,40 @@ async function seed() {
   await User.bulkCreate(dummyUsers);
   await Game.bulkCreate(dummyGames);
 
-  // To do: Need to find a way to create & insert rounds and words concurrently
-  const generatedRounds = await generateRounds(MIN_QUANTILE, MAX_QUANTILE);
-  console.log(`inserting ${generatedRounds.length} rounds total`);
-  const generatedRoundsWithWords = generatedRounds.map(round => {
-    const wordsObjects = round.words.map(word => ({ word: word }));
-    round.words = wordsObjects;
-    return round;
-  });
+  // Seed rounds without words associations
+  const generatedRounds = await generateRounds();
+  const rounds = await Round.bulkCreate(generatedRounds);
 
-  // Insert rounds 200 at a time
-  const maxInserts = 200;
-  for (let i = maxInserts; i <= generatedRounds.length; i = i + maxInserts) {
-    console.log('slice from', i - maxInserts, 'to', i);
-    const rounds = await Round.bulkCreate(
-      generatedRoundsWithWords.slice(i - maxInserts, i),
-      {
-        include: [{ model: Word }]
-      }
-    );
-  }
+  // Seed all words used in a round
+  const roundWordsHashMap = {};
+  generatedRounds.map(generatedRound =>
+    generatedRound.words.forEach(([idx, word]) => {
+      roundWordsHashMap[+idx] = word;
+    })
+  );
+  const words = Object.entries(roundWordsHashMap).map(([idx, word]) => ({
+    id: +idx,
+    word: word
+  }));
+
+  console.log(`seeding ${words.length} distinct words`);
+  await Word.bulkCreate(words);
+
+  // Seed associations manually
+  const roundWords = rounds
+    .map(round => {
+      const roundId = round.id;
+      const words = generatedRounds[roundId - 1].words;
+      const allRoundWords = words.map(([wordPk, word]) => ({
+        roundId: roundId,
+        wordId: +wordPk
+      }));
+      return allRoundWords;
+    })
+    .flat();
+
+  console.log(`seeding ${roundWords.length} roundWord associations`);
+  await db.model('roundWords').bulkCreate(roundWords);
 
   // Seed game & winner associations for first 50 rounds
   for (let i = 1; i <= 50; i++) {
