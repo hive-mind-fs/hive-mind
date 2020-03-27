@@ -1,3 +1,4 @@
+const fs = require('fs');
 const { performance } = require('perf_hooks');
 const {
   benchmark,
@@ -108,12 +109,13 @@ const getWordsForPangram = async n => {
   const nPangrams = n ? n : pangrams.length - 1;
 
   // For each pangram, find words and write to file
-  await persist(PANGRAM_WORDS_FILE, '');
+  var stream = fs.createWriteStream(PANGRAM_WORDS_FILE);
+
   pangrams.slice(0, nPangrams).forEach(async pKey => {
     const wordsForPangram = getWordsForPangramInner(wordsHashMap, pKey);
     const wordsForPangramFlat = wordsForPangram.flat().join(',');
     const objectStr = `${pKey}:${wordsForPangramFlat}\n`;
-    await append(PANGRAM_WORDS_FILE, objectStr);
+    stream.write(objectStr);
   });
 
   const t1 = performance.now();

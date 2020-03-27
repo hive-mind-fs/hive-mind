@@ -3,6 +3,7 @@ const { promisify } = require('util');
 const colors = require('colors');
 const readFileAsync = promisify(fs.readFile);
 const writeFileAsync = promisify(fs.writeFile);
+const appendFileAsync = promisify(fs.appendFile);
 
 const benchmark = (t0, t1, name) => {
   console.log(
@@ -33,6 +34,10 @@ const readKeyedObjects = async file => {
     keyedObjects.set(kVs[0], kVs[1].split(','));
   });
   return keyedObjects;
+};
+
+const append = async (file, data) => {
+  await appendFileAsync(__dirname + `/${file}`, data, 'utf8');
 };
 
 const persist = async (file, data) => {
@@ -84,6 +89,7 @@ module.exports = {
   benchmark,
   persist,
   read,
+  append,
   persistKeyedObjects,
   readKeyedObjects,
   getPossiblePoints,
