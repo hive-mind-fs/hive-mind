@@ -4,7 +4,6 @@ const {
   benchmark,
   persist,
   read,
-  append,
   readKeyedObjects,
   quantile,
   getPossiblePoints
@@ -15,8 +14,8 @@ const DICT_FILE = 'dictionary.txt';
 const PANGRAMS_FILE = 'pangramLetterSets.txt';
 const PANGRAM_WORDS_FILE = 'pangramWords.txt';
 
-const MIN_QUANTILE = 50;
-const MAX_QUANTILE = 55;
+const MIN_QUANTILE = 25;
+const MAX_QUANTILE = 75;
 const QUANTILES = [MIN_QUANTILE, MAX_QUANTILE];
 
 const getWordSet = word => new Set(word.split('').sort());
