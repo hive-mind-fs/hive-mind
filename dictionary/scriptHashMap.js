@@ -118,8 +118,8 @@ const getWordsForPangram = async (pangramWordsFile, n) => {
 
 const getRoundsFromPangramWords = async (
   pangramObjects,
-  pangram_words_file,
-  rounds_file,
+  pangramWordsFile,
+  roundsFile,
   minPoints,
   maxPoints
 ) => {
@@ -133,7 +133,7 @@ const getRoundsFromPangramWords = async (
     crlfDelay: Infinity
   });
 
-  const writeStream = fs.createWriteStream(rounds_file);
+  const writeStream = fs.createWriteStream(roundsFile);
   for await (const line of lines) {
     const [pKey, wordsLine] = line.split(':');
 
