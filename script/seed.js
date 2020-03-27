@@ -87,11 +87,6 @@ async function seed() {
   await UserRound.bulkCreate([
     { userId: 1, roundId: 50 } //This UserRound will get id 3
   ]);
-
-  // Seeding a user who guessed all words in a round
-  for (let i = 1; i <= 50; i++) {
-    await GuessedWord.bulkCreate([{ wordId: i, userRoundId: 1 }]);
-  }
 }
 
 // We've separated the `seed` function from the `runSeed` function.
