@@ -3,7 +3,7 @@ const {
   benchmark,
   persist,
   read,
-  persistKeyedObjects,
+  append,
   readKeyedObjects,
   quantile,
   getPossiblePoints
@@ -107,26 +107,24 @@ const getWordsForPangram = async n => {
   const pangrams = p.split(',');
   const nPangrams = n ? n : pangrams.length - 1;
 
-  // For each pangram, find words
-  const pangramWordObjects = new Map();
-  pangrams.slice(0, nPangrams).forEach(pKey => {
+  // For each pangram, find words and write to file
+  await persist(PANGRAM_WORDS_FILE, '');
+  pangrams.slice(0, nPangrams).forEach(async pKey => {
     const wordsForPangram = getWordsForPangramInner(wordsHashMap, pKey);
-    pangramWordObjects.set(pKey, wordsForPangram);
+    const wordsForPangramFlat = wordsForPangram.flat().join(',');
+    const objectStr = `${pKey}:${wordsForPangramFlat}\n`;
+    await append(PANGRAM_WORDS_FILE, objectStr);
   });
 
-  await persistKeyedObjects(PANGRAM_WORDS_FILE, pangramWordObjects);
   const t1 = performance.now();
-  benchmark(
-    t0,
-    t1,
-    `getWordsForPangram: for ${pangramWordObjects.size} pangrams`
-  );
+  benchmark(t0, t1, `getWordsForPangram`);
 };
 
 const getRoundsFromPangramWords = async pangramObjects => {
   const t0 = performance.now();
 
   const pangramWordsObjectsFlat = await readKeyedObjects(PANGRAM_WORDS_FILE);
+
   const pangramWordsObjects = new Map();
   pangramWordsObjectsFlat.forEach((wordsFlat, pKey) => {
     const words = wordsFlat.filter((e, idx) => !(idx % 2));
