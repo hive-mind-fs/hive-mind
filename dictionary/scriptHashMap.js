@@ -32,7 +32,7 @@ const addKVToMap = (hashMap, key, value) => {
 
 const getWords = async () => {
   const dict = await read(DICT_FILE);
-  const words = dict.split('\n');
+  const words = dict.split('\n').map((word, idx) => [word, idx + 1]);
   return words;
 };
 
@@ -43,7 +43,7 @@ const getUniqueLetterSets = async letterCount => {
   const words = await getWords();
   const letterSets = new Set();
   const pangramObjects = new Map();
-  words.forEach(word => {
+  words.forEach(([word, idx]) => {
     const letterSet = getWordSet(word);
 
     if (letterSet.size === letterCount) {
@@ -63,9 +63,9 @@ const getUniqueLetterSets = async letterCount => {
 const getWordsHashMap = words => {
   const t0 = performance.now();
   const wordObjects = new Map();
-  words.forEach(word => {
+  words.forEach(([word, idx]) => {
     const wKey = getWordKey(getWordSet(word));
-    addKVToMap(wordObjects, wKey, word);
+    addKVToMap(wordObjects, wKey, [word, idx]);
   });
   const t1 = performance.now();
   benchmark(t0, t1, `getWordsHashMap: count ${wordObjects.size}`);
@@ -99,8 +99,7 @@ const getWordsForPangram = async n => {
   const t0 = performance.now();
 
   // Preprocessing words hash map
-  const dict = await read(DICT_FILE);
-  const words = dict.split('\n');
+  const words = await getWords(); // array of [word, idx]
   const wordsHashMap = getWordsHashMap(words); // 1-2 sec, 3x reduction
 
   // Load all pangrams
@@ -127,14 +126,24 @@ const getWordsForPangram = async n => {
 const getRoundsFromPangramWords = async pangramObjects => {
   const t0 = performance.now();
 
-  const pangramWordsObjects = await readKeyedObjects(PANGRAM_WORDS_FILE);
+  const pangramWordsObjectsFlat = await readKeyedObjects(PANGRAM_WORDS_FILE);
+  const pangramWordsObjects = new Map();
+  pangramWordsObjectsFlat.forEach((wordsFlat, pKey) => {
+    const words = wordsFlat.filter((e, idx) => !(idx % 2));
+    const wordsPks = wordsFlat.filter((e, idx) => idx % 2);
+    const wordsWithPks = words.map((word, idx) => [wordsPks[idx], word]);
+    pangramWordsObjects.set(pKey, wordsWithPks);
+  });
 
   const rounds = [];
-  pangramWordsObjects.forEach((words, pKey) => {
+  pangramWordsObjects.forEach((wordsWithPks, pKey) => {
     for (cl of pKey) {
-      const roundWords = words.filter(word => word.includes(cl));
+      const roundWords = wordsWithPks.filter(word => word[1].includes(cl));
       const pangramList = pangramObjects.get(pKey);
-      const possiblePoints = getPossiblePoints(roundWords, pangramList);
+      const possiblePoints = getPossiblePoints(
+        roundWords.map(word => word[1]),
+        pangramList
+      );
       rounds.push({
         letters: pKey,
         coreLetter: cl,
@@ -177,17 +186,16 @@ const generateRounds = async (
   maxQuantile = MAX_QUANTILE
 ) => {
   const pangramObjects = await getUniqueLetterSets(PANGRAM_NUM); // this takes 1 sec
+  await getWordsForPangram(); // this takes 2 min
   const allPossibleRounds = await getRoundsFromPangramWords(pangramObjects); // this takes 7 seconds secs
   const rounds = filterGoodRounds(allPossibleRounds, minQuantile, maxQuantile);
   return rounds;
 };
 
-// Run this if you want to recreate pangrams for new dictionary
+//Run this if you want to recreate pangrams for new dictionary
 // (async () => {
 //   await getUniqueLetterSets(PANGRAM_NUM); // this is fast
 //   await getWordsForPangram(); // this takes 2 min
 // })();
 
-//generateRounds();
-
-module.exports = { generateRounds, getWords };
+module.exports = { generateRounds };
