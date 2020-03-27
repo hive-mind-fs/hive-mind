@@ -4,12 +4,16 @@ import { Container, H1, Button, Text } from 'native-base';
 import { Logo } from '../components';
 import { fetchPracticeRound } from '../store/game';
 
-function PlayScreen({ navigation, createUserRound, userId }) {
+function PlayScreen({ navigation, createUserRound, user }) {
+  console.log('we have user', user);
+
   const handleSubmit = () => {
-    createUserRound(userId);
+    console.log('user id', user.id);
+    console.log('user id', user.id);
+    createUserRound(user.id);
     navigation.navigate('CountdownScreen');
   };
-  console.log(userId);
+
   return (
     <Container>
       <Logo />
@@ -44,7 +48,7 @@ function PlayScreen({ navigation, createUserRound, userId }) {
 
 const mapState = state => {
   return {
-    userId: state.user.id
+    user: state.user
   };
 };
 

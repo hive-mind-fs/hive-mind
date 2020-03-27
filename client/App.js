@@ -19,7 +19,7 @@ import {
   RulesScreen,
   SignupScreen
 } from './screens';
-import store from './store';
+import store, { getUser } from './store';
 import colors from './utils/styles';
 import { StyleProvider } from 'native-base';
 import getTheme from './native-base-theme/components';
@@ -122,6 +122,7 @@ export function App() {
         const user = JSON.parse(userString);
         if (user) {
           setUser(user);
+          store.dispatch(getUser(user));
         }
         setIsReady(true);
       })();
