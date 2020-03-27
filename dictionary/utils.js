@@ -84,7 +84,6 @@ module.exports = {
   benchmark,
   persist,
   read,
-  append,
   persistKeyedObjects,
   readKeyedObjects,
   getPossiblePoints,

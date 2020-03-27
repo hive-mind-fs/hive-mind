@@ -1,6 +1,5 @@
-const { getWords, generateRounds } = require('./scriptHashMap');
+const { generateRounds } = require('./scriptHashMap');
 
 module.exports = {
-  getWords,
   generateRounds
 };

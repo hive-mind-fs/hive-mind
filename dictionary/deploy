@@ -1,0 +1,4 @@
+heroku git:remote -a hivemind-fs
+push PR & merge
+deploy to heroku
+npm run seed
