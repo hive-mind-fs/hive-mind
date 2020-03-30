@@ -42,7 +42,7 @@ const puzzlesForBoardSet = (charVector: number) => {
 };
 
 //Generate the array of charachter vectors and requiredVectors for all possible puzzles
-const puzzleGen = (dict, minLen, maxLets) => {
+const puzzleGen = (dict: any, minLen: number, maxLets: number) => {
   let wordSet = new Set();
   let wordsByVector = new Map();
   let boardSet = new Set();
@@ -85,7 +85,7 @@ const puzzleGen = (dict, minLen, maxLets) => {
 };
 
 //Create hash map of dict with char vector as key and word as value
-const puzzleMaster = (dict: any, minLen: any, maxLets: any) => {
+const puzzleMaster = (dict: any, minLen: number, maxLets: number) => {
   let wordSet = new Set();
   let wordsByVector = new Map();
   let boardSet = new Set();
