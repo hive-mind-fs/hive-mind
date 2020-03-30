@@ -1,7 +1,7 @@
 import React, { Fragment, useState, useEffect } from 'react';
 import { connect } from 'react-redux';
 import { StyleSheet } from 'react-native';
-import { Container, H1, H3, Text, Button } from 'native-base';
+import { Container, H1, H3, Text, Button, List, ListItem } from 'native-base';
 import getSocket from '../socket';
 
 const LobbyScreen = ({ navigation, user }) => {
@@ -40,7 +40,20 @@ const LobbyScreen = ({ navigation, user }) => {
   return usersWaiting.length >= 1 ? (
     <Container>
       <H1 style={styles.lobby}></H1>
-      <H3>You have opponents!...</H3>
+      <H3>You have opponents!</H3>
+      <List>
+        {usersWaiting.map((l, i) => (
+          <ListItem
+            key={i}
+            leftAvatar={{ source: { uri: l.avatar_url } }}
+            title={l.name}
+            subtitle={l.subtitle}
+            bottomDivider
+          >
+            <Text>l.username</Text>
+          </ListItem>
+        ))}
+      </List>
     </Container>
   ) : (
     inRoom && (

@@ -5,12 +5,12 @@ module.exports = io => {
     );
 
     socket.on('join room', function(data) {
-      console.log(`${data.user} joining room ${data.room}`);
+      console.log(`${data.user.username} joining room ${data.room}`);
       socket.join(data.room);
     });
 
     socket.on('leave room', function(data) {
-      console.log(`${data.user} joining room ${data.room}`);
+      console.log(`${data.user.username} joining room ${data.room}`);
       socket.leave(data.room);
     });
 
