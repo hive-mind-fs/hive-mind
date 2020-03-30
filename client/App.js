@@ -17,13 +17,17 @@ import {
   PostRoundScreen,
   ProfileScreen,
   RulesScreen,
-  SignupScreen
+  SignupScreen,
+  LobbyScreen
 } from './screens';
 import store, { getUser } from './store';
 import colors from './utils/styles';
 import { StyleProvider } from 'native-base';
 import getTheme from './native-base-theme/components';
 import customMaterial from './native-base-theme/variables/customMaterial';
+
+// establishes socket connection
+import './socket';
 
 const Stack = createStackNavigator();
 
@@ -103,6 +107,13 @@ const signup = (
     options={{ headerTitle: 'Sign Up', ...navStyle }}
   />
 );
+const lobby = (
+  <Stack.Screen
+    name="LobbyScreen"
+    component={LobbyScreen}
+    options={{ headerShown: false }}
+  />
+);
 
 const profile = <Stack.Screen name="ProfileScreen" component={ProfileScreen} />;
 
@@ -150,6 +161,7 @@ export function App() {
               {landing}
               {login}
               {signup}
+              {lobby}
             </Stack.Navigator>
           </NavigationContainer>
         </StyleProvider>
