@@ -4,13 +4,19 @@ module.exports = io => {
       `A socket connection to the server has been made: ${socket.id}`
     );
 
-    socket.on('room', function(data) {
-      console.log('user has joined room', data);
+    socket.on('join room', function(data) {
+      console.log(`${data.user} joining room ${data.room}`);
+      socket.join(data.room);
     });
 
-    // for this particular socket, this function returns a function that can disconnect
-    socket.on('leave room', () => {
-      console.log(`Connection ${socket.id} has left the building`);
+    socket.on('leave room', function(data) {
+      console.log(`${data.user} joining room ${data.room}`);
+      socket.leave(data.room);
+    });
+
+    // how is this different than disconnect?
+    socket.on('disconnect', data => {
+      console.log(`Connection ${socket.id} has disconnected`);
     });
   });
 };

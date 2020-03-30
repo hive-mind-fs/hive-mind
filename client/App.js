@@ -145,7 +145,7 @@ export function App() {
   }
 
   if (user) {
-    console.log('user is logged in', user);
+    //    console.log('user is logged in', user);
     return (
       <Provider store={store}>
         <StyleProvider style={getTheme(customMaterial)}>
@@ -168,7 +168,7 @@ export function App() {
       </Provider>
     );
   } else {
-    console.log('user is not logged in', user);
+    //    console.log('user is not logged in', user);
     return (
       <Provider store={store}>
         <StyleProvider style={getTheme(customMaterial)}>

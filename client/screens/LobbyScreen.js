@@ -1,27 +1,33 @@
-import React, { useState, useEffect } from 'react';
+import React, { Fragment, useState, useEffect } from 'react';
 import { connect } from 'react-redux';
 import { StyleSheet } from 'react-native';
 import { Container, H1, H3, Text, Button } from 'native-base';
-import { getSocket } from '../socket';
+import getSocket from '../socket';
 
 const LobbyScreen = ({ navigation, user }) => {
   const [inRoom, setInRoom] = useState(true);
   const [socket] = useState(getSocket());
+  const [curr1v1Room, set1v1Room] = useState(0);
+  const [usersWaiting, setUsersWaiting] = useState([]);
 
-  const TEST_ROOM = 'test-room';
+  const WAITING_ROOM = 'waiting_room';
+
   useEffect(() => {
     if (inRoom) {
-      console.log('joining room');
-      socket.emit('joinroom', roomname); //A room always will be unique, when you do socket.join('roomname') if the room not exist it will created and this socket will join it, if exist the socket just will join it.
-      socket.emit('room', { room: TEST_ROOM });
+      socket.emit('join room', {
+        user: user,
+        room: WAITING_ROOM
+      }); //A room always will be unique, when you do socket.join('roomname') if the room not exist it will created and this socket will join it, if exist the socket just will join it.
+
+      setUsersWaiting([...usersWaiting, user]);
     }
 
     // This just runs when the component dismounts
     return () => {
       if (inRoom) {
-        console.log('leaving room');
         socket.emit('leave room', {
-          room: TEST_ROOM
+          user: user,
+          room: WAITING_ROOM
         });
       }
     };
@@ -31,11 +37,16 @@ const LobbyScreen = ({ navigation, user }) => {
     navigation.navigate('PlayScreen');
   };
 
-  return (
+  return usersWaiting.length >= 1 ? (
     <Container>
-      <H3>Waiting for opponent...</H3>
       <H1 style={styles.lobby}></H1>
-      {inRoom && (
+      <H3>You have opponents!...</H3>
+    </Container>
+  ) : (
+    inRoom && (
+      <Container>
+        <H1 style={styles.lobby}></H1>
+        <H3>Waiting for opponent...</H3>
         <Button
           primary
           block
@@ -46,8 +57,8 @@ const LobbyScreen = ({ navigation, user }) => {
         >
           <Text>Find An Opponent</Text>
         </Button>
-      )}
-    </Container>
+      </Container>
+    )
   );
 };
 

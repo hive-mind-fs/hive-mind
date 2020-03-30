@@ -69,6 +69,13 @@ const User = db.define('user', {
 });
 
 /**
+ * Hooks
+ **/
+User.addHook('beforeValidate', (user, options) => {
+  user.username = user.username ? user.username : user.email.split('@')[0];
+});
+
+/**
  * instanceMethods
  */
 User.prototype.correctPassword = function(candidatePwd) {

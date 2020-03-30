@@ -10,6 +10,7 @@ export { default as CountdownScreen } from './CountdownScreen';
 export { default as HomeScreen } from './HomeScreen';
 export { default as LandingScreen } from './LandingScreen';
 export { default as LoginScreen } from './LoginScreen';
+export { default as LobbyScreen } from './LobbyScreen';
 export { default as PlayScreen } from './PlayScreen';
 export { default as PostRoundScreen } from './PostRoundScreen';
 export { default as ProfileScreen } from './ProfileScreen';
