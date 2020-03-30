@@ -41,50 +41,7 @@ const puzzlesForBoardSet = (charVector: number) => {
   return puzzles;
 };
 
-//Generate the array of charachter vectors and requiredVectors for all possible puzzles
-const puzzleGen = (dict: any, minLen: number, maxLets: number) => {
-  let wordSet = new Set();
-  let wordsByVector = new Map();
-  let boardSet = new Set();
-  let puzzles = [];
-  loop1: for (let i = 0; i < dict.length; i++) {
-    let word = dict[i];
-    if (word.length < minLen) {
-      continue;
-    }
-    var charArr = word.split('');
-    for (var j = 0; j < charArr.length; j++) {
-      var c = charArr[j];
-      if (
-        c.charCodeAt(0) < 'a'.charCodeAt(0) ||
-        c.charCodeAt(0) > 'z'.charCodeAt(0)
-      ) {
-        continue loop1;
-      }
-    }
-    const vector = toCharVector(charArr);
-    const distinctLetterCount = bitCount(vector);
-    if (distinctLetterCount > maxLets) {
-      continue;
-    }
-    wordSet.add(word);
-    wordsByVector.set(
-      vector,
-      wordsByVector.has(vector)
-        ? [...wordsByVector.get(vector), word]
-        : new Array(word)
-    );
-    if (distinctLetterCount === maxLets) {
-      if (!boardSet.has(vector) ? boardSet.add(vector) : false) {
-        puzzles.push(puzzlesForBoardSet(vector));
-      }
-    }
-  }
-
-  return puzzles;
-};
-
-//Create hash map of dict with char vector as key and word as value
+//Create hash map of dict with charvector as key and word as value & generate array of charectors and reqVectors for all possible puzzles
 const puzzleMaster = (dict: any, minLen: number, maxLets: number) => {
   let wordSet = new Set();
   let wordsByVector = new Map();
@@ -123,7 +80,7 @@ const puzzleMaster = (dict: any, minLen: number, maxLets: number) => {
       }
     }
   }
-  return wordsByVector;
+  return [wordsByVector, puzzles];
 };
 
 //Find all words that contain the requiredVector and use no additional characters but those specified in the optionalVector then add those words to the given result set.
@@ -166,15 +123,10 @@ const SolvePuzzles = async (dictPath: string) => {
   const words = await dict.split('\n'); //read into array of words
 
   console.log('Generating puzzles...');
-
-  //gives the hash map for dictionary
-  const hashmap = puzzleMaster(words, 4, 7);
-
-  //Create all puzzles
-  const puzzles = puzzleGen(words, 4, 7);
+  const hashmap = puzzleMaster(words, 4, 7)[0]; //Create the hash map for dictionary
+  const puzzles = puzzleMaster(words, 4, 7)[1]; //Create all puzzles
 
   console.log('Solutions:');
-
   //Create a has map of charachter vectors for the required letter:
   const createReqMap = () => {
     let reqMap = new Map();
@@ -229,7 +181,7 @@ const SolvePuzzles = async (dictPath: string) => {
     return lettersMap;
   };
 
-  const solver = (puzzles: any[], hashmap: Map<number, any[]>) => {
+  const solver = (puzzles: any, hashmap: any) => {
     let solutions = [];
     const reqMap = createReqMap();
     const letterSetMap = createLetterSetMap(puzzles, hashmap);
@@ -244,22 +196,21 @@ const SolvePuzzles = async (dictPath: string) => {
           solutionsTo(charVector, requiredVector, hashmap)
             .flat(Infinity)
             .filter(x => x)
-          // .filter(Boolean) //does the same thing
         ]);
       }
     }
     return solutions;
   };
 
-  //⏱  SolvePuzzles took 1421.117 milliseconds. if you dont do the write file
+  //If you dont do the write file: ⏱  SolvePuzzles took 1421.117 milliseconds
   console.log(solver(puzzles, hashmap));
-  const gameData = JSON.stringify(solver(puzzles, hashmap));
-  await writeFileAsync(__dirname + '/Solutions.json', gameData);
+  //Else: ⏱  SolvePuzzles took 2939.944 milliseconds.
+  // const gameData = JSON.stringify(solver(puzzles, hashmap));
+  // await writeFileAsync(__dirname + '/Solutions.json', gameData);
   const t1 = performance.now();
   benchmark(t0, t1, 'SolvePuzzles');
 };
 
-//⏱  SolvePuzzles took 2939.944 milliseconds.
 (async () => {
   await SolvePuzzles('/ubuntu-wamerican.txt'); //"/dictionary.txt"); //if you switch to this dict you have to change the characthervector function to use lower case letters
 })();
