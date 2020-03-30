@@ -10,4 +10,8 @@ socket.on('connect', () => {
   console.log('Connected on client!');
 });
 
+socket.on('joinroom', function(data) {
+  socket.join(data);
+});
+
 export default () => socket;

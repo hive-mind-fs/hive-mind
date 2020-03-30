@@ -12,6 +12,7 @@ const LobbyScreen = ({ navigation, user }) => {
   useEffect(() => {
     if (inRoom) {
       console.log('joining room');
+      socket.emit('joinroom', roomname); //A room always will be unique, when you do socket.join('roomname') if the room not exist it will created and this socket will join it, if exist the socket just will join it.
       socket.emit('room', { room: TEST_ROOM });
     }
 
