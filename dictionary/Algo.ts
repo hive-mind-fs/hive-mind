@@ -251,6 +251,7 @@ const SolvePuzzles = async (dictPath: string) => {
     return solutions;
   };
 
+  //⏱  SolvePuzzles took 1421.117 milliseconds. if you dont do the write file
   console.log(solver(puzzles, hashmap));
   const gameData = JSON.stringify(solver(puzzles, hashmap));
   await writeFileAsync(__dirname + '/Solutions.json', gameData);
