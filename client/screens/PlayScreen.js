@@ -7,11 +7,17 @@ import { fetchPracticeRound } from '../store/game';
 function PlayScreen({ navigation, createUserRound, user }) {
   console.log('we have user', user);
 
-  const handleSubmit = () => {
+  const handlePracticeRound = () => {
     console.log('user id', user.id);
-    console.log('user id', user.id);
+
     createUserRound(user.id);
     navigation.navigate('CountdownScreen');
+  };
+
+  const handleLobbying = () => {
+    console.log('user id', user.id);
+    // we don't know whether we will create round or not
+    navigation.navigate('LobbyScreen');
   };
 
   return (
@@ -26,10 +32,21 @@ function PlayScreen({ navigation, createUserRound, user }) {
         block
         rounded
         marginTopL
-        title="Start Playing"
-        onPress={() => handleSubmit()}
+        title="FindOpponent"
+        onPress={() => handleLobbying()}
       >
-        <Text>Start Playing</Text>
+        <Text>Find An Opponent</Text>
+      </Button>
+
+      <Button
+        primary
+        block
+        rounded
+        marginTopL
+        title="Practice"
+        onPress={() => handlePracticeRound()}
+      >
+        <Text>Practice</Text>
       </Button>
 
       <Button
