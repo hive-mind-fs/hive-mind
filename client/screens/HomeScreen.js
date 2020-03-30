@@ -1,7 +1,7 @@
 import React from 'react';
 import { Icon } from 'native-base';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { PlayScreen, ProfileScreen } from '.';
+import { LeaderboardScreen, PlayScreen, ProfileScreen } from '.';
 
 const Tab = createBottomTabNavigator();
 
@@ -27,6 +27,16 @@ export default function Nav() {
         component={PlayScreen}
         options={{
           tabBarLabel: 'Play',
+          tabBarIcon: ({ color }) => (
+            <Icon active name="heart" style={{ fontSize: 36, color }} />
+          )
+        }}
+      />
+      <Tab.Screen
+        name="LeaderboardScreen"
+        component={LeaderboardScreen}
+        options={{
+          tabBarLabel: 'Leaderboard',
           tabBarIcon: ({ color }) => (
             <Icon active name="trophy" style={{ fontSize: 36, color }} />
           )

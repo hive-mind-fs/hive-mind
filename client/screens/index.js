@@ -9,6 +9,7 @@ export { default as GameBoardScreen } from './GameBoardScreen';
 export { default as CountdownScreen } from './CountdownScreen';
 export { default as HomeScreen } from './HomeScreen';
 export { default as LandingScreen } from './LandingScreen';
+export { default as LeaderboardScreen } from './LeaderboardScreen';
 export { default as LoginScreen } from './LoginScreen';
 export { default as PlayScreen } from './PlayScreen';
 export { default as PostRoundScreen } from './PostRoundScreen';
