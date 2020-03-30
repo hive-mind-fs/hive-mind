@@ -42,15 +42,9 @@ const LobbyScreen = ({ navigation, user }) => {
       <H1 style={styles.lobby}></H1>
       <H3>You have opponents!</H3>
       <List>
-        {usersWaiting.map((l, i) => (
-          <ListItem
-            key={i}
-            leftAvatar={{ source: { uri: l.avatar_url } }}
-            title={l.name}
-            subtitle={l.subtitle}
-            bottomDivider
-          >
-            <Text>l.username</Text>
+        {usersWaiting.map(user => (
+          <ListItem key={user.id} title={user.username} bottomDivider>
+            {/* <Text>{l.username}</Text> */}
           </ListItem>
         ))}
       </List>
