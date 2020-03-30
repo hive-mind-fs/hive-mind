@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
 import { StyleSheet } from 'react-native';
-import { Container, H1, H3, Text } from 'native-base';
+import { Container, H1, H3, Text, Button } from 'native-base';
 import { getSocket } from '../socket';
 
 const LobbyScreen = ({ navigation, user }) => {
