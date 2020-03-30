@@ -69,13 +69,6 @@ const User = db.define('user', {
 });
 
 /**
- * Hooks
- **/
-User.addHook('beforeValidate', (user, options) => {
-  user.username = user.username ? user.username : user.email.split('@')[0];
-});
-
-/**
  * instanceMethods
  */
 User.prototype.correctPassword = function(candidatePwd) {
@@ -98,7 +91,7 @@ User.encryptPassword = function(plainText, salt) {
 };
 
 /**
- * hooks
+ * Hooks
  */
 const setSaltAndPassword = user => {
   if (user.changed('password')) {
@@ -107,10 +100,15 @@ const setSaltAndPassword = user => {
   }
 };
 
+const addUserName = user => {
+  user.username = user.email.split('@')[0];
+};
+
 User.beforeCreate(setSaltAndPassword);
 User.beforeUpdate(setSaltAndPassword);
 User.beforeBulkCreate(User => {
   User.forEach(setSaltAndPassword);
+  User.forEach(addUserName);
 });
 
 module.exports = User;
