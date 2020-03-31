@@ -3,8 +3,8 @@ import { Svg, G, Line, Rect, Text } from 'react-native-svg';
 import { View } from 'react-native';
 import * as d3 from 'd3';
 
-const GRAPH_MARGIN = 35;
-const GRAPH_BAR_WIDTH = 10;
+const GRAPH_MARGIN = 30;
+const GRAPH_BAR_WIDTH = 20;
 const colors = {
   axis: '#aaa',
   bars1: 'gold',
@@ -13,7 +13,7 @@ const colors = {
 
 const colorsArr = [colors.bars1, colors.bars2];
 
-export default class BarChartGrouped extends PureComponent {
+export default class BarChartStacked extends PureComponent {
   render() {
     // Dimensions
     const SVGHeight = 200;
@@ -24,34 +24,39 @@ export default class BarChartGrouped extends PureComponent {
 
     const data = [
       {
-        label: '4',
-        player: 5,
-        opponent: 3
+        label: 'PANGRAM',
+        player: 40,
+        totalPossible: 100
       },
       {
-        label: '5',
-        player: 2,
-        opponent: 2
+        label: 'DANGROM',
+        player: 60,
+        totalPossible: 200
       },
       {
-        label: '6',
-        player: 1,
-        opponent: 1
+        label: 'SAMGRAM',
+        player: 80,
+        totalPossible: 90
       },
       {
-        label: '7',
-        player: 1,
-        opponent: 3
+        label: 'SONORAM',
+        player: 34,
+        totalPossible: 50
       },
       {
-        label: '8',
-        player: 2,
-        opponent: 0
+        label: 'JAMARAM',
+        player: 80,
+        totalPossible: 90
       },
       {
-        label: '9',
-        player: 0,
-        opponent: 1
+        label: 'WOMORAM',
+        player: 34,
+        totalPossible: 50
+      },
+      {
+        label: 'LIMIRAM',
+        player: 34,
+        totalPossible: 50
       }
     ];
 
@@ -66,9 +71,9 @@ export default class BarChartGrouped extends PureComponent {
 
     // Y scale linear
     const maxValue = d3.max(data, d =>
-      d.player > d.opponent ? d.player : d.opponent
+      d.player > d.totalPossible ? d.player : d.totalPossible
     );
-    const topValue = maxValue % 2 === 0 ? maxValue + 2 : maxValue + 1;
+    const topValue = Math.ceil(maxValue / this.props.round) * this.props.round;
     const yDomain = [0, topValue];
     const yRange = [0, graphHeight];
     const y = d3
@@ -83,7 +88,7 @@ export default class BarChartGrouped extends PureComponent {
         let yCoord = (graphHeight / topValue) * i;
         let value = i;
 
-        if (i % 2 === 0) {
+        if (i % 50 === 0) {
           arr.push({
             value,
             yCoord
@@ -100,12 +105,12 @@ export default class BarChartGrouped extends PureComponent {
     return (
       <View style={{ paddingTop: 50 }}>
         <Svg width={SVGWidth} height={SVGHeight}>
-          <Text y="20" x="17" fontSize="22">
-            Word Length
+          <Text y="15" x="17" fontSize="20">
+            Points Per Game
           </Text>
           <G y={graphHeight + GRAPH_MARGIN - 5} x={GRAPH_MARGIN / 2}>
             {/* Top value label */}
-            {['You', 'Opponent'].map((name, i) => (
+            {['You', 'Possible'].map((name, i) => (
               <Text
                 key={name}
                 fill={colorsArr[i % colorsArr.length]}
@@ -150,49 +155,37 @@ export default class BarChartGrouped extends PureComponent {
               x2="0"
               y2={y(topValue) * -1}
               stroke={colors.axis}
-              strokeWidth="2.5"
+              strokeWidth="1"
             />
 
             {/* bars */}
-            {data.map(item => (
+            {data.map((item, idx) => (
               <>
                 <Rect
+                  key={'bar-possible' + item.label}
+                  x={x(item.label) - GRAPH_BAR_WIDTH + 15}
+                  y={y(item.totalPossible) * -1}
+                  rx={2.5}
+                  width={GRAPH_BAR_WIDTH}
+                  height={y(item.totalPossible)}
+                  fill={colors.bars2}
+                />
+                <Rect
                   key={'bar-player' + item.label}
-                  x={x(item.label) - GRAPH_BAR_WIDTH * 1.2}
+                  x={x(item.label) - GRAPH_BAR_WIDTH + 15}
                   y={y(item.player) * -1}
                   rx={2.5}
                   width={GRAPH_BAR_WIDTH}
                   height={y(item.player)}
                   fill={colors.bars1}
                 />
-                <Rect
-                  key={'bar-opponent' + item.label}
-                  x={x(item.label) + GRAPH_BAR_WIDTH * 0.1}
-                  y={y(item.opponent) * -1}
-                  rx={2.5}
-                  width={GRAPH_BAR_WIDTH}
-                  height={y(item.opponent)}
-                  fill={colors.bars2}
-                />
               </>
             ))}
 
             {/* X labels */}
-            <Text y="35" x={graphWidth / 2} textAnchor="middle">
-              Word Length
+            <Text y="20" x={graphWidth / 2} textAnchor="middle">
+              Last 7 Games
             </Text>
-            {data.map((item, idx) => (
-              <Text
-                key={'label' + idx}
-                fontSize="8"
-                x={x(item.label)}
-                y="20"
-                textAnchor="middle"
-                fontSize="14"
-              >
-                {item.label}
-              </Text>
-            ))}
 
             {/* Y labels */}
             <Text
@@ -201,16 +194,16 @@ export default class BarChartGrouped extends PureComponent {
               x={graphHeight / 2}
               textAnchor="middle"
             >
-              Words Got
+              Points
             </Text>
             {yValues().map(yValue => (
               <>
                 <Text
                   key={yValue.value}
                   fontSize="8"
-                  x="10"
+                  x="5"
                   y={-yValue.yCoord + 14}
-                  textAnchor="middle"
+                  textAnchor="Left"
                   fontSize="14"
                 >
                   {yValue.value}

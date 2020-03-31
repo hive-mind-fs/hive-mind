@@ -12,7 +12,7 @@ import {
   Thumbnail
 } from 'native-base';
 import { connect } from 'react-redux';
-import { Stats, Logo, BarChart, BarChartGrouped } from '../components';
+import { Stats, Logo, BarChartStacked, BarChartGrouped } from '../components';
 import { logout } from '../store';
 
 const ProfileScreen = ({ user, navigation, handleLogout }) => {
@@ -83,7 +83,7 @@ const ProfileScreen = ({ user, navigation, handleLogout }) => {
           // }}
           >
             <Stats stats={stats} />
-            <BarChart width={320} round={100} unit="€" />
+            <BarChartStacked round="50" />
             <BarChartGrouped width={320} round={1} unit="€" />
           </View>
         </Tab>
