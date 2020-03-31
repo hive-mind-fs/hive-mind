@@ -8,8 +8,8 @@ const writeFileAsync = promisify(fs.writeFile);
 const benchmark = (t0: number, t1: number, name: string) => {
   console.log('⏱ ', name, 'took', (t1 - t0).toFixed(3), 'milliseconds.');
 };
-const toCharVector = (cs: string) => {
-  var result = 0;
+const toVchar = (cs: string) => {
+  var cv = 0;
   for (let i = 0; i < cs.length; i++) {
     var c = cs[i];
     {
@@ -17,10 +17,10 @@ const toCharVector = (cs: string) => {
         (function(c: any) {
           return c.charCodeAt == null ? c : c.charCodeAt(0);
         })(c) - 'a'.charCodeAt(0);
-      result |= 1 << ordinal;
+      cv |= 1 << ordinal;
     }
   }
-  return result;
+  return cv;
 };
 
 const bitCount = (u: number) => {
@@ -30,18 +30,18 @@ const bitCount = (u: number) => {
 
 const firstSetBit = (int: number) => int & -int;
 
-const puzzlesForBoardSet = (charVector: number) => {
+const puzzlesForBoardSet = (Vchar: number) => {
   let puzzles = [];
-  let decayingBoardSet = charVector;
+  let decayingBoardSet = Vchar;
   while (decayingBoardSet !== 0) {
     let required = firstSetBit(decayingBoardSet);
     decayingBoardSet ^= required;
-    puzzles.push([charVector, required]);
+    puzzles.push([Vchar, required]);
   }
   return puzzles;
 };
 
-//Create hash map of dict with charvector as key and word as value & generate array of charectors and reqVectors for all possible puzzles
+//Create hash map of dict with Vchar as key and word as value & generate array of charectors and reqVectors for all possible puzzles
 const puzzleMaster = (dict: any, minLen: number, maxLets: number) => {
   let wordSet = new Set();
   let wordsByVector = new Map();
@@ -62,7 +62,7 @@ const puzzleMaster = (dict: any, minLen: number, maxLets: number) => {
         continue loop1;
       }
     }
-    const vector = toCharVector(charArr);
+    const vector = toVchar(charArr);
     const distinctLetterCount = bitCount(vector);
     if (distinctLetterCount > maxLets) {
       continue;
@@ -80,38 +80,36 @@ const puzzleMaster = (dict: any, minLen: number, maxLets: number) => {
       }
     }
   }
-  return [wordsByVector, puzzles];
+  return { wordsByVector, puzzles };
 };
 
-//Find all words that contain the requiredVector and use no additional characters but those specified in the optionalVector then add those words to the given result set.
+//Find all words that contain the Required Vector and use no additional characters but those specified in the Optional Vector then add those words to the given result set.
 const addSolutions = (
   result: any[],
-  requiredVector: number,
-  optionalVector: number,
+  Vreq: number,
+  Vopt: number,
   hashmap: Map<number, any[]>
 ) => {
-  if (optionalVector === 0) {
-    result.push(
-      hashmap.has(requiredVector) ? hashmap.get(requiredVector) : null
-    );
+  if (Vopt === 0) {
+    result.push(hashmap.has(Vreq) ? hashmap.get(Vreq) : null);
   } else {
-    var nextOneHot = firstSetBit(optionalVector);
-    var expandedRequiredVector = requiredVector | nextOneHot;
-    var nextOptionalVector = optionalVector ^ nextOneHot;
-    addSolutions(result, requiredVector, nextOptionalVector, hashmap);
-    addSolutions(result, expandedRequiredVector, nextOptionalVector, hashmap);
+    var nextOneHot = firstSetBit(Vopt);
+    var expandedVreq = Vreq | nextOneHot;
+    var nextVopt = Vopt ^ nextOneHot;
+    addSolutions(result, Vreq, nextVopt, hashmap);
+    addSolutions(result, expandedVreq, nextVopt, hashmap);
   }
 };
 
 // Find all words that can be formed in the given puzzle.
 const solutionsTo = (
-  potVector: number,
-  requiredVector: number,
+  Vlets: number,
+  Vreq: number,
   hashmap: Map<number, any[]>
 ) => {
   const solutions = []; //new Set();
-  const optionalVector = potVector & ~requiredVector;
-  addSolutions(solutions, requiredVector, optionalVector, hashmap);
+  const Vopt = Vlets & ~Vreq;
+  addSolutions(solutions, Vreq, Vopt, hashmap);
   return solutions;
 };
 
@@ -123,8 +121,8 @@ const SolvePuzzles = async (dictPath: string) => {
   const words = await dict.split('\n'); //read into array of words
 
   console.log('Generating puzzles...');
-  const hashmap = puzzleMaster(words, 4, 7)[0]; //Create the hash map for dictionary
-  const puzzles = puzzleMaster(words, 4, 7)[1]; //Create all puzzles
+  const { wordsByVector } = puzzleMaster(words, 4, 7); //Create the hash map for dictionary
+  const { puzzles } = puzzleMaster(words, 4, 7); //Create all puzzles
 
   console.log('Solutions:');
   //Create a has map of charachter vectors for the required letter:
@@ -159,7 +157,7 @@ const SolvePuzzles = async (dictPath: string) => {
       'Z'
     ];
     for (let i = 0; i < alphabet.length; i++) {
-      reqMap.set(toCharVector(alphabet[i]), alphabet[i]);
+      reqMap.set(toVchar(alphabet[i]), alphabet[i]);
     }
     return reqMap;
   };
@@ -187,13 +185,13 @@ const SolvePuzzles = async (dictPath: string) => {
     const letterSetMap = createLetterSetMap(puzzles, hashmap);
     for (let i = 0; i < puzzles.length; i++) {
       for (let j = 0; j < 7; j++) {
-        let charVector = puzzles[i][j][0];
-        let requiredVector = puzzles[i][j][1];
+        let Vchar = puzzles[i][j][0];
+        let Vreq = puzzles[i][j][1];
         solutions.push([
-          reqMap.get(requiredVector),
-          letterSetMap.get(charVector),
-          hashmap.get(charVector),
-          solutionsTo(charVector, requiredVector, hashmap)
+          reqMap.get(Vreq),
+          letterSetMap.get(Vchar),
+          hashmap.get(Vchar),
+          solutionsTo(Vchar, Vreq, hashmap)
             .flat(Infinity)
             .filter(x => x)
         ]);
@@ -203,7 +201,7 @@ const SolvePuzzles = async (dictPath: string) => {
   };
 
   //If you dont do the write file: ⏱  SolvePuzzles took 1421.117 milliseconds
-  console.log(solver(puzzles, hashmap));
+  console.log(solver(puzzles, wordsByVector));
   //Else: ⏱  SolvePuzzles took 2939.944 milliseconds.
   // const gameData = JSON.stringify(solver(puzzles, hashmap));
   // await writeFileAsync(__dirname + '/Solutions.json', gameData);
