@@ -18,7 +18,8 @@ import {
   ProfileScreen,
   RulesScreen,
   SignupScreen,
-  LobbyScreen
+  LobbyScreen,
+  FriendLobbyScreen
 } from './screens';
 import store, { getUser } from './store';
 import colors from './utils/styles';
@@ -107,10 +108,19 @@ const signup = (
     options={{ headerTitle: 'Sign Up', ...navStyle }}
   />
 );
+
 const lobby = (
   <Stack.Screen
     name="LobbyScreen"
     component={LobbyScreen}
+    options={{ headerShown: false }}
+  />
+);
+
+const friendlobby = (
+  <Stack.Screen
+    name="FriendLobbyScreen"
+    component={FriendLobbyScreen}
     options={{ headerShown: false }}
   />
 );
@@ -162,6 +172,7 @@ export function App() {
               {login}
               {signup}
               {lobby}
+              {friendlobby}
             </Stack.Navigator>
           </NavigationContainer>
         </StyleProvider>

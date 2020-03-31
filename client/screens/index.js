@@ -17,3 +17,4 @@ export { default as ProfileScreen } from './ProfileScreen';
 export { default as RulesScreen } from './RulesScreen';
 export { default as SignupScreen } from './SignupScreen';
 export { default as FBLoginScreen } from './FBLoginScreen';
+export { default as FriendLobbyScreen } from './LobbyScreen';

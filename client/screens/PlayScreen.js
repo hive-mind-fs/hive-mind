@@ -14,7 +14,13 @@ function PlayScreen({ navigation, createUserRound, user }) {
     navigation.navigate('CountdownScreen');
   };
 
-  const handleLobbying = () => {
+  const handleFriendLobbying = () => {
+    console.log('user id', user.id);
+    // we don't know whether we will create round or not
+    navigation.navigate('FriendLobbyScreen');
+  };
+
+  const handleRandomLobbying = () => {
     console.log('user id', user.id);
     // we don't know whether we will create round or not
     navigation.navigate('LobbyScreen');
@@ -27,15 +33,27 @@ function PlayScreen({ navigation, createUserRound, user }) {
       <Text marginT5 center>
         How many words can you make{'\n'}with 7 letters?
       </Text>
+
       <Button
         primary
         block
         rounded
         marginTopL
         title="FindOpponent"
-        onPress={() => handleLobbying()}
+        onPress={() => handleFriendLobbying()}
       >
-        <Text>Find An Opponent</Text>
+        <Text>Play A Friend</Text>
+      </Button>
+
+      <Button
+        primary
+        block
+        rounded
+        marginTopL
+        title="FindOpponent"
+        onPress={() => handleRandomLobbying()}
+      >
+        <Text>Play A Stranger</Text>
       </Button>
 
       <Button
