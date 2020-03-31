@@ -1,5 +1,9 @@
 let usersWaiting = []
 const {Round} = require("../db/models")
+let round = null;
+let roomCtr = 0;
+
+const WAITING_ROOM = 'waiting_room'
 
 //To do: get room from server
 
@@ -13,15 +17,21 @@ module.exports = io => {
       `A socket connection to the server has been made: ${socket.id}`
     );
 
-    socket.on('join room', async function(data) {
-      console.log(`${data.user.username} joining room ${data.room}`);
-      usersWaiting.push(data.user.username)
-      socket.join(data.room);
-      const round = await Round.getRandom()
+    socket.on('join room', async function (data) {
+      console.log(`${data.user.username} joining room ${WAITING_ROOM}`);
 
-      // io.to (name of room), to emit to room
-      socket.emit('game ready!', {usersWaiting: usersWaiting, round: round})
-      //socket.to()
+      socket.join(WAITING_ROOM);
+
+      usersWaiting.push(data.user.username)
+
+      round = await Round.getRandom()
+
+      if (usersWaiting.length > 1) {
+        const v1Room = `room_${roomCtr++}`
+        socket.broadcast.to(WAITING_ROOM)
+        .emit('game ready!', {usersWaiting: usersWaiting, round: round, v1Room: v1Room})
+        usersWaiting = []
+      }
     });
 
     socket.on('leave room', function(data) {

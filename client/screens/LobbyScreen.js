@@ -8,9 +8,6 @@ const LobbyScreen = ({ navigation, user }) => {
   const [curr1v1Room, set1v1Room] = useState(0);
   const [usersWaiting, setUsersWaiting] = useState([]);
 
-  const WAITING_ROOM = 'waiting_room';
-  const V1_ROOM = curr1v1Room;
-
   /*
   Notes: I think that there should be two modes,
 
@@ -20,8 +17,7 @@ const LobbyScreen = ({ navigation, user }) => {
   */
   useEffect(() => {
       socket.emit('join room', {
-        user: user,
-        room: WAITING_ROOM
+        user: user
       });
 });
  //A room always will be unique, when you do socket.join('roomname') if the room not exist it will created and this socket will join it, if exist the socket just will join it.

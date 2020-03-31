@@ -12,7 +12,8 @@ socket.on('connect', () => {
 
 socket.on('game ready!', data => {
   console.log(`We have users waiting, ${data.usersWaiting[0]}`)
-  console.log(`To play round, ${data.round}`)
+  console.log(`To play round, ${data.round.coreLetter}`)
+  console.log(`And join room, ${data.v1Room}`)
 })
 
 socket.on('...', () => {
