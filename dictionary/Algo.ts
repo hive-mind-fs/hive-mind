@@ -9,11 +9,11 @@ const benchmark = (t0: number, t1: number, name: string) => {
   console.log('⏱ ', name, 'took', (t1 - t0).toFixed(3), 'milliseconds.');
 };
 const toVchar = (cs: string) => {
-  var cv = 0;
+  let cv = 0;
   for (let i = 0; i < cs.length; i++) {
-    var c = cs[i];
+    let c = cs[i];
     {
-      var ordinal =
+      let ordinal =
         (function(c: any) {
           return c.charCodeAt == null ? c : c.charCodeAt(0);
         })(c) - 'a'.charCodeAt(0);
@@ -52,9 +52,9 @@ const puzzleMaster = (dict: any, minLen: number, maxLets: number) => {
     if (word.length < minLen) {
       continue;
     }
-    var charArr = word.split('');
-    for (var j = 0; j < charArr.length; j++) {
-      var c = charArr[j];
+    let charArr = word.split('');
+    for (let j = 0; j < charArr.length; j++) {
+      let c = charArr[j];
       if (
         c.charCodeAt(0) < 'a'.charCodeAt(0) ||
         c.charCodeAt(0) > 'z'.charCodeAt(0)
@@ -93,9 +93,9 @@ const addSolutions = (
   if (Vopt === 0) {
     result.push(hashmap.has(Vreq) ? hashmap.get(Vreq) : null);
   } else {
-    var nextOneHot = firstSetBit(Vopt);
-    var expandedVreq = Vreq | nextOneHot;
-    var nextVopt = Vopt ^ nextOneHot;
+    let nextOneHot = firstSetBit(Vopt);
+    let expandedVreq = Vreq | nextOneHot;
+    let nextVopt = Vopt ^ nextOneHot;
     addSolutions(result, Vreq, nextVopt, hashmap);
     addSolutions(result, expandedVreq, nextVopt, hashmap);
   }
