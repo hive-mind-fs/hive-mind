@@ -21,34 +21,41 @@ import { logout } from '../store';
 const LeaderboardScreen = ({ navigation, handleLogout }) => {
   const stats = [
     {
+      userId: '1',
       title: 'Total Score',
       stat: '1,234'
     },
     {
+      userId: '2',
       title: 'Games Played',
       stat: '34'
     },
     {
+      userId: '3',
       title: 'Words Gotten',
       stat: '334'
     },
     {
-      title: 'Total Score',
-      stat: '1,234'
-    },
-    {
-      title: 'Games Played',
+      userId: '4',
+      title: 'Total Score2',
       stat: '34'
     },
     {
+      userId: '5',
+      title: 'Games Played',
+      stat: '4'
+    },
+    {
+      userId: '6',
       title: 'Words Gotten',
-      stat: '334'
+      stat: '1'
     }
   ];
 
   const list = (
     <FlatList
       data={stats}
+      keyExtractor={item => item.userId}
       renderItem={({ item }) => (
         <ListItem avatar>
           <Left>
@@ -62,7 +69,6 @@ const LeaderboardScreen = ({ navigation, handleLogout }) => {
           </Right>
         </ListItem>
       )}
-      keyExtractor={item => item.id}
     />
   );
   return (
