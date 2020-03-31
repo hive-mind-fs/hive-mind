@@ -7,7 +7,16 @@ const socket = io(`http://localhost:${PORT}`);
 
 // Not sure if we're going to use this, but we'll find out
 socket.on('connect', () => {
-  console.log('Connected on client!');
+  console.log(`Connected on client! ${socket.id}`);
+});
+
+socket.on('game ready!', data => {
+  console.log(`We have users waiting, ${data.usersWaiting[0]}`)
+  console.log(`To play round, ${data.round}`)
+})
+
+socket.on('...', () => {
+
 });
 
 export default socket;
