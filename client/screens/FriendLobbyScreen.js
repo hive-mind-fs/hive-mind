@@ -1,7 +1,18 @@
 import React, { Fragment, useState, useEffect } from 'react';
 import { connect } from 'react-redux';
 import { StyleSheet } from 'react-native';
-import { Container, H1, H3, Text, Button } from 'native-base';
+import {
+  Container,
+  H1,
+  H3,
+  Text,
+  Button,
+  Content,
+  Form,
+  Input,
+  Item,
+  Label
+} from 'native-base';
 import getSocket from '../socket';
 
 /*
@@ -11,12 +22,10 @@ they can join any arbitrary room.
 */
 
 const FriendLobbyScreen = ({ navigation, user }) => {
-  const [input, handleInput] = useState('');
+  const [room, setRoom] = useState('');
   const [inRoom, setInRoom] = useState(true);
   const [players, setPlayers] = useState([]);
   const [socket] = useState(getSocket());
-
-  const room = input;
 
   useEffect(() => {
     if (inRoom) {
@@ -53,7 +62,20 @@ const FriendLobbyScreen = ({ navigation, user }) => {
       <Container>
         <H1 style={styles.lobby}></H1>
         <H3>Waiting for Friend...</H3>
-
+        <Container form>
+          <Content>
+            <Form style={{ width: 360 }}>
+              <Item floatingLabel>
+                <Label>Email</Label>
+                <Input
+                  placeholder="Email"
+                  autoCapitalize="none"
+                  onChange={e => setRoom(e.nativeEvent.text)}
+                />
+              </Item>
+            </Form>
+          </Content>
+        </Container>
         <Button
           primary
           block
