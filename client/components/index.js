@@ -6,3 +6,4 @@
 export { default as Logo } from './Logo';
 export { default as Stats } from './Stats';
 export { default as BarChart } from './BarChart';
+export { default as BarChartGrouped } from './BarChartGrouped';

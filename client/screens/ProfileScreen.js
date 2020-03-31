@@ -1,19 +1,21 @@
 import React from 'react';
-import { StyleSheet, View } from 'react-native';
+import { StyleSheet, View, DatePickerIOSComponent } from 'react-native';
 import {
   Button,
   Container,
   H1,
+  Icon,
   Tab,
   Tabs,
   TabHeading,
-  Text
+  Text,
+  Thumbnail
 } from 'native-base';
 import { connect } from 'react-redux';
-import { Stats, Logo, BarChart } from '../components';
+import { Stats, Logo, BarChart, BarChartGrouped } from '../components';
 import { logout } from '../store';
 
-const ProfileScreen = ({ navigation, handleLogout }) => {
+const ProfileScreen = ({ user, navigation, handleLogout }) => {
   const stats = [
     {
       title: 'Total Score',
@@ -44,16 +46,29 @@ const ProfileScreen = ({ navigation, handleLogout }) => {
     }
   ];
 
-  // const handleLogout = () => {
-  //   handleLogout();
-  //   navigation.navigate('LandingScreen');
-  // };
-
   return (
     <Container>
-      <Text style={styles.Logo} />
-      <Logo />
-      <H1>Username</H1>
+      <Button
+        iconLeft
+        transparent
+        marginTopL
+        title="Log Out"
+        onPress={() => {
+          console.log('attempting to logout');
+          handleLogout();
+          navigation.navigate('LandingScreen');
+        }}
+        style={{ marginLeft: 'auto' }}
+      >
+        {/* <Icon name="cog" /> */}
+        <Text>Log Out</Text>
+      </Button>
+      {user.photo ? (
+        <Thumbnail xlarge source={{ uri: user.photo }} />
+      ) : (
+        <Logo />
+      )}
+      <H1>{user.username ? user.username : 'You'}</H1>
       <Tabs style={styles.Tabs}>
         <Tab
           heading={
@@ -63,14 +78,14 @@ const ProfileScreen = ({ navigation, handleLogout }) => {
           }
         >
           <View
-            onLayout={event => {
-              var { x, y, width, height } = event.nativeEvent.layout;
-            }}
+          // onLayout={event => {
+          //   var { x, y, width, height } = event.nativeEvent.layout;
+          // }}
           >
+            <Stats stats={stats} />
             <BarChart width={320} round={100} unit="€" />
+            <BarChartGrouped width={320} round={1} unit="€" />
           </View>
-
-          <Stats stats={stats} />
         </Tab>
         <Tab
           heading={
@@ -82,28 +97,11 @@ const ProfileScreen = ({ navigation, handleLogout }) => {
           <Stats stats={games} />
         </Tab>
       </Tabs>
-      <Button
-        rounded
-        bordered
-        block
-        marginTop
-        title="Log Out"
-        onPress={() => {
-          console.log('attempting to logout');
-          handleLogout();
-          navigation.navigate('LandingScreen');
-        }}
-      >
-        <Text>Log Out</Text>
-      </Button>
     </Container>
   );
 };
 
 const styles = StyleSheet.create({
-  Logo: {
-    marginTop: 60
-  },
   Tabs: {
     marginTop: 30
   }
