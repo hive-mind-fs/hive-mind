@@ -52,30 +52,30 @@ const FriendLobbyScreen = ({ navigation, user }) => {
     navigation.navigate('PlayScreen');
   };
 
-  return (
-    //    players.length > 1 ? (
-    //     <Container>
-    //       <H1 style={styles.lobby}></H1>
-    //       <H3>{players[1]} has joined!</H3>
-    //     </Container>
-    //   ) : (
-
-    <Container form>
+  //WHy wont it render my form?!?!
+  return players.length > 1 ? (
+    <Container>
+      <H1 style={styles.lobby}></H1>
+      <H3>{players[1]} has joined!</H3>
+    </Container>
+  ) : (
+    <Container>
       <H1 style={styles.lobby}></H1>
       <H3>Waiting for Friend...</H3>
-      <Content>
-        <Form style={{ width: 360 }}>
-          <Item floatingLabel>
-            <Label>Name Your Room</Label>
-            <Input
-              placeholder="Room Name"
-              autoCapitalize="none"
-              onChange={e => setRoom(e.nativeEvent.text)}
-            />
-          </Item>
-        </Form>
-      </Content>
-
+      <Container form>
+        <Content>
+          <Form style={{ width: 360 }}>
+            <Item floatingLabel>
+              <Label>Name Your Room</Label>
+              <Input
+                placeholder="Room Name"
+                autoCapitalize="none"
+                onChange={e => setRoom(e.nativeEvent.text)}
+              />
+            </Item>
+          </Form>
+        </Content>
+      </Container>
       <Button
         primary
         block
