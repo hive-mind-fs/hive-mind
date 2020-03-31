@@ -113,6 +113,81 @@ const solutionsTo = (
   return solutions;
 };
 
+//Create a has map of charachter vectors for the required letter:
+const createReqMap = () => {
+  let reqMap = new Map();
+  const alphabet = [
+    'A',
+    'B',
+    'C',
+    'D',
+    'E',
+    'F',
+    'G',
+    'H',
+    'I',
+    'J',
+    'K',
+    'L',
+    'M',
+    'N',
+    'O',
+    'P',
+    'Q',
+    'R',
+    'S',
+    'T',
+    'U',
+    'V',
+    'W',
+    'X',
+    'Y',
+    'Z'
+  ];
+  for (let i = 0; i < alphabet.length; i++) {
+    reqMap.set(toVchar(alphabet[i]), alphabet[i]);
+  }
+  return reqMap;
+};
+
+//Create a has map of charachter vectors for the letter set
+const createLetterSetMap = (puzzles: any[], hashmap: Map<number, any[]>) => {
+  let letters = [];
+  let lettersMap = new Map();
+  for (let i = 0; i < puzzles.length; i++) {
+    letters.push(puzzles[i][0][0]);
+    lettersMap.set(
+      letters[i],
+      hashmap
+        .get(letters[i])[0]
+        .replace(/(.)(?=.*\1)/g, '')
+        .toUpperCase()
+    );
+  }
+  return lettersMap;
+};
+
+const solver = (puzzles: any, hashmap: any) => {
+  let solutions = [];
+  const reqMap = createReqMap();
+  const letterSetMap = createLetterSetMap(puzzles, hashmap);
+  for (let i = 0; i < puzzles.length; i++) {
+    for (let j = 0; j < 7; j++) {
+      let Vchar = puzzles[i][j][0];
+      let Vreq = puzzles[i][j][1];
+      solutions.push([
+        reqMap.get(Vreq),
+        letterSetMap.get(Vchar),
+        hashmap.get(Vchar),
+        solutionsTo(Vchar, Vreq, hashmap)
+          .flat(Infinity)
+          .filter(x => x)
+      ]);
+    }
+  }
+  return solutions;
+};
+
 const SolvePuzzles = async (dictPath: string) => {
   const t0 = performance.now();
 
@@ -125,86 +200,11 @@ const SolvePuzzles = async (dictPath: string) => {
   const { puzzles } = puzzleMaster(words, 4, 7); //Create all puzzles
 
   console.log('Solutions:');
-  //Create a has map of charachter vectors for the required letter:
-  const createReqMap = () => {
-    let reqMap = new Map();
-    const alphabet = [
-      'A',
-      'B',
-      'C',
-      'D',
-      'E',
-      'F',
-      'G',
-      'H',
-      'I',
-      'J',
-      'K',
-      'L',
-      'M',
-      'N',
-      'O',
-      'P',
-      'Q',
-      'R',
-      'S',
-      'T',
-      'U',
-      'V',
-      'W',
-      'X',
-      'Y',
-      'Z'
-    ];
-    for (let i = 0; i < alphabet.length; i++) {
-      reqMap.set(toVchar(alphabet[i]), alphabet[i]);
-    }
-    return reqMap;
-  };
+  console.log(solver(puzzles, wordsByVector)); //If you dont do the write file: ⏱  SolvePuzzles took 1421.117 milliseconds
 
-  //Create a has map of charachter vectors for the letter set
-  const createLetterSetMap = (puzzles: any[], hashmap: Map<number, any[]>) => {
-    let letters = [];
-    let lettersMap = new Map();
-    for (let i = 0; i < puzzles.length; i++) {
-      letters.push(puzzles[i][0][0]);
-      lettersMap.set(
-        letters[i],
-        hashmap
-          .get(letters[i])[0]
-          .replace(/(.)(?=.*\1)/g, '')
-          .toUpperCase()
-      );
-    }
-    return lettersMap;
-  };
-
-  const solver = (puzzles: any, hashmap: any) => {
-    let solutions = [];
-    const reqMap = createReqMap();
-    const letterSetMap = createLetterSetMap(puzzles, hashmap);
-    for (let i = 0; i < puzzles.length; i++) {
-      for (let j = 0; j < 7; j++) {
-        let Vchar = puzzles[i][j][0];
-        let Vreq = puzzles[i][j][1];
-        solutions.push([
-          reqMap.get(Vreq),
-          letterSetMap.get(Vchar),
-          hashmap.get(Vchar),
-          solutionsTo(Vchar, Vreq, hashmap)
-            .flat(Infinity)
-            .filter(x => x)
-        ]);
-      }
-    }
-    return solutions;
-  };
-
-  //If you dont do the write file: ⏱  SolvePuzzles took 1421.117 milliseconds
-  console.log(solver(puzzles, wordsByVector));
-  //Else: ⏱  SolvePuzzles took 2939.944 milliseconds.
-  // const gameData = JSON.stringify(solver(puzzles, hashmap));
+  // const gameData = JSON.stringify(solver(puzzles, hashmap)); //Else: ⏱  SolvePuzzles took 2939.944 milliseconds.
   // await writeFileAsync(__dirname + '/Solutions.json', gameData);
+
   const t1 = performance.now();
   benchmark(t0, t1, 'SolvePuzzles');
 };
