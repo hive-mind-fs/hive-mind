@@ -20,7 +20,8 @@
     "test": "npm run test-server & npm run test-client",
     "test-client": "jest ./client/**/*.spec.js",
     "test-server": "NODE_ENV='test' mocha \"./server/**/*.spec.js\" \"./script/**/*.spec.js\" --require @babel/polyfill --require @babel/register",
-    "web": "expo start --web"
+    "web": "expo start --web",
+    "kill-server": "lsof -ti:8080 | xargs kill"
   },
   "jest": {
     "preset": "react-native"
