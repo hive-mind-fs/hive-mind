@@ -2,13 +2,12 @@ import React, { Fragment, useState, useEffect } from 'react';
 import { connect } from 'react-redux';
 import { StyleSheet } from 'react-native';
 import { Container, H1, H3, Text, Button, List, ListItem } from 'native-base';
-import getSocket from '../socket';
+import socket from '../socket';
 
 const LobbyScreen = ({ navigation, user }) => {
   const [inRoom, setInRoom] = useState(true);
-  const [socket] = useState(getSocket());
   const [curr1v1Room, set1v1Room] = useState(0);
-  const [usersWaiting, setUsersWaiting] = useState([user]);
+  const [usersWaiting, setUsersWaiting] = useState([]);
 
   const WAITING_ROOM = 'waiting_room';
   const V1_ROOM = curr1v1Room;
@@ -26,7 +25,8 @@ const LobbyScreen = ({ navigation, user }) => {
     if (inRoom) {
       socket.emit('join room', {
         user: user,
-        room: WAITING_ROOM
+        room: WAITING_ROOM,
+        users: usersWaiting
       }); //A room always will be unique, when you do socket.join('roomname') if the room not exist it will created and this socket will join it, if exist the socket just will join it.
 
       setUsersWaiting([...usersWaiting, user]);
@@ -46,7 +46,6 @@ const LobbyScreen = ({ navigation, user }) => {
     }
 
     // This just runs when the component dismounts
-    // This just runs when the component dismounts
     return () => {
       if (inRoom) {
         socket.emit('leave room', {
@@ -63,16 +62,10 @@ const LobbyScreen = ({ navigation, user }) => {
     navigation.navigate('PlayScreen');
   };
 
-  return usersWaiting.length > 1 ? (
+  return usersWaiting.length >= 1 ? (
     <Container>
       <H1 style={styles.lobby}></H1>
       <H3>You have opponents!</H3>
-<<<<<<< HEAD
-
-      {usersWaiting.map(user => (
-        <Text key={user.id}>{user.username}</Text>
-      ))}
-=======
       <List>
         {usersWaiting.map((l, i) => (
           <ListItem
@@ -86,7 +79,6 @@ const LobbyScreen = ({ navigation, user }) => {
           </ListItem>
         ))}
       </List>
->>>>>>> fcfebc621bd9842c45837e4ec1bb3dc78c12e17b
     </Container>
   ) : (
     inRoom && (

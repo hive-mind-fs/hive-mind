@@ -10,4 +10,4 @@ socket.on('connect', () => {
   console.log('Connected on client!');
 });
 
-export default () => socket;
+export default socket;

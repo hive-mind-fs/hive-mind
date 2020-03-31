@@ -6,6 +6,7 @@ module.exports = io => {
 
     socket.on('join room', function(data) {
       console.log(`${data.user.username} joining room ${data.room}`);
+      data.usersWaiting.push(data.user)
       socket.join(data.room);
     });
 
