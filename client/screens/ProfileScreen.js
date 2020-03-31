@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 import {
   Button,
   Container,
@@ -10,7 +10,7 @@ import {
   Text
 } from 'native-base';
 import { connect } from 'react-redux';
-import { Stats, Logo } from '../components';
+import { Stats, Logo, BarChart } from '../components';
 import { logout } from '../store';
 
 const ProfileScreen = ({ navigation, handleLogout }) => {
@@ -62,6 +62,14 @@ const ProfileScreen = ({ navigation, handleLogout }) => {
             </TabHeading>
           }
         >
+          <View
+            onLayout={event => {
+              var { x, y, width, height } = event.nativeEvent.layout;
+            }}
+          >
+            <BarChart width={width} round={100} unit="€" />
+          </View>
+
           <Stats stats={stats} />
         </Tab>
         <Tab
