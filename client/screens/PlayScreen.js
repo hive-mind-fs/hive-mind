@@ -15,8 +15,6 @@ function PlayScreen({ navigation, createUserRound, user }) {
   };
 
   const handleFriendLobbying = () => {
-    console.log('user id', user.id);
-    // we don't know whether we will create round or not
     navigation.navigate('FriendLobbyScreen');
   };
 
@@ -39,7 +37,7 @@ function PlayScreen({ navigation, createUserRound, user }) {
         block
         rounded
         marginTopL
-        title="FindOpponent"
+        title="FindFriend"
         onPress={() => handleFriendLobbying()}
       >
         <Text>Play A Friend</Text>
