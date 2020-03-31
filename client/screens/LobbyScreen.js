@@ -8,7 +8,7 @@ const LobbyScreen = ({ navigation, user }) => {
   const [inRoom, setInRoom] = useState(true);
   const [socket] = useState(getSocket());
   const [curr1v1Room, set1v1Room] = useState(0);
-  const [usersWaiting, setUsersWaiting] = useState([]);
+  const [usersWaiting, setUsersWaiting] = useState([user]);
 
   const WAITING_ROOM = 'waiting_room';
   const V1_ROOM = curr1v1Room;
@@ -21,6 +21,8 @@ const LobbyScreen = ({ navigation, user }) => {
   Play with Friends: You click a diferent button and you are navigated to a screen where you create a room and then invite your friend to join that room. Maybe you can click on your friend from a list of your friends and have this happen dynamically but for now lets just have one user create a room and invite there friend to it.
   */
   useEffect(() => {
+    console.log('we are in useEffect');
+    console.log('usersWaiting are', usersWaiting);
     if (inRoom) {
       socket.emit('join room', {
         user: user,
@@ -38,8 +40,12 @@ const LobbyScreen = ({ navigation, user }) => {
         : set1v1Room(curr1v1Room); //increment the room id once 2 users are in it so the next user can joing a unique room
       setUsersWaiting(usersWaiting.splice(usersWaiting.indexOf(user), 1)); //Remove user from Waiting_Room
       setInRoom(false);
+      if (!usersWaiting.includes(user)) {
+        setUsersWaiting([...usersWaiting, user]);
+      }
     }
 
+    // This just runs when the component dismounts
     // This just runs when the component dismounts
     return () => {
       if (inRoom) {
@@ -49,7 +55,7 @@ const LobbyScreen = ({ navigation, user }) => {
         });
       }
     };
-  });
+  }, [usersWaiting]);
 
   const handleLeaving = () => {
     setInRoom(false);
@@ -61,10 +67,26 @@ const LobbyScreen = ({ navigation, user }) => {
     <Container>
       <H1 style={styles.lobby}></H1>
       <H3>You have opponents!</H3>
+<<<<<<< HEAD
 
       {usersWaiting.map(user => (
         <Text key={user.id}>{user.username}</Text>
       ))}
+=======
+      <List>
+        {usersWaiting.map((l, i) => (
+          <ListItem
+            key={i}
+            leftAvatar={{ source: { uri: l.avatar_url } }}
+            title={l.name}
+            subtitle={l.subtitle}
+            bottomDivider
+          >
+            <Text>{l.username}</Text>
+          </ListItem>
+        ))}
+      </List>
+>>>>>>> fcfebc621bd9842c45837e4ec1bb3dc78c12e17b
     </Container>
   ) : (
     inRoom && (

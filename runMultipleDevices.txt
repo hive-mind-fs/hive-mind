@@ -1,0 +1,8 @@
+xcrun simctl shutdown all // shutdown all processes
+xcrun simctl list // simctl instruments
+xcrun instruments -w "iPhone 11 Pro Max (13.3) [" // no template specified 
+xcrun simctl spawn booted launchctl print system // PID and booted devices
+xcrun simctl list --json devices
+xcrun simctl boot "FF303109-271B-45CA-B308-5C60CE4F09BA"
+xcrun simctl install "FF303109-271B-45CA-B308-5C60CE4F09BA" ~/.expo/ios-simulator-app-cache/Exponent-2.14.0.tar.app
+xcrun simctl openurl "FF303109-271B-45CA-B308-5C60CE4F09BA" exp://192.168.61.123:19000

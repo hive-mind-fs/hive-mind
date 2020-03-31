@@ -21,7 +21,7 @@ function PlayScreen({ navigation, createUserRound, user }) {
   const handleRandomLobbying = () => {
     console.log('user id', user.id);
     // we don't know whether we will create round or not
-    navigation.navigate('LobbyScreen');
+    navigation.navigate('HomeScreen', {screen: 'LobbyScreen'});
   };
 
   return (
