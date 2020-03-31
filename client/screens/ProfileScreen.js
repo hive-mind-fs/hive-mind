@@ -67,7 +67,7 @@ const ProfileScreen = ({ navigation, handleLogout }) => {
               var { x, y, width, height } = event.nativeEvent.layout;
             }}
           >
-            <BarChart width={width} round={100} unit="€" />
+            <BarChart width={320} round={100} unit="€" />
           </View>
 
           <Stats stats={stats} />
