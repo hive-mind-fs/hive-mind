@@ -6,7 +6,7 @@ import socket from '../socket';
 
 const LobbyScreen = ({ navigation, user }) => {
   const [enteredRoom, setEnteredRoom] = useState(true)
-  const [usersWaiting, setUsersWaiting] = useState([]);
+  const [users, setUsers] = useState([]);
 
   /*
   Notes: I think that there should be two modes,
@@ -17,7 +17,6 @@ const LobbyScreen = ({ navigation, user }) => {
   */
   useEffect(() => {
     if (enteredRoom) {
-    console.log(`${user.username} joining waiting room`)
 
     socket.emit('join room', {
         user: user
@@ -30,26 +29,26 @@ const LobbyScreen = ({ navigation, user }) => {
   useEffect(() => {
     socket.on('game ready!', data => {
       const gameData = JSON.parse(data)
-      console.log(`We have data for game`, gameData)
-      setUsersWaiting(gameData.usersWaiting)
+      console.log(`Me ${user.username} has data for game`, gameData)
+      setUsers(gameData.users)
     })
-  })
+  }, [users])
 
 
   const handleLeaving = () => {
     // Given game ready
     // From client we do post
     // Ensuring that users get same round
-    setUsersWaiting(usersWaiting.splice(usersWaiting.indexOf(user), 1));
+    setUsers(users.splice(users.indexOf(user), 1));
     navigation.navigate('PlayScreen');
   };
 
-  return usersWaiting.length ? (
+  return users.length ? (
     <Container>
       <H1 style={styles.lobby}></H1>
       <H3>You have opponents!</H3>
       <List>
-        {usersWaiting.map((user,i) => (
+        {users.map((user,i) => (
           <ListItem key={i} bottomDivider>
             <Text>{user.username}</Text>
           </ListItem>
