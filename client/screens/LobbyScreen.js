@@ -7,7 +7,7 @@ import socket from '../socket';
 
 const LobbyScreen = ({ navigation, createUserRound, user }) => {
   const [enteredRoom, setEnteredRoom] = useState(true);
-  const [users, setUsers] = useState([]);
+  const [users, setUsers] = useState({});
 
   /*
   Notes: I think that there should be two modes,
@@ -47,14 +47,14 @@ const LobbyScreen = ({ navigation, createUserRound, user }) => {
     navigation.navigate('PlayScreen');
   };
 
-  return users.length ? (
+  return Object.keys(users).length > 1 ? (
     <Container>
       <H1 style={styles.lobby}></H1>
       <H3>You have opponents!</H3>
       <List>
-        {users.map((user, i) => (
-          <ListItem key={i} bottomDivider>
-            <Text>{user.name}</Text>
+        {Object.keys(users).map(key => (
+          <ListItem key={key} bottomDivider>
+            <Text>{users[key]}</Text>
           </ListItem>
         ))}
       </List>
