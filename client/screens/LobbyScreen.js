@@ -54,7 +54,7 @@ const LobbyScreen = ({ navigation, createUserRound, user }) => {
       <List>
         {users.map((user, i) => (
           <ListItem key={i} bottomDivider>
-            <Text>{user.username}</Text>
+            <Text>{user.name}</Text>
           </ListItem>
         ))}
       </List>

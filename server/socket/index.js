@@ -1,5 +1,5 @@
-const {Round} = require("../db/models")
-let users = []
+const { Round } = require('../db/models');
+let users = new Set();
 let round = null;
 let roomCtr = 0;
 
@@ -9,24 +9,27 @@ module.exports = io => {
       `A socket connection to the server has been made: ${socket.id}`
     );
 
-    socket.on('join room', async function (data) {
-      const v1Room = `room_${roomCtr}`
+    socket.on('join room', async function(data) {
+      const v1Room = `room_${roomCtr}`;
 
       console.log(`${data.user.username} joining room ${v1Room} server`);
 
-      users.push(data.user)
+      users.add({ id: data.user.id, name: data.user.username });
 
-      console.log('users waiting', users)
+      console.log('users waiting', users);
 
       socket.join(v1Room);
 
-      if (users.length === 1) {
+      if (users.size === 1) {
         // TO DO: get a round once
-        round = await Round.getRandom()
+        round = await Round.getRandom();
       } else {
-        io.to(v1Room).emit('game ready!', JSON.stringify({users: users, round: round})) // emit this to all clients in waiting room
-        roomCtr++
-        users = []
+        io.to(v1Room).emit(
+          'game ready!',
+          JSON.stringify({ users: Array.from(users), round: round })
+        ); // emit this to all clients in waiting room
+        roomCtr++;
+        users = new Set();
       }
     });
 
