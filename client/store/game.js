@@ -6,64 +6,71 @@ import { BASE_URL } from '../utils/constants';
  */
 const defaultGame = {
   gameStatus: 'countdown',
-  practiceRound: {}
+  round: {}
 };
 
 /**
  * ACTION TYPES
  */
-const SET_PRACTICE_ROUND = 'SET_PRACTICE_ROUND';
-const SAVED_PRACTICE_ROUND = 'SAVED_PRACTICE_ROUND';
+const SET_ROUND = 'SET_ROUND';
+const SAVED_ROUND = 'SAVED_ROUND';
 
 /**
  * ACTION CREATORS
  */
-const setPracticeRound = practiceRound => ({
-  type: SET_PRACTICE_ROUND,
-  practiceRound
+const setRound = round => ({
+  type: SET_ROUND,
+  round
 });
 
-const savedPracticeRound = practiceRound => ({
-  type: SAVED_PRACTICE_ROUND,
-  practiceRound
+const savedRound = round => ({
+  type: SAVED_ROUND,
+  round
 });
 
 /**
  * THUNK CREATORS
  */
-export const fetchPracticeRound = userId => async dispatch => {
+export const fetchRound = userId => async dispatch => {
   try {
-    let practiceRound;
+    let round;
     try {
-      practiceRound = await axios.post(`${BASE_URL}/api/userRounds/${userId}`);
+      round = await axios.post(`${BASE_URL}/api/userRounds/${userId}`);
     } catch (error) {
-      practiceRound = await axios.post(`/api/userRounds/${userId}`);
+      round = await axios.post(`/api/userRounds/${userId}`);
     }
-    dispatch(setPracticeRound(practiceRound.data));
+    dispatch(setRound(round.data));
   } catch (err) {
     console.error(err);
   }
 };
 
-export const savePracticeRound = (
-  practiceRoundId,
-  score,
-  correctWords
-) => async dispatch => {
+export const fetch1v1Round = roundId => async dispatch => {
   try {
-    let practiceRound;
+    let round;
     try {
-      practiceRound = await axios.put(
-        `${BASE_URL}/api/userRounds/${practiceRoundId}`,
-        {
-          score: score,
-          words: correctWords
-        }
-      );
+      round = await axios.post(`${BASE_URL}/api/rounds/${roundId}`);
+    } catch (error) {
+      round = await axios.post(`/api/rounds/${roundId}`);
+    }
+    dispatch(setRound(round.data));
+  } catch (err) {
+    console.error(err);
+  }
+};
+
+export const saveRound = (roundId, score, correctWords) => async dispatch => {
+  try {
+    let round;
+    try {
+      round = await axios.put(`${BASE_URL}/api/userRounds/${roundId}`, {
+        score: score,
+        words: correctWords
+      });
     } catch (error) {
       console.error(err);
     }
-    dispatch(savedPracticeRound(practiceRound.data));
+    dispatch(savedRound(round.data));
   } catch (err) {
     console.error(err);
   }
@@ -74,10 +81,10 @@ export const savePracticeRound = (
  */
 export default function(state = defaultGame, action) {
   switch (action.type) {
-    case SET_PRACTICE_ROUND:
-      return { ...state, practiceRound: action.practiceRound };
-    case SAVED_PRACTICE_ROUND:
-      return { ...state, practiceRound: action.practiceRound };
+    case SET_ROUND:
+      return { ...state, round: action.round };
+    case SAVED_ROUND:
+      return { ...state, round: action.round };
     default:
       return state;
   }

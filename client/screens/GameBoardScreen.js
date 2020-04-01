@@ -6,7 +6,7 @@ import Hive from '../components/Hive';
 import Input from '../components/Input';
 import Error from '../components/Error';
 import CorrectWords from '../components/CorrectWords';
-import { savePracticeRound } from '../store';
+import { saveRound } from '../store';
 
 import {
   shuffle,
@@ -42,7 +42,7 @@ function GameBoardScreen(props) {
         let userWords = roundDictObjs.filter(word =>
           correctWords.includes(word.word)
         );
-        props.savePracticeRound(props.practiceRound.id, score, userWords);
+        props.saveRound(props.round.id, score, userWords);
         props.navigation.navigate('PostRoundScreen', {
           words: userWords,
           score: score
@@ -220,14 +220,14 @@ const styles = StyleSheet.create({
 
 const mapState = state => {
   return {
-    practiceRound: state.game.practiceRound
+    round: state.game.round
   };
 };
 
 const mapDispatch = dispatch => {
   return {
-    savePracticeRound: (userRoundId, score, correctWords) =>
-      dispatch(savePracticeRound(userRoundId, score, correctWords))
+    saveRound: (userRoundId, score, correctWords) =>
+      dispatch(saveRound(userRoundId, score, correctWords))
   };
 };
 

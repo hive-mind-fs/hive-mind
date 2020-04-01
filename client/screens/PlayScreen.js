@@ -2,7 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { Container, H1, Button, Text } from 'native-base';
 import { Logo } from '../components';
-import { fetchPracticeRound } from '../store/game';
+import { fetchRound } from '../store/game';
 
 function PlayScreen({ navigation, createUserRound, user }) {
   console.log('we have user', user);
@@ -21,7 +21,7 @@ function PlayScreen({ navigation, createUserRound, user }) {
   const handleRandomLobbying = () => {
     console.log('user id', user.id);
     // we don't know whether we will create round or not
-    navigation.navigate('HomeScreen', {screen: 'LobbyScreen'});
+    navigation.navigate('HomeScreen', { screen: 'LobbyScreen' });
   };
 
   return (
@@ -87,7 +87,7 @@ const mapState = state => {
 
 const mapDispatch = dispatch => {
   return {
-    createUserRound: userId => dispatch(fetchPracticeRound(userId)),
+    createUserRound: userId => dispatch(fetchRound(userId)),
     logout: () => dispatch(logout())
   };
 };

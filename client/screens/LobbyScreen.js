@@ -2,12 +2,14 @@ import React, { Fragment, useState, useEffect } from 'react';
 import { connect } from 'react-redux';
 import { StyleSheet } from 'react-native';
 import { Container, H1, H3, Text, Button, List, ListItem } from 'native-base';
-import { fetchPracticeRound } from '../store/game';
+import { fetch1v1Round } from '../store/game';
 import socket from '../socket';
+import { set } from 'react-native-reanimated';
 
-const LobbyScreen = ({ navigation, createUserRound, user }) => {
-  const [enteredRoom, setEnteredRoom] = useState(true);
+const LobbyScreen = ({ navigation, create1v1Round, user }) => {
+  const [inRoom, setInRoom] = useState(true);
   const [users, setUsers] = useState({});
+  const [room, setRoom] = useState('');
 
   /*
   Notes: I think that there should be two modes,
@@ -17,25 +19,25 @@ const LobbyScreen = ({ navigation, createUserRound, user }) => {
   Play with Friends: You click a diferent button and you are navigated to a screen where you create a room and then invite your friend to join that room. Maybe you can click on your friend from a list of your friends and have this happen dynamically but for now lets just have one user create a room and invite there friend to it.
   */
   useEffect(() => {
-    if (enteredRoom) {
+    if (inRoom) {
       socket.emit('join room', {
         user: user
       });
-
-      setEnteredRoom(false);
+      setInRoom(false);
     }
   }); //only run once ...
 
   useEffect(() => {
     socket.on('game ready!', data => {
       const gameData = JSON.parse(data);
-      console.log(`Me ${user.username} has data for game`, gameData);
+      console.log(`Me ${user.username} has data for game`); //, gameData);
       setUsers(gameData.users);
+      setRoom(gameData.room);
+      create1v1Round(gameData.round.id);
     });
   }, [users]);
 
   const handlePlay = () => {
-    createUserRound(user.id);
     navigation.navigate('CountdownScreen');
   };
 
@@ -43,7 +45,17 @@ const LobbyScreen = ({ navigation, createUserRound, user }) => {
     // Given game ready
     // From client we do post
     // Ensuring that users get same round
-    setUsers(users.splice(users.indexOf(user), 1));
+    setUsers(users => {
+      const newUsers = { ...users };
+      delete newUsers[user.id.toString()];
+      return newUsers;
+    });
+    setInRoom(false);
+    socket.emit('leave room', {
+      user: { username: user.username, id: user.id },
+      room: room
+    });
+    console.log('leftRoom', room);
     navigation.navigate('PlayScreen');
   };
 
@@ -64,7 +76,7 @@ const LobbyScreen = ({ navigation, createUserRound, user }) => {
         block
         rounded
         marginTopL
-        title="Practice"
+        title="Play"
         onPress={() => handlePlay()}
       >
         <Text>Play</Text>
@@ -115,7 +127,7 @@ const mapState = state => {
 
 const mapDispatch = dispatch => {
   return {
-    createUserRound: userId => dispatch(fetchPracticeRound(userId))
+    create1v1Round: roundId => dispatch(fetch1v1Round(roundId))
   };
 };
 

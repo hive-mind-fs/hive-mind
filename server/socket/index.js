@@ -23,12 +23,12 @@ module.exports = io => {
       if (Object.keys(users).length === 1) {
         // TO DO: get a round once
         round = await Round.getRandom({
-          include: [{ model: Word }]
+          include: [{ model: Word, attributes: ['word', 'id'] }]
         });
       } else {
         io.to(v1Room).emit(
           'game ready!',
-          JSON.stringify({ users: users, round: round })
+          JSON.stringify({ users: users, round: round, room: v1Room })
         ); // emit this to all clients in waiting room
         roomCtr++;
         users = {};
@@ -37,6 +37,9 @@ module.exports = io => {
 
     socket.on('leave room', function(data) {
       console.log(`${data.user.username} leaving room ${data.room}`);
+      console.log('users before leaving:', users);
+      delete users[data.user.id.toString()];
+      console.log('users after leaving:', users);
       socket.leave(data.room);
     });
 

@@ -44,9 +44,13 @@ Round.beforeBulkCreate(Round => {
  * Class Methods
  **/
 
-Round.getRandom = async function() {
-  const round = await Round.findOne({
+Round.getRandom = async function(opts = {}) {
+  const defaultOptions = {
     order: [Sequelize.fn('RANDOM')]
+  };
+  const round = await Round.findOne({
+    ...defaultOptions,
+    ...opts
   });
   return round;
 };

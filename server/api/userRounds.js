@@ -40,12 +40,12 @@ router.post('/:userId', async (req, res, next) => {
 
 // Update
 // Given userRound id, persist to database
-router.put('/:practiceRoundId', async (req, res, next) => {
+router.put('/:roundId', async (req, res, next) => {
   try {
-    let practiceRoundId = +req.params.practiceRoundId;
-    const userRound = await UserRound.findByPk(practiceRoundId, {
+    let roundId = +req.params.roundId;
+    const userRound = await UserRound.findByPk(roundId, {
       returning: true,
-      where: { id: practiceRoundId },
+      where: { id: roundId },
       include: [
         { model: Word, attributes: WORD_ATTRIBUTES },
         {
@@ -55,14 +55,14 @@ router.put('/:practiceRoundId', async (req, res, next) => {
         }
       ]
     });
-    const updatedPracticeRound = await userRound.update(req.body);
+    const updatedRound = await userRound.update(req.body);
     // Potential Optimization: Figure out a way to do the below  within the update above
     const guessedWords = req.body.words.map(word => {
-      return { wordId: word.id, userRoundId: practiceRoundId };
+      return { wordId: word.id, userRoundId: roundId };
     });
     await GuessedWord.bulkCreate(guessedWords);
 
-    res.send(updatedPracticeRound);
+    res.send(updatedRound);
   } catch (err) {
     next(err);
   }
