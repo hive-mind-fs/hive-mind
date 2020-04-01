@@ -98,7 +98,12 @@ export default class BarChartGrouped extends PureComponent {
     const middleValue = topValue / 2;
 
     return (
-      <View style={{ paddingTop: 50 }}>
+      <View
+        style={{
+          paddingTop: this.props.paddingTop,
+          paddingLeft: this.props.paddingLeft
+        }}
+      >
         <Svg width={SVGWidth} height={SVGHeight}>
           <Text y="20" x="17" fontSize="22">
             Word Length

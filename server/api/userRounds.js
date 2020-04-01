@@ -86,19 +86,7 @@ router.get('/:userId', async (req, res, next) => {
       ]
     });
 
-    const userRoundWithAttributes = await UserRound.findByPk(userRound[0].id, {
-      attributes: USERROUND_ATTRIBUTES,
-      include: [
-        { model: Word, attributes: WORD_ATTRIBUTES },
-        {
-          model: Round,
-          attributes: ROUND_ATTRIBUTES,
-          include: [{ model: Word }]
-        }
-      ]
-    });
-
-    res.send(userRoundWithAttributes);
+    res.send(userRound);
   } catch (err) {
     next(err);
   }

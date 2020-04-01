@@ -11,8 +11,8 @@ export default (variables /* : * */ = variable) => {
     display: 'flex',
     height: Platform.OS === PLATFORM.IOS ? deviceHeight : deviceHeight - 20,
     backgroundColor: variables.containerBgColor,
-    flex: 1, 
-    alignItems: 'center', 
+    flex: 1,
+    alignItems: 'center',
     justifyContent: 'center',
     padding: 20,
     textAlign: 'center',
@@ -21,7 +21,7 @@ export default (variables /* : * */ = variable) => {
       justifyContent: 'none',
       textAlign: 'left',
       display: 'block'
-    },
+    }
   };
 
   return theme;

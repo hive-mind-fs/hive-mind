@@ -13,6 +13,7 @@ export { default as LeaderboardScreen } from './LeaderboardScreen';
 export { default as LoginScreen } from './LoginScreen';
 export { default as PlayScreen } from './PlayScreen';
 export { default as PostRoundScreen } from './PostRoundScreen';
+export { default as PostRound1v1Screen } from './PostRound1v1Screen';
 export { default as ProfileScreen } from './ProfileScreen';
 export { default as RulesScreen } from './RulesScreen';
 export { default as SignupScreen } from './SignupScreen';
