@@ -94,15 +94,17 @@ User.encryptPassword = function(plainText, salt) {
 /**
  * Hooks
  */
+
+ User.addHook('beforeValidate', (user, options) => {
+  user.username = user.email.split('@')[0];
+});
+
+
 const setSaltAndPassword = user => {
   if (user.changed('password')) {
     user.salt = User.generateSalt();
     user.password = User.encryptPassword(user.password(), user.salt());
   }
-};
-
-const addUserName = user => {
-  user.username = user.email.split('@')[0];
 };
 
 User.beforeCreate(setSaltAndPassword);
