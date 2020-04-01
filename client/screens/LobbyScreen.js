@@ -33,7 +33,8 @@ const LobbyScreen = ({ navigation, create1v1Round, user }) => {
       console.log(`Me ${user.username} has data for game`); //, gameData);
       setUsers(gameData.users);
       setRoom(gameData.room);
-      create1v1Round(gameData.round.id);
+      console.log(gameData.round.id);
+      create1v1Round(user.id, gameData.round.id);
     });
   }, [users]);
 
@@ -127,7 +128,8 @@ const mapState = state => {
 
 const mapDispatch = dispatch => {
   return {
-    create1v1Round: roundId => dispatch(fetch1v1Round(roundId))
+    create1v1Round: (userId, roundId) =>
+      dispatch(fetch1v1Round(userId, roundId))
   };
 };
 

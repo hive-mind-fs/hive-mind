@@ -13,6 +13,7 @@ const defaultGame = {
  * ACTION TYPES
  */
 const SET_ROUND = 'SET_ROUND';
+const SET_1V1_ROUND = 'SET_1V1_ROUND';
 const SAVED_ROUND = 'SAVED_ROUND';
 
 /**
@@ -20,6 +21,11 @@ const SAVED_ROUND = 'SAVED_ROUND';
  */
 const setRound = round => ({
   type: SET_ROUND,
+  round
+});
+
+const set1v1Round = round => ({
+  type: SET_1V1_ROUND,
   round
 });
 
@@ -45,15 +51,17 @@ export const fetchRound = userId => async dispatch => {
   }
 };
 
-export const fetch1v1Round = roundId => async dispatch => {
+export const fetch1v1Round = (userId, roundId) => async dispatch => {
   try {
     let round;
     try {
-      round = await axios.post(`${BASE_URL}/api/rounds/${roundId}`);
+      round = await axios.post(
+        `${BASE_URL}/api/userRounds/${userId}/${roundId}`
+      );
     } catch (error) {
-      round = await axios.post(`/api/rounds/${roundId}`);
+      round = await axios.post(`/api/userRounds/${userId}/${roundId}`);
     }
-    dispatch(setRound(round.data));
+    dispatch(set1v1Round(round.data));
   } catch (err) {
     console.error(err);
   }
@@ -82,6 +90,8 @@ export const saveRound = (roundId, score, correctWords) => async dispatch => {
 export default function(state = defaultGame, action) {
   switch (action.type) {
     case SET_ROUND:
+      return { ...state, round: action.round };
+    case SET_1V1_ROUND:
       return { ...state, round: action.round };
     case SAVED_ROUND:
       return { ...state, round: action.round };

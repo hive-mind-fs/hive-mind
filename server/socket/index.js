@@ -22,9 +22,10 @@ module.exports = io => {
 
       if (Object.keys(users).length === 1) {
         // TO DO: get a round once
-        round = await Round.getRandom({
-          include: [{ model: Word, attributes: ['word', 'id'] }]
-        });
+        round = await Round.getRandom();
+        // round = await Round.getRandom({
+        //   include: [{ model: Word, attributes: ['word', 'id'] }]
+        // });
       } else {
         io.to(v1Room).emit(
           'game ready!',
