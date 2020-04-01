@@ -5,12 +5,6 @@ let roomCtr = 0;
 
 const WAITING_ROOM = 'waiting_room'
 
-//To do: get room from server
-
-//To do: Emit to room, not socket
-
-//To do: Only do once two people have joined
-
 module.exports = io => {
   io.on('connection', socket => {
     console.log(
