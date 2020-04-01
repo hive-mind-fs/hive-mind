@@ -14,7 +14,7 @@ module.exports = io => {
 
       console.log(`${data.user.username} joining room ${v1Room} server`);
 
-      users.push(data.user)
+      users.push({id: data.user.id, username: data.user.username})
 
       console.log('users waiting', users)
 
