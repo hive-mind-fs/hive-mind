@@ -1,0 +1,3 @@
+To broadcast an event to all the clients, we can use the io.sockets.emit method.
+Now, if we want to send an event to everyone, but the client that caused it (in the previous example, it was caused by new clients on connecting), we can use the socket.broadcast.emit
+Emit to particular room, io.to(room).emit('event', 'message') 

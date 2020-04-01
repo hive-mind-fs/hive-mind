@@ -22,20 +22,20 @@ module.exports = io => {
 
       socket.join(WAITING_ROOM);
 
-      usersWaiting.push(data.user.username)
+      usersWaiting.push(data.user)
 
       round = await Round.getRandom()
 
       if (usersWaiting.length > 1) {
+        console.log('server usersWaiting', usersWaiting)
         const v1Room = `room_${roomCtr++}`
-        socket.broadcast.to(WAITING_ROOM)
-        .emit('game ready!', {usersWaiting: usersWaiting, round: round, v1Room: v1Room})
+        io.to(WAITING_ROOM).emit('game ready!', JSON.stringify({usersWaiting: usersWaiting, round: round, v1Room: v1Room})) // emit this to all clients in waiting room
         usersWaiting = []
       }
     });
 
     socket.on('leave room', function(data) {
-      console.log(`${data.user.username} joining room ${data.room}`);
+      console.log(`${data.user.username} leaving room ${data.room}`);
       socket.leave(data.room);
     });
 

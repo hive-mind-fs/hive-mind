@@ -5,7 +5,7 @@ import { Container, H1, H3, Text, Button, List, ListItem } from 'native-base';
 import socket from '../socket';
 
 const LobbyScreen = ({ navigation, user }) => {
-  const [curr1v1Room, set1v1Room] = useState(0);
+  const [enteredRoom, setEnteredRoom] = useState(true)
   const [usersWaiting, setUsersWaiting] = useState([]);
 
   /*
@@ -16,65 +16,41 @@ const LobbyScreen = ({ navigation, user }) => {
   Play with Friends: You click a diferent button and you are navigated to a screen where you create a room and then invite your friend to join that room. Maybe you can click on your friend from a list of your friends and have this happen dynamically but for now lets just have one user create a room and invite there friend to it.
   */
   useEffect(() => {
-      socket.emit('join room', {
+    if (enteredRoom) {
+    console.log(`${user.username} joining waiting room`)
+
+    socket.emit('join room', {
         user: user
       });
-});
- //A room always will be unique, when you do socket.join('roomname') if the room not exist it will created and this socket will join it, if exist the socket just will join it.
 
+    setEnteredRoom(false)
+    }
+  }); //only run once ...
 
-    // } else if (inRoom && usersWaiting.length > 1) {
-    //   socket.emit('join room', {
-    //     user: user,
-    //     room: V1_ROOM
-    //   });
-    //   socket.clients(curr1v1Room) === 2 //not sure this works based on my web search it seems like the command to get the number of people in a room keeps changing with version updates
-    //     ? set1v1Room(curr1v1Room + 1)
-    //     : set1v1Room(curr1v1Room); //increment the room id once 2 users are in it so the next user can joing a unique room
-    //   setUsersWaiting(usersWaiting.splice(usersWaiting.indexOf(user), 1)); //Remove user from Waiting_Room
-    //   setInRoom(false);
-    //   if (!usersWaiting.includes(user)) {
-    //     setUsersWaiting([...usersWaiting, user]);
-    //   }
-    // }
+  useEffect(() => {
+    socket.on('game ready!', data => {
+      const gameData = JSON.parse(data)
+      console.log(`We have data for game`, gameData)
+      setUsersWaiting(gameData.usersWaiting)
+    })
+  })
 
-    // This just runs when the component dismounts
-  //   return () => {
-  //     if (inRoom) {
-  //       socket.emit('leave room', {
-  //         user: user,
-  //         room: WAITING_ROOM
-  //       });
-  //     }
-  //   };
-  //});
-
-  // useEffect((user) => {
-  //   if (!usersWaiting.includes(user)) {
-  //   console.log('before update users waiting', usersWaiting)
-  //   setUsersWaiting([]);
-  //   } else {
-  //     console.log('nothing happened')
-  //     console.log(`users waiting ${usersWaiting.length}`)
-  //   }
-  // }, [usersWaiting]);
 
   const handleLeaving = () => {
     // Given game ready
     // From client we do post
     // Ensuring that users get same round
-    setInRoom(false);
     setUsersWaiting(usersWaiting.splice(usersWaiting.indexOf(user), 1));
     navigation.navigate('PlayScreen');
   };
 
-  return usersWaiting.length >= 1 ? (
+  return usersWaiting.length ? (
     <Container>
       <H1 style={styles.lobby}></H1>
       <H3>You have opponents!</H3>
       <List>
-        {usersWaiting.map(user => (
-          <ListItem key={user.id} bottomDivider>
+        {usersWaiting.map((user,i) => (
+          <ListItem key={i} bottomDivider>
             <Text>{user.username}</Text>
           </ListItem>
         ))}

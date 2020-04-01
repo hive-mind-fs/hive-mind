@@ -10,14 +10,6 @@ socket.on('connect', () => {
   console.log(`Connected on client! ${socket.id}`);
 });
 
-socket.on('game ready!', data => {
-  console.log(`We have users waiting, ${data.usersWaiting[0]}`)
-  console.log(`To play round, ${data.round.coreLetter}`)
-  console.log(`And join room, ${data.v1Room}`)
-})
 
-socket.on('...', () => {
-
-});
 
 export default socket;
