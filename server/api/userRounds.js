@@ -95,3 +95,27 @@ router.put('/:roundId', async (req, res, next) => {
     next(err);
   }
 });
+
+// GET FOR STATS
+
+router.get('/:userId', async (req, res, next) => {
+  try {
+    const { userId } = +req.params;
+
+    const userRound = await UserRound.findAll({
+      where: { userId: userId },
+      attributes: USERROUND_ATTRIBUTES,
+      include: [
+        {
+          model: Round,
+          attributes: ROUND_ATTRIBUTES,
+          include: [{ model: Word }]
+        }
+      ]
+    });
+
+    res.send(userRound);
+  } catch (err) {
+    next(err);
+  }
+});
