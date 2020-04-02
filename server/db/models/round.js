@@ -1,6 +1,5 @@
 const Sequelize = require('sequelize');
 const db = require('../db');
-const Word = require('./word');
 
 const Round = db.define('round', {
   letters: {

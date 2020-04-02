@@ -19,8 +19,7 @@ export const getScore = (word, pangramList) => {
   return score;
 };
 
-export const getInitialStateFromProps = props => {
-  const round = props.practiceRound.round;
+export const getInitialStateFromProps = round => {
   const cl = round.coreLetter;
   const otherLetters = getOtherLetters(round, cl);
   const roundDictObjs = getRoundDictObjs(round);

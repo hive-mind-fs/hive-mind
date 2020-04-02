@@ -15,7 +15,7 @@ import {
   getInitialStateFromProps
 } from './gameBoardController';
 
-function GameBoardScreen(props) {
+function GameBoardScreen({ round }) {
   const {
     cl,
     otherLetters,
@@ -23,7 +23,7 @@ function GameBoardScreen(props) {
     roundDictObjs,
     pangramList,
     possiblePoints
-  } = getInitialStateFromProps(props);
+  } = getInitialStateFromProps(round);
 
   [input, setInput] = useState([]);
   [correctWords, setCorrectWords] = useState([]);
@@ -220,7 +220,7 @@ const styles = StyleSheet.create({
 
 const mapState = state => {
   return {
-    practiceRound: state.game.practiceRound
+    round: state.game.practiceRound
   };
 };
 
