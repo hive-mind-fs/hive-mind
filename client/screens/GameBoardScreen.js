@@ -30,27 +30,45 @@ function GameBoardScreen(props) {
   const [correctWords, setCorrectWords] = useState([]);
   const [lettersOrdering, setLettersOrdering] = useState(otherLetters);
   const [score, setScore] = useState(0);
+  const [opScore, setOpScore] = useState(0);
   const [rank, setRank] = useState('Beginner');
   const [error, setError] = useState([]);
   const [gameTimer, setGameTimer] = useState(300);
   const [isActive, toggleActive] = useState(true);
   const [gameStart, setGameStart] = useState(true);
-  const [opponentData, setOpponentData] = useState({});
+  const [opData, setOpData] = useState({});
 
+  //runs once on component did mount
   useEffect(() => {
-    console.log('were in the use effect');
     if (gameStart) {
       socket.emit('game start', {
-        user: props.user.username,
+        user: props.user,
+        username: props.user.username,
         photo: props.user.photo
       });
       setGameStart(false);
+      socket.on('opponent', function(data) {
+        setOpData(data);
+        console.log('data:', data.username);
+        console.log('state:', opData.username);
+      });
     }
-    socket.on('opponent', function(data) {
-      setOpponentData(data);
-      console.log('this is your oponents data', data);
+  });
+
+  useEffect(() => {
+    socket.emit('my score changed', {
+      score: score
     });
-  }); //, [gameStart]); //only run once ...
+
+    socket.on('ops score changed', function(data) {
+      // const scoreData = Object.values(data.data.score);
+      // const score = scoreData.score;
+      console.log('this is your oponents score', data.score);
+      setOpScore(data.score);
+      console.log('this is the score on state:', opScore);
+    });
+  }, [score]);
+  //Runs everytime the score changes
 
   // useEffect(() => {
   //   setTimeout(() => {

@@ -40,8 +40,14 @@ module.exports = io => {
       const v1Room = `room_${roomCtr}`;
       const userData = data;
       console.log(`Weve got data from the gameboard`, userData);
-      socket.to(v1Room).emit('opponent', { userData });
+      //socket.to(v1Room).emit('opponent', { data });
       socket.emit('opponent', { data });
+    });
+
+    socket.on('my score changed', function(data) {
+      const v1Room = `room_${roomCtr}`;
+      //socket.to(v1Room).emit('ops score changed' { data });
+      socket.emit('ops score changed', data);
     });
 
     socket.on('leave room', function(data) {
