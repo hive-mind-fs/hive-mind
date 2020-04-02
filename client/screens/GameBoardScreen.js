@@ -7,6 +7,7 @@ import Input from '../components/Input';
 import Error from '../components/Error';
 import CorrectWords from '../components/CorrectWords';
 import { saveRound } from '../store';
+import socket from '../socket';
 
 import {
   shuffle,
@@ -25,14 +26,15 @@ function GameBoardScreen(props, { user }) {
     possiblePoints
   } = getInitialStateFromProps(props);
 
-  [input, setInput] = useState([]);
-  [correctWords, setCorrectWords] = useState([]);
-  [lettersOrdering, setLettersOrdering] = useState(otherLetters);
-  [score, setScore] = useState(0);
-  [rank, setRank] = useState('Beginner');
-  [error, setError] = useState([]);
-  [gameTimer, setGameTimer] = useState(300);
-  [isActive, toggleActive] = useState(true);
+  const [input, setInput] = useState([]);
+  const [correctWords, setCorrectWords] = useState([]);
+  const [lettersOrdering, setLettersOrdering] = useState(otherLetters);
+  const [score, setScore] = useState(0);
+  const [rank, setRank] = useState('Beginner');
+  const [error, setError] = useState([]);
+  const [gameTimer, setGameTimer] = useState(300);
+  const [isActive, toggleActive] = useState(true);
+  const [gameStart, setGameStart] = useState(true);
 
   console.log(
     'these are the props',
@@ -42,7 +44,21 @@ function GameBoardScreen(props, { user }) {
     ',this is the user photo:',
     props.user.photo
   );
-  useEffect(() => {});
+
+  useEffect(() => {
+    if (gameStart) {
+      socket.emit(
+        'game start',
+        JSON.stringify({
+          user: props.user,
+          username: props.user.username,
+          photo: props.user.photo
+        })
+      );
+      setGameStart(false);
+    }
+  }); //, [gameStart]); //only run once ...
+
   // useEffect(() => {
   //   setTimeout(() => {
   //     if (gameTimer > 0) {
