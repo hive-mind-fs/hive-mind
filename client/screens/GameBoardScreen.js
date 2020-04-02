@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
-import { StyleSheet, View } from 'react-native';
+import { StyleSheet, View, Image } from 'react-native';
 import { Button, Container, Text, Icon } from 'native-base';
 import Hive from '../components/Hive';
 import Input from '../components/Input';
@@ -37,8 +37,10 @@ function GameBoardScreen(props, { user }) {
   console.log(
     'these are the props',
     props,
-    'this is the user',
-    props.user.username
+    'this is the username:',
+    props.user.username,
+    ',this is the user photo:',
+    props.user.photo
   );
   useEffect(() => {});
   // useEffect(() => {
@@ -103,20 +105,23 @@ function GameBoardScreen(props, { user }) {
   return (
     <Container style={styles.container}>
       <View style={styles.topBar}>
+        <Image
+          // style={{ width: 10, height: 10, borderRadius: 50 }}
+          source={{ uri: props.user.photo }}
+        />
+        <Image style={styles.topBarPhoto} source={{ uri: props.user.photo }} />
+        <Text style={styles.topBarItem}>
+          {score + ' '}
+          {props.user.username}
+        </Text>
         <Text style={styles.topBarItem}>
           <Icon classes={styles.topBarIcon} name="alarm" />
           {'  '}
           {minutes}:{seconds}
         </Text>
         <Text style={styles.topBarItem}>
-          <Icon classes={styles.topBarIcon} name="trophy" />
-          {'  '}
-          {score}
-        </Text>
-        <Text style={styles.topBarItem}>
-          <Icon classes={styles.topBarIcon} name="school" />
-          {'  '}
-          {rank}
+          {score + ' '}
+          {props.user.username}
         </Text>
       </View>
       <View style={styles.correctWordsCont}>
@@ -169,6 +174,74 @@ function GameBoardScreen(props, { user }) {
         </Button>
       </View>
     </Container>
+    // <Container style={styles.container}>
+    //   <View style={styles.topBar}>
+    //     <Text style={styles.topBarItem}>
+    //       <Icon classes={styles.topBarIcon} name="alarm" />
+    //       {'  '}
+    //       {minutes}:{seconds}
+    //     </Text>
+    //     <Text style={styles.topBarItem}>
+    //       <Icon classes={styles.topBarIcon} name="trophy" />
+    //       {'  '}
+    //       {score}
+    //     </Text>
+    //     <Text style={styles.topBarItem}>
+    //       <Icon classes={styles.topBarIcon} name="school" />
+    //       {'  '}
+    //       {rank}
+    //     </Text>
+    //   </View>
+    //   <View style={styles.correctWordsCont}>
+    //     <Text marginT10>You've found {correctWords.length} correct words</Text>
+    //     <CorrectWords words={correctWords.join('   ')} />
+    //   </View>
+    //   <View style={styles.inputCont}>
+    //     <Input style={styles.textCenter} inputLetters={input} />
+    //     <Error error={error} />
+    //   </View>
+    //   <Hive
+    //     style={styles.gameBoard}
+    //     centerLetter={cl} // comes from redux now
+    //     otherLetters={lettersOrdering}
+    //     onLetterPress={letter => handleLetterPress(letter)}
+    //   />
+    //   <View style={styles.flexRow}>
+    //     <Button
+    //       style={styles.gameButtons}
+    //       block
+    //       bordered
+    //       rounded
+    //       large
+    //       title="Delete"
+    //       onPress={() => handleDelete()}
+    //     >
+    //       <Text>Delete</Text>
+    //     </Button>
+    //     <Button
+    //       style={styles.gameButtons}
+    //       block
+    //       bordered
+    //       rounded
+    //       large
+    //       title="Shuffle"
+    //       onPress={() => handleShuffle()}
+    //     >
+    //       <Text>Shuffle</Text>
+    //     </Button>
+    //     <Button
+    //       style={styles.gameButtons}
+    //       block
+    //       bordered
+    //       rounded
+    //       large
+    //       title="Enter"
+    //       onPress={() => handleEnter()}
+    //     >
+    //       <Text>Enter</Text>
+    //     </Button>
+    //   </View>
+    // </Container>
   );
 }
 
@@ -187,6 +260,12 @@ const styles = StyleSheet.create({
   },
   topBarIcon: {
     paddingRight: 15
+  },
+  topBarPhoto: {
+    paddingRight: 15,
+    width: 10,
+    height: 10,
+    borderRadius: 50
   },
   correctWordsCont: {
     // flex: 1
