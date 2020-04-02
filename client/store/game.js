@@ -10,7 +10,7 @@ const defaultGame = {
     totalScore: '-',
     roundsPlayed: '-',
     wordsGotten: '-',
-    graphPoints: null
+    graphPoints: []
   },
   leaderboard: []
 };

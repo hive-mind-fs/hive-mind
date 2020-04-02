@@ -73,6 +73,7 @@ router.put('/:practiceRoundId', async (req, res, next) => {
 router.get('/leaderboard', async (req, res, next) => {
   try {
     let leaderboard = null;
+    let leaderboardObj = null;
     try {
       leaderboard = await UserRound.findAll({
         attributes: [
@@ -80,20 +81,21 @@ router.get('/leaderboard', async (req, res, next) => {
         ],
         include: [{ model: User, attributes: ['id', 'username', 'photo'] }],
         group: ['user.id']
+        // order: sequelize.literal('totalScore DESC')
       });
 
-      // const stats = [
-      //   {
-      //     userId: '1',
-      //     title: 'Total Score',
-      //     stat: '1,234'
-      //   },
-      // ]
+      leaderboardObj = leaderboard.map(rank => {
+        return {
+          username: rank.user.username,
+          photo: rank.user.photo,
+          totalScore: rank.totalScore
+        };
+      });
     } catch (err) {
       next(err);
     }
 
-    res.send(leaderboard);
+    res.send(leaderboardObj);
   } catch (err) {
     next(err);
   }

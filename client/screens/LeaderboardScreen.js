@@ -18,63 +18,68 @@ import { connect } from 'react-redux';
 // import { Stats } from '../components';
 import { getLeaderboard } from '../store';
 
-const LeaderboardScreen = ({ navigation, getLeaderboard }) => {
+const LeaderboardScreen = ({ navigation, getLeaderboard, leaderboard }) => {
   useEffect(() => {
     getLeaderboard();
   }, []);
 
-  const stats = [
-    {
-      userId: '1',
-      title: 'Total Score',
-      stat: '1,234'
-    },
-    {
-      userId: '2',
-      title: 'Games Played',
-      stat: '34'
-    },
-    {
-      userId: '3',
-      title: 'Words Gotten',
-      stat: '334'
-    },
-    {
-      userId: '4',
-      title: 'Total Score2',
-      stat: '34'
-    },
-    {
-      userId: '5',
-      title: 'Games Played',
-      stat: '4'
-    },
-    {
-      userId: '6',
-      title: 'Words Gotten',
-      stat: '1'
-    }
-  ];
+  // const stats = [
+  //   {
+  //     userId: '1',
+  //     title: 'Total Score',
+  //     stat: '1,234'
+  //   },
+  //   {
+  //     userId: '2',
+  //     title: 'Games Played',
+  //     stat: '34'
+  //   },
+  //   {
+  //     userId: '3',
+  //     title: 'Words Gotten',
+  //     stat: '334'
+  //   },
+  //   {
+  //     userId: '4',
+  //     title: 'Total Score2',
+  //     stat: '34'
+  //   },
+  //   {
+  //     userId: '5',
+  //     title: 'Games Played',
+  //     stat: '4'
+  //   },
+  //   {
+  //     userId: '6',
+  //     title: 'Words Gotten',
+  //     stat: '1'
+  //   }
+  // ];
 
-  const list = (
-    <FlatList
-      data={stats}
-      keyExtractor={item => item.userId}
-      renderItem={({ item }) => (
-        <ListItem avatar>
-          <Left>
-            <Thumbnail source={{ uri: 'https://i.imgur.com/UMFJ5Gm.jpg' }} />
-          </Left>
-          <Body>
-            <Text>Kumar Pratik</Text>
-          </Body>
-          <Right>
-            <Text>1,123</Text>
-          </Right>
-        </ListItem>
-      )}
-    />
-  );
+  const list =
+    leaderboard.length > 0 ? (
+      <FlatList
+        data={leaderboard}
+        keyExtractor={(item, idx) => item.idx}
+        renderItem={({ item }) => (
+          <ListItem avatar>
+            <Left>
+              <Thumbnail small source={{ uri: `${item.photo}` }} />
+            </Left>
+            <Body>
+              <Text>{item.username}</Text>
+            </Body>
+            <Right>
+              <Text>{item.totalScore}</Text>
+            </Right>
+          </ListItem>
+        )}
+      />
+    ) : (
+      <Text center marginT20>
+        Loading...
+      </Text>
+    );
   return (
     <Container>
       <Text style={styles.Logo} />
