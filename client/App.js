@@ -18,15 +18,19 @@ import {
   PostRound1v1Screen,
   ProfileScreen,
   RulesScreen,
-  SignupScreen
+  SignupScreen,
+  LobbyScreen,
+  FriendLobbyScreen
 } from './screens';
 import store, { getUser } from './store';
 import colors from './utils/styles';
 import { StyleProvider } from 'native-base';
 import getTheme from './native-base-theme/components';
 import customMaterial from './native-base-theme/variables/customMaterial';
-
+// establishes socket connection
+import './socket';
 console.disableYellowBox = true;
+
 
 const Stack = createStackNavigator();
 
@@ -114,6 +118,22 @@ const signup = (
   />
 );
 
+const lobby = (
+  <Stack.Screen
+    name="LobbyScreen"
+    component={LobbyScreen}
+    options={{ headerShown: false }}
+  />
+);
+
+const friendlobby = (
+  <Stack.Screen
+    name="FriendLobbyScreen"
+    component={FriendLobbyScreen}
+    options={{ headerShown: false }}
+  />
+);
+
 const profile = <Stack.Screen name="ProfileScreen" component={ProfileScreen} />;
 
 export function App() {
@@ -144,7 +164,7 @@ export function App() {
   }
 
   if (user) {
-    console.log('user is logged in', user);
+    //    console.log('user is logged in', user);
     return (
       <Provider store={store}>
         <StyleProvider style={getTheme(customMaterial)}>
@@ -159,13 +179,15 @@ export function App() {
               {landing}
               {login}
               {signup}
+              {lobby}
+              {friendlobby}
             </Stack.Navigator>
           </NavigationContainer>
         </StyleProvider>
       </Provider>
     );
   } else {
-    console.log('user is not logged in', user);
+    //    console.log('user is not logged in', user);
     return (
       <Provider store={store}>
         <StyleProvider style={getTheme(customMaterial)}>

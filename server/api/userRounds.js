@@ -11,13 +11,41 @@ module.exports = router;
 
 // Create
 // Given user id, create new user rounds entry with random round
-router.post('/:userId', async (req, res, next) => {
+// router.post('/:userId', async (req, res, next) => {
+//   try {
+//     const userId = +req.params.userId;
+//     const round = await Round.getRandom();
+
+//     const userRound = await UserRound.findOrCreate({
+//       where: { userId: userId, roundId: round.id }
+//     });
+
+//     const userRoundWithAttributes = await UserRound.findByPk(userRound[0].id, {
+//       attributes: USERROUND_ATTRIBUTES,
+//       include: [
+//         { model: Word, attributes: WORD_ATTRIBUTES },
+//         {
+//           model: Round,
+//           attributes: ROUND_ATTRIBUTES,
+//           include: [{ model: Word }]
+//         }
+//       ]
+//     });
+
+//     res.send(userRoundWithAttributes);
+//   } catch (err) {
+//     next(err);
+//   }
+// });
+
+// Given a user and round id, create new user rounds entry with specific
+router.post('/:userId/:roundId', async (req, res, next) => {
   try {
     const userId = +req.params.userId;
-    const round = await Round.getRandom();
+    const roundId = +req.params.roundId;
 
     const userRound = await UserRound.findOrCreate({
-      where: { userId: userId, roundId: round.id }
+      where: { userId: userId, roundId: roundId }
     });
 
     const userRoundWithAttributes = await UserRound.findByPk(userRound[0].id, {
@@ -40,12 +68,12 @@ router.post('/:userId', async (req, res, next) => {
 
 // Update
 // Given userRound id, persist to database
-router.put('/:practiceRoundId', async (req, res, next) => {
+router.put('/:roundId', async (req, res, next) => {
   try {
-    let practiceRoundId = +req.params.practiceRoundId;
-    const userRound = await UserRound.findByPk(practiceRoundId, {
+    let roundId = +req.params.roundId;
+    const userRound = await UserRound.findByPk(roundId, {
       returning: true,
-      where: { id: practiceRoundId },
+      where: { id: roundId },
       include: [
         { model: Word, attributes: WORD_ATTRIBUTES },
         {
@@ -55,14 +83,14 @@ router.put('/:practiceRoundId', async (req, res, next) => {
         }
       ]
     });
-    const updatedPracticeRound = await userRound.update(req.body);
+    const updatedRound = await userRound.update(req.body);
     // Potential Optimization: Figure out a way to do the below  within the update above
     const guessedWords = req.body.words.map(word => {
-      return { wordId: word.id, userRoundId: practiceRoundId };
+      return { wordId: word.id, userRoundId: roundId };
     });
     await GuessedWord.bulkCreate(guessedWords);
 
-    res.send(updatedPracticeRound);
+    res.send(updatedRound);
   } catch (err) {
     next(err);
   }

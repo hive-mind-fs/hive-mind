@@ -23,12 +23,14 @@ export const me = () => async dispatch => {
   }
 };
 
-export const auth = (email, password, method) => async dispatch => {
+export const auth = (email, password, method, username) => async dispatch => {
   let res;
   try {
+    username = email.split('@')[0];
     res = await axios.post(`${BASE_URL}/auth/${method}`, {
       email,
-      password
+      password,
+      username
     });
   } catch (e) {
     return dispatch(getUser({ error: e }));

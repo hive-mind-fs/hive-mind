@@ -3,6 +3,7 @@ const express = require('express');
 const session = require('express-session');
 const morgan = require('morgan');
 const passport = require('passport');
+const socketio = require('socket.io');
 const SequelizeStore = require('connect-session-sequelize')(session.Store);
 
 const db = require('./db');
@@ -84,6 +85,10 @@ const startListening = () => {
   const server = app.listen(PORT, () =>
     console.log(`Mixing it up on port ${PORT}`)
   );
+
+  // web server & socket server???
+  const io = socketio(server); // this is a server
+  require('./socket')(io);
 };
 
 const syncDb = () => db.sync();
