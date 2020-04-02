@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
-import { StyleSheet, View, Image } from 'react-native';
-import { Button, Container, Text, Icon } from 'native-base';
+import { StyleSheet, View } from 'react-native';
+import { Button, Container, Text, Icon, Thumbnail } from 'native-base';
 import Hive from '../components/Hive';
 import Input from '../components/Input';
 import Error from '../components/Error';
@@ -118,14 +118,14 @@ function GameBoardScreen(props, { user }) {
   let secondsCalc = gameTimer - minutes * 60;
   let seconds = secondsCalc <= 9 ? '0' + secondsCalc : secondsCalc;
 
+  let profPic = props.user.photo + '.jpg';
+  // profPic = profPic + '.jpg';
+  console.log('profile picture', profPic);
   return (
     <Container style={styles.container}>
       <View style={styles.topBar}>
-        <Image
-          // style={{ width: 10, height: 10, borderRadius: 50 }}
-          source={{ uri: props.user.photo }}
-        />
-        <Image style={styles.topBarPhoto} source={{ uri: props.user.photo }} />
+        <Thumbnail center large source={{ uri: profPic }} />
+        {/* <Image style={styles.topBarPhoto} source={{ uri: props.user.photo }} /> */}
         <Text style={styles.topBarItem}>
           {score + ' '}
           {props.user.username}
