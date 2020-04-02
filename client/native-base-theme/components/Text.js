@@ -19,6 +19,9 @@ export default (variables /* : * */ = variable) => {
     },
     '.marginT10': {
       marginTop: 10
+    },
+    '.marginT20': {
+      marginTop: 20
     }
   };
 

@@ -10,7 +10,8 @@ const defaultGame = {
   userStats: {
     totalScore: '-',
     roundsPlayed: '-',
-    wordsGotten: '-'
+    wordsGotten: '-',
+    graphPoints: null
   }
 };
 
@@ -83,7 +84,6 @@ export const savePracticeRound = (
 export const getUserStats = userId => async dispatch => {
   try {
     let userStats;
-    console.log('USER IDDD THUNKKKKKKK', userId);
     try {
       userStats = await axios.get(`${BASE_URL}/api/userRounds/${userId}`);
     } catch (error) {

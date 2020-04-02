@@ -39,6 +39,9 @@ export default () => {
         borderRadius: 0
       }
     },
+    '.center': {
+      alignSelf: 'center'
+    },
     width: 56,
     height: 56,
     borderRadius: 28

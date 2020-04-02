@@ -3,6 +3,7 @@ import { StyleSheet, View, DatePickerIOSComponent } from 'react-native';
 import {
   Button,
   Container,
+  Content,
   H1,
   Icon,
   Tab,
@@ -13,7 +14,7 @@ import {
 } from 'native-base';
 import { connect } from 'react-redux';
 import { Stats, Logo, BarChartStacked, BarChartGrouped } from '../components';
-import { logout, getUserStats } from '../store';
+import { logout, getUserStats, getUser } from '../store';
 
 const ProfileScreen = ({
   user,
@@ -24,6 +25,7 @@ const ProfileScreen = ({
 }) => {
   useEffect(() => {
     getUserStats(user.id);
+    getUser();
   }, []);
 
   const stats = [
@@ -58,55 +60,67 @@ const ProfileScreen = ({
 
   return (
     <Container>
-      <Button
-        iconLeft
-        transparent
-        marginTopL
-        title="Log Out"
-        onPress={() => {
-          console.log('attempting to logout');
-          handleLogout();
-          navigation.navigate('LandingScreen');
-        }}
-        style={{ marginLeft: 'auto' }}
-      >
-        {/* <Icon name="cog" /> */}
-        <Text>Log Out</Text>
-      </Button>
-      {user.photo ? (
-        <Thumbnail xlarge source={{ uri: user.photo }} />
-      ) : (
-        <Logo />
-      )}
-      <H1>{user.username ? user.username : 'You'}</H1>
-      <Tabs style={styles.Tabs}>
-        <Tab
-          heading={
-            <TabHeading>
-              <Text>Stats</Text>
-            </TabHeading>
-          }
+      <Content>
+        <Button
+          iconLeft
+          transparent
+          marginTopL
+          title="Log Out"
+          onPress={() => {
+            console.log('attempting to logout');
+            handleLogout();
+            navigation.navigate('LandingScreen');
+          }}
+          style={{ marginLeft: 'auto' }}
         >
-          <View
-          // onLayout={event => {
-          //   var { x, y, width, height } = event.nativeEvent.layout;
-          // }}
+          {/* <Icon name="cog" /> */}
+          <Text>Log Out</Text>
+        </Button>
+        {user.photo ? (
+          <Thumbnail center large source={{ uri: user.photo }} />
+        ) : (
+          <Logo />
+        )}
+        <H1 marginT20 center>
+          {user.username ? user.username : 'You'}
+        </H1>
+        <Tabs style={styles.Tabs}>
+          <Tab
+            heading={
+              <TabHeading>
+                <Text>Stats</Text>
+              </TabHeading>
+            }
           >
-            <Stats stats={stats} />
-            {/* <BarChartStacked round="50" data={userPointsGraphData} /> */}
-            {/* <BarChartGrouped width={320} round={1} unit="€" /> */}
-          </View>
-        </Tab>
-        <Tab
-          heading={
-            <TabHeading>
-              <Text>Game Log</Text>
-            </TabHeading>
-          }
-        >
-          <Stats stats={games} />
-        </Tab>
-      </Tabs>
+            <View
+            // onLayout={event => {
+            //   var { x, y, width, height } = event.nativeEvent.layout;
+            // }}
+            >
+              <Stats stats={stats} />
+              {userStats.roundsPlayed >= 7 && (
+                <BarChartStacked round="250" data={userStats.graphPoints} />
+              )}
+              {/* <BarChartGrouped width={320} round={1} unit="€" /> */}
+            </View>
+          </Tab>
+          <Tab
+            heading={
+              <TabHeading>
+                <Text>Game Log</Text>
+              </TabHeading>
+            }
+          >
+            {userStats.roundsPlayed > 0 ? (
+              <Stats stats={userStats.graphPoints} navigation={navigation} />
+            ) : (
+              <Text center marginT20>
+                You haven't played any games yet!
+              </Text>
+            )}
+          </Tab>
+        </Tabs>
+      </Content>
     </Container>
   );
 };

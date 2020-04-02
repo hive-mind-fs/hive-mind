@@ -74,18 +74,17 @@ router.get('/:userId', async (req, res, next) => {
   try {
     let userId = +req.params.userId;
 
-    console.log('USER IDDDDDDD', userId);
-
     let userStats = {
       totalScore: 0,
       roundsPlayed: 0,
-      wordsGotten: 0
+      wordsGotten: 0,
+      graphPoints: null
     };
 
     try {
       let userRounds = await UserRound.findAll({
         where: { userId: userId },
-        // where: { userId: 53 },
+        // where: { userId: 53 }, // In case you need it hardcoded
         attributes: USERROUND_ATTRIBUTES,
         include: [
           { model: Word, attributes: WORD_ATTRIBUTES },
@@ -97,23 +96,25 @@ router.get('/:userId', async (req, res, next) => {
         ]
       });
 
-      userStats.totalScore = userRounds
-        .map(userRound => userRound.score)
-        .reduce((acc, curr) => acc + curr);
+      if (userRounds.length > 0) {
+        userStats.totalScore = userRounds
+          .map(userRound => userRound.score)
+          .reduce((acc, curr) => acc + curr);
 
-      userStats.roundsPlayed = userRounds.length;
+        userStats.roundsPlayed = userRounds.length;
 
-      userStats.wordsGotten = userRounds
-        .map(userRound => userRound.words.length)
-        .reduce((acc, curr) => acc + curr);
+        userStats.wordsGotten = userRounds
+          .map(userRound => userRound.words.length)
+          .reduce((acc, curr) => acc + curr);
 
-      // userStats.graphPoints = userRounds.map(userRound => {
-      //   return {
-      //     label: userRound.round.letters,
-      //     player: userRound.score,
-      //     totalPossible: userRound.possiblePoints
-      //   };
-      // });
+        userStats.graphPoints = userRounds.map(userRound => {
+          return {
+            label: userRound.round.letters,
+            player: userRound.score,
+            totalPossible: userRound.round.possiblePoints
+          };
+        });
+      }
     } catch (err) {
       next(err);
     }
