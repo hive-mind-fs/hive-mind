@@ -48,7 +48,8 @@ const puzzleMaster = (dict: any, minLen: number, maxLets: number) => {
   let boardSet = new Set();
   let puzzles = [];
   loop1: for (let i = 0; i < dict.length; i++) {
-    let word = dict[i];
+    let word = dict[i][0];
+    let idx = dict[i][1];
     if (word.length < minLen) {
       continue;
     }
@@ -71,8 +72,8 @@ const puzzleMaster = (dict: any, minLen: number, maxLets: number) => {
     wordsByVector.set(
       vector,
       wordsByVector.has(vector)
-        ? [...wordsByVector.get(vector), word]
-        : new Array(word)
+        ? [...wordsByVector.get(vector), word, idx]
+        : new Array(word, idx)
     );
     if (distinctLetterCount === maxLets) {
       if (!boardSet.has(vector) ? boardSet.add(vector) : false) {
@@ -91,7 +92,9 @@ const addSolutions = (
   hashmap: Map<number, any[]>
 ) => {
   if (Vopt === 0) {
-    result.push(hashmap.has(Vreq) ? hashmap.get(Vreq) : null);
+    result.push(
+      hashmap.has(Vreq) ? [hashmap.get(Vreq)[0], hashmap.get(Vreq)[1]] : null
+    );
   } else {
     let nextOneHot = firstSetBit(Vopt);
     let expandedVreq = Vreq | nextOneHot;
@@ -193,7 +196,8 @@ const SolvePuzzles = async (dictPath: string) => {
 
   console.log('Reading dictionary...');
   const dict = await readFileAsync(__dirname + dictPath, 'utf8');
-  const words = await dict.split('\n'); //read into array of words
+  // const words = await dict.split('\n'); //read into array of words
+  const words = dict.split('\n').map((word, idx) => [word, idx + 1]);
 
   console.log('Generating puzzles...');
   const { wordsByVector } = puzzleMaster(words, 4, 7); //Create the hash map for dictionary
@@ -201,9 +205,9 @@ const SolvePuzzles = async (dictPath: string) => {
 
   console.log('Solutions:');
   console.log(solver(puzzles, wordsByVector)); //If you dont do the write file: ⏱  SolvePuzzles took 1421.117 milliseconds
-
-  // const gameData = JSON.stringify(solver(puzzles, hashmap)); //Else: ⏱  SolvePuzzles took 2939.944 milliseconds.
-  // await writeFileAsync(__dirname + '/Solutions.json', gameData);
+  //console.log(wordsByVector);
+  const gameData = JSON.stringify(solver(puzzles, wordsByVector)); //Else: ⏱  SolvePuzzles took 2939.944 milliseconds.
+  await writeFileAsync(__dirname + '/Solutions.json', gameData);
 
   const t1 = performance.now();
   benchmark(t0, t1, 'SolvePuzzles');
