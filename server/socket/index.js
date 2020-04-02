@@ -22,7 +22,7 @@ module.exports = io => {
 
       if (Object.keys(users).length === 1) {
         // TO DO: get a round once
-        round = await Round.getRandom();
+        round = await Round.getRandom({ include: [{ model: Word }] });
         // round = await Round.getRandom({
         //   include: [{ model: Word, attributes: ['word', 'id'] }]
         // });
@@ -36,10 +36,12 @@ module.exports = io => {
       }
     });
 
-    socket.on('game start', data => {
-      const userData = JSON.parse(data);
-      console.log(`Weve got data from the gameboard`); //, gameData);
-      conosle.log('userData:', userData);
+    socket.on('game start', function(data) {
+      const v1Room = `room_${roomCtr}`;
+      const userData = data;
+      console.log(`Weve got data from the gameboard`, userData);
+      socket.to(v1Room).emit('opponent', { userData });
+      socket.emit('opponent', { data });
     });
 
     socket.on('leave room', function(data) {

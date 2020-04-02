@@ -2,14 +2,15 @@
 const db = require('../server/db');
 const fs = require('fs');
 const readline = require('readline');
-const { read, getPossiblePoints } = require('../dictionary');
+const { generateRounds } = require('../dictionary');
 
 const {
   User,
   Round,
   Game,
   Word,
-  UserRound
+  UserRound,
+  GuessedWord
 } = require('../server/db/models');
 
 const dummyUsers = require('../server/db/dummyData/dummyUsers.js');
@@ -21,59 +22,55 @@ async function seed() {
   await User.bulkCreate(dummyUsers);
   await Game.bulkCreate(dummyGames);
 
-  // Get rounds from algo.ts (after running ts-node dictionary/Algo.ts, add to npm run seed)
-  const roundsJSON = await read('../dictionary/Solutions.json')
-  const rounds = JSON.parse(roundsJSON)
+  // Stream seed rounds without words associations
+  const ROUNDS_FILE = 'allPossibleRounds.txt';
+  const PANGRAM_WORDS_FILE = 'pangramWords.txt';
+  await generateRounds(ROUNDS_FILE, PANGRAM_WORDS_FILE); // writes rounds to a file
 
-  const allRoundWordAssociations = []
-  const roundModels = []
+  const readStream = fs.createReadStream(ROUNDS_FILE);
+  const lines = readline.createInterface({
+    input: readStream,
+    crlfDelay: Infinity
+  });
 
-  // Seed rounds without words associations
-  rounds.map((round, roundIndex) => {
+  console.log(`seeding rounds`);
+  const distinctWords = {};
+  for await (const line of lines) {
+    const generatedRound = JSON.parse(line);
+    await Round.create(generatedRound);
+    generatedRound.words.forEach(([idx, word]) => {
+      distinctWords[+idx] = word;
+    });
+  }
 
-    // Create and push round model
-    const coreLetter = round[0]
-    const letters = round[1]
-    const wordsAndIndices = round[3]
-    const words = wordsAndIndices.filter((word, index) => !(index % 2))
-    const pangramList = round[2][0]
-    const possiblePoints = getPossiblePoints(words, pangramList)
-    roundModels.push({letters, coreLetter, pangramList, possiblePoints})
+  const words = Object.entries(distinctWords).map(([idx, word]) => ({
+    id: idx,
+    word: word
+  }));
 
-    // Create and push roundWords model
-    const wordIndices = wordsAndIndices.filter((word, index) => index % 2)
-    const roundWordAssociations = wordIndices.map(wordIndex => ({roundId: roundIndex + 1, wordId: wordIndex}))
-    allRoundWordAssociations.push(roundWordAssociations)
-  })
-
-  console.log(roundModels)
-  console.log(`seeding ${roundModels.length} distinct rounds`)
-
-  //await Round.bulkCreate(roundModels)
-
-  //console.log(`word 79651 is`, distinctWords[79651])
-
-  // Seed distinct words
-  // Just do that via reading the dictionary
-
-  // Object.keys(distinctWords).forEach(index => (wordModels.push({word: distinctWords[index], id: index + 1})))
-
-  // console.log('a wordModel:', wordModels[0])
-  // await Word.bulkCreate(wordModels.slice(0,10))
+  console.log(`seeding ${words.length} distinct words`);
+  await Word.bulkCreate(words);
 
   // Seed associations manually
-  // console.log(`seeding round word associations`);
-  // let roundIdx = 0;
-  // for await (const line of roundModels) {
-  //   roundIdx++;
-  //   const generatedRound = JSON.parse(line);
 
-  //   const roundWords = generatedRound.words.map(([wordIdx, word]) => ({
-  //     roundId: roundIdx,
-  //     wordId: +wordIdx
-  //   }));
-  //   await db.model('roundWords').bulkCreate(roundWords);
-  // }
+  const readStreamAssociations = fs.createReadStream(ROUNDS_FILE);
+  const linesAssociations = readline.createInterface({
+    input: readStreamAssociations,
+    crlfDelay: Infinity
+  });
+
+  console.log(`seeding round word associations`);
+  let roundIdx = 0;
+  for await (const line of linesAssociations) {
+    roundIdx++;
+    const generatedRound = JSON.parse(line);
+
+    const roundWords = generatedRound.words.map(([wordIdx, word]) => ({
+      roundId: roundIdx,
+      wordId: +wordIdx
+    }));
+    await db.model('roundWords').bulkCreate(roundWords);
+  }
 
   // Seed game & winner associations for first 50 rounds
   for (let i = 1; i <= 50; i++) {

@@ -16,7 +16,7 @@ import {
   getInitialStateFromProps
 } from './gameBoardController';
 
-function GameBoardScreen(props, { user }) {
+function GameBoardScreen(props) {
   const {
     cl,
     otherLetters,
@@ -35,28 +35,21 @@ function GameBoardScreen(props, { user }) {
   const [gameTimer, setGameTimer] = useState(300);
   const [isActive, toggleActive] = useState(true);
   const [gameStart, setGameStart] = useState(true);
-
-  console.log(
-    'these are the props',
-    props,
-    'this is the username:',
-    props.user.username,
-    ',this is the user photo:',
-    props.user.photo
-  );
+  const [opponentData, setOpponentData] = useState({});
 
   useEffect(() => {
+    console.log('were in the use effect');
     if (gameStart) {
-      socket.emit(
-        'game start',
-        JSON.stringify({
-          user: props.user,
-          username: props.user.username,
-          photo: props.user.photo
-        })
-      );
+      socket.emit('game start', {
+        user: props.user.username,
+        photo: props.user.photo
+      });
       setGameStart(false);
     }
+    socket.on('opponent', function(data) {
+      setOpponentData(data);
+      console.log('this is your oponents data', data);
+    });
   }); //, [gameStart]); //only run once ...
 
   // useEffect(() => {
