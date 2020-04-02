@@ -25,30 +25,41 @@ async function seed() {
   const roundsJSON = await read('../dictionary/Solutions.json')
   const rounds = JSON.parse(roundsJSON)
 
-  const distinctWords = new Set()
+  const allRoundWordAssociations = []
+  const roundModels = []
 
   // Seed rounds without words associations
-  const roundModels = []
-  for (const round of rounds) {
+  rounds.map((round, roundIndex) => {
+
+    // Create and push round model
     const coreLetter = round[0]
     const letters = round[1]
-    const words = round[3]
-    const pangramList = round[2]
+    const wordsAndIndices = round[3]
+    const words = wordsAndIndices.filter((word, index) => !(index % 2))
+    const pangramList = round[2][0]
     const possiblePoints = getPossiblePoints(words, pangramList)
     roundModels.push({letters, coreLetter, pangramList, possiblePoints})
-    words.forEach(word => distinctWords.add(word))
-  }
 
-  await Round.bulkCreate(roundModels)
+    // Create and push roundWords model
+    const wordIndices = wordsAndIndices.filter((word, index) => index % 2)
+    const roundWordAssociations = wordIndices.map(wordIndex => ({roundId: roundIndex + 1, wordId: wordIndex}))
+    allRoundWordAssociations.push(roundWordAssociations)
+  })
 
-  const distinctWordsArray = Array.from(distinctWords)
-  console.log(`a word is ${distinctWordsArray[0]}`)
+  console.log(roundModels)
+  console.log(`seeding ${roundModels.length} distinct rounds`)
+
+  //await Round.bulkCreate(roundModels)
+
+  //console.log(`word 79651 is`, distinctWords[79651])
 
   // Seed distinct words
-  const wordModels = distinctWordsArray.map((word, index) => {return {id: index + 1, word: word}})
+  // Just do that via reading the dictionary
 
-  console.log(`seeding ${wordModels.length} distinct words`)
-  await Word.bulkCreate(wordModels.slice(0,10))
+  // Object.keys(distinctWords).forEach(index => (wordModels.push({word: distinctWords[index], id: index + 1})))
+
+  // console.log('a wordModel:', wordModels[0])
+  // await Word.bulkCreate(wordModels.slice(0,10))
 
   // Seed associations manually
   // console.log(`seeding round word associations`);
