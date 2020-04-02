@@ -86,9 +86,9 @@ router.get('/leaderboard', async (req, res, next) => {
 
       leaderboardObj = leaderboard.map(rank => {
         return {
+          totalScore: rank.dataValues.totalScore,
           username: rank.user.username,
-          photo: rank.user.photo,
-          totalScore: rank.totalScore
+          photo: rank.user.photo
         };
       });
     } catch (err) {

@@ -60,7 +60,7 @@ const LeaderboardScreen = ({ navigation, getLeaderboard, leaderboard }) => {
     leaderboard.length > 0 ? (
       <FlatList
         data={leaderboard}
-        keyExtractor={(item, idx) => item.idx}
+        keyExtractor={(item, idx) => item + idx}
         renderItem={({ item }) => (
           <ListItem avatar>
             <Left>
