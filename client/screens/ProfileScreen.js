@@ -14,66 +14,32 @@ import {
 import { connect } from 'react-redux';
 import { Stats, Logo, BarChartStacked, BarChartGrouped } from '../components';
 import { logout, getUserStats } from '../store';
-import { getInitialStateFromProps } from './profileController';
 
 const ProfileScreen = ({
   user,
   navigation,
   handleLogout,
   getUserStats,
-  userRounds
+  userStats
 }) => {
-  // const [userStats, setUserStats] = useState(preGameTimer);
-  let userTotalScore = '-';
-  let userRoundsPlayed = '-';
-  let userWordsGotten = '-';
-  let userPointsGraphData = '-';
+  useEffect(() => {
+    getUserStats(user.id);
+  }, []);
 
-  getUserStats();
-
-  // [userStats, setUserStats] = useState(getUserStats());
-  // [userTotalScore, setUserTotalScore] = useState('-');
-  // [userRoundsPlayed, setUserRoundsPlayed] = useState('-');
-  // [userWordsGotten, setUserWordsGotten] = useState('-');
-  // Reset timer when screen is loaded
-  // useEffect(() => {
-  //   getUserStats();
-
-  //   setUserTotalScore(
-  //     userRounds
-  //       .map(userRound => userRound.score)
-  //       .reduce((acc, curr) => acc + curr)
-  //   );
-
-  //   userRoundsPlayed = userRounds.length;
-
-  //   userWordsGotten = userRounds
-  //     .map(userRound => userRound.words.length)
-  //     .reduce((acc, curr) => acc + curr);
-
-  //   userPointsGraphData = userRounds.map(userRound => {
-  //     return {
-  //       label: userRound.round.letters,
-  //       player: userRound.score,
-  //       totalPossible: userRound.possiblePoints
-  //     };
-  //   });
-  // });
-
-  // const stats = [
-  //   {
-  //     title: 'Total Score',
-  //     stat: `${userTotalScore}`
-  //   },
-  //   {
-  //     title: 'Games Played',
-  //     stat: `${userRoundsPlayed}`
-  //   },
-  //   {
-  //     title: 'Words Gotten',
-  //     stat: `${userWordsGotten}`
-  //   }
-  // ];
+  const stats = [
+    {
+      title: 'Total Score',
+      stat: `${userStats.totalScore}`
+    },
+    {
+      title: 'Games Played',
+      stat: `${userStats.roundsPlayed}`
+    },
+    {
+      title: 'Words Gotten',
+      stat: `${userStats.wordsGotten}`
+    }
+  ];
 
   const games = [
     {
@@ -89,8 +55,6 @@ const ProfileScreen = ({
       stat: '34'
     }
   ];
-
-  // console.log('USER GRAPH DATA', userPointsGraphData);
 
   return (
     <Container>
@@ -128,7 +92,7 @@ const ProfileScreen = ({
           //   var { x, y, width, height } = event.nativeEvent.layout;
           // }}
           >
-            {/* <Stats stats={stats} /> */}
+            <Stats stats={stats} />
             {/* <BarChartStacked round="50" data={userPointsGraphData} /> */}
             {/* <BarChartGrouped width={320} round={1} unit="€" /> */}
           </View>
@@ -156,7 +120,7 @@ const styles = StyleSheet.create({
 const mapState = state => {
   return {
     user: state.user,
-    userRounds: state.game.userRounds
+    userStats: state.game.userStats
   };
 };
 

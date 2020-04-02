@@ -72,10 +72,18 @@ router.put('/:practiceRoundId', async (req, res, next) => {
 
 router.get('/:userId', async (req, res, next) => {
   try {
-    const { userId } = +req.params;
-    let userRound = 'This sucks';
+    let userId = +req.params.userId;
+
+    console.log('USER IDDDDDDD', userId);
+
+    let userStats = {
+      totalScore: 0,
+      roundsPlayed: 0,
+      wordsGotten: 0
+    };
+
     try {
-      userRound = await UserRound.findAll({
+      let userRounds = await UserRound.findAll({
         where: { userId: userId },
         // where: { userId: 53 },
         attributes: USERROUND_ATTRIBUTES,
@@ -88,11 +96,29 @@ router.get('/:userId', async (req, res, next) => {
           }
         ]
       });
+
+      userStats.totalScore = userRounds
+        .map(userRound => userRound.score)
+        .reduce((acc, curr) => acc + curr);
+
+      userStats.roundsPlayed = userRounds.length;
+
+      userStats.wordsGotten = userRounds
+        .map(userRound => userRound.words.length)
+        .reduce((acc, curr) => acc + curr);
+
+      // userStats.graphPoints = userRounds.map(userRound => {
+      //   return {
+      //     label: userRound.round.letters,
+      //     player: userRound.score,
+      //     totalPossible: userRound.possiblePoints
+      //   };
+      // });
     } catch (err) {
       next(err);
     }
 
-    res.send(userRound);
+    res.send(userStats);
   } catch (err) {
     next(err);
   }

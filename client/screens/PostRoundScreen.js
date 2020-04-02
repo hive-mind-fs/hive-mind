@@ -1,5 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
+import { View } from 'react-native';
 import { Button, Card, Container, H1, Text } from 'native-base';
 import { Stats, Logo } from '../components';
 import { fetchPracticeRound } from '../store/game';
@@ -23,9 +24,11 @@ function PostRoundScreen({ route, navigation, createUserRound, user }) {
     <Container>
       <Logo />
       <H1>Round Over</H1>
-      <Card style={{ marginTop: 20 }}>
+      {/* <Card style={{ marginTop: 20 }}> */}
+      <View>
         <Stats stats={postRound} words={words} />
-      </Card>
+      </View>
+      {/* </Card> */}
       <Card></Card>
 
       <Button

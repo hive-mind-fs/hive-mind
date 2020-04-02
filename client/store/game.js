@@ -5,9 +5,13 @@ import { BASE_URL } from '../utils/constants';
  * INITIAL STATE
  */
 const defaultGame = {
-  gameStatus: 'countdown',
   practiceRound: {},
-  userRounds: {}
+  // userStats: {}
+  userStats: {
+    totalScore: '-',
+    roundsPlayed: '-',
+    wordsGotten: '-'
+  }
 };
 
 /**
@@ -30,13 +34,9 @@ const savedPracticeRound = practiceRound => ({
   practiceRound
 });
 
-const gotUserStats = userRounds => ({
+const gotUserStats = userStats => ({
   type: GOT_USER_STATS,
-  userRounds: {
-    score,
-    totalRounds,
-    wordsGotten
-  }
+  userStats
 });
 
 /**
@@ -83,6 +83,7 @@ export const savePracticeRound = (
 export const getUserStats = userId => async dispatch => {
   try {
     let userStats;
+    console.log('USER IDDD THUNKKKKKKK', userId);
     try {
       userStats = await axios.get(`${BASE_URL}/api/userRounds/${userId}`);
     } catch (error) {
@@ -104,7 +105,7 @@ export default function(state = defaultGame, action) {
     case SAVED_PRACTICE_ROUND:
       return { ...state, practiceRound: action.practiceRound };
     case GOT_USER_STATS:
-      return { ...state, userRounds: action.userRounds };
+      return { ...state, userStats: action.userStats };
     default:
       return state;
   }
