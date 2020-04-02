@@ -10,7 +10,6 @@ const sessionStore = new SequelizeStore({ db });
 
 const PORT = process.env.PORT || 8080;
 const app = express();
-module.exports = app;
 
 // passport registration
 passport.serializeUser((user, done) => done(null, user.id));
@@ -103,3 +102,5 @@ if (require.main === module) {
 } else {
   createApp();
 }
+
+module.exports = app;
