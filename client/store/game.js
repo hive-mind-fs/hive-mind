@@ -6,13 +6,13 @@ import { BASE_URL } from '../utils/constants';
  */
 const defaultGame = {
   practiceRound: {},
-  // userStats: {}
   userStats: {
     totalScore: '-',
     roundsPlayed: '-',
     wordsGotten: '-',
     graphPoints: null
-  }
+  },
+  leaderboard: []
 };
 
 /**
@@ -21,6 +21,7 @@ const defaultGame = {
 const SET_PRACTICE_ROUND = 'SET_PRACTICE_ROUND';
 const SAVED_PRACTICE_ROUND = 'SAVED_PRACTICE_ROUND';
 const GOT_USER_STATS = 'GOT_USER_STATS';
+const GOT_LEADERBOARD = 'GOT_LEADERBOARD';
 
 /**
  * ACTION CREATORS
@@ -38,6 +39,11 @@ const savedPracticeRound = practiceRound => ({
 const gotUserStats = userStats => ({
   type: GOT_USER_STATS,
   userStats
+});
+
+const gotLeaderboard = leaderboard => ({
+  type: GOT_LEADERBOARD,
+  leaderboard
 });
 
 /**
@@ -89,7 +95,25 @@ export const getUserStats = userId => async dispatch => {
     } catch (error) {
       userStats = await axios.get(`/api/userRounds/${userId}`);
     }
-    dispatch(gotUserStats(userStats.data));
+
+    let response = userStats.data ? userStats.data : userStats;
+
+    dispatch(gotUserStats(response));
+  } catch (err) {
+    console.error(err);
+  }
+};
+
+export const getLeaderboard = () => async dispatch => {
+  try {
+    let leaderboard;
+
+    try {
+      leaderboard = await axios.get(`${BASE_URL}/api/userRounds/leaderboard`);
+    } catch (error) {
+      leaderboard = await axios.get(`/api/userRounds/leaderboard`);
+    }
+    dispatch(gotLeaderboard(leaderboard.data));
   } catch (err) {
     console.error(err);
   }
@@ -106,6 +130,8 @@ export default function(state = defaultGame, action) {
       return { ...state, practiceRound: action.practiceRound };
     case GOT_USER_STATS:
       return { ...state, userStats: action.userStats };
+    case GOT_LEADERBOARD:
+      return { ...state, leaderboard: action.leaderboard };
     default:
       return state;
   }

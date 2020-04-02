@@ -1,4 +1,5 @@
 const router = require('express').Router();
+const sequelize = require('sequelize');
 const { Round, Word, User, UserRound, GuessedWord } = require('../db/models');
 const { isAdmin, isCorrectUser, isSession } = require('./gateway');
 const {
@@ -68,8 +69,37 @@ router.put('/:practiceRoundId', async (req, res, next) => {
   }
 });
 
-// GET FOR STATS
+// GET FOR LEADERBOARD
+router.get('/leaderboard', async (req, res, next) => {
+  try {
+    let leaderboard = null;
+    try {
+      leaderboard = await UserRound.findAll({
+        attributes: [
+          [sequelize.fn('sum', sequelize.col('score')), 'totalScore']
+        ],
+        include: [{ model: User, attributes: ['id', 'username', 'photo'] }],
+        group: ['user.id']
+      });
 
+      // const stats = [
+      //   {
+      //     userId: '1',
+      //     title: 'Total Score',
+      //     stat: '1,234'
+      //   },
+      // ]
+    } catch (err) {
+      next(err);
+    }
+
+    res.send(leaderboard);
+  } catch (err) {
+    next(err);
+  }
+});
+
+// GET FOR STATS
 router.get('/:userId', async (req, res, next) => {
   try {
     let userId = +req.params.userId;

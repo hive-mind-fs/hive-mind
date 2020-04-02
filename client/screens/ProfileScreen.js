@@ -25,7 +25,6 @@ const ProfileScreen = ({
 }) => {
   useEffect(() => {
     getUserStats(user.id);
-    getUser();
   }, []);
 
   const stats = [
@@ -40,21 +39,6 @@ const ProfileScreen = ({
     {
       title: 'Words Gotten',
       stat: `${userStats.wordsGotten}`
-    }
-  ];
-
-  const games = [
-    {
-      title: 'PANGRAM',
-      stat: '234'
-    },
-    {
-      title: 'LETTERS',
-      stat: '341'
-    },
-    {
-      title: 'STUFFING',
-      stat: '34'
     }
   ];
 

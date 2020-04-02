@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { FlatList, StyleSheet } from 'react-native';
 import {
   Container,
@@ -15,10 +15,14 @@ import {
   Thumbnail
 } from 'native-base';
 import { connect } from 'react-redux';
-import { Stats } from '../components';
-import { logout } from '../store';
+// import { Stats } from '../components';
+import { getLeaderboard } from '../store';
 
-const LeaderboardScreen = ({ navigation, handleLogout }) => {
+const LeaderboardScreen = ({ navigation, getLeaderboard }) => {
+  useEffect(() => {
+    getLeaderboard();
+  }, []);
+
   const stats = [
     {
       userId: '1',
@@ -119,13 +123,14 @@ const styles = StyleSheet.create({
 
 const mapState = state => {
   return {
-    user: state.user
+    user: state.user,
+    leaderboard: state.game.leaderboard
   };
 };
 
 const mapDispatch = dispatch => {
   return {
-    handleLogout: () => dispatch(logout())
+    getLeaderboard: () => dispatch(getLeaderboard())
   };
 };
 
