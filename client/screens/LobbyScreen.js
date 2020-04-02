@@ -39,7 +39,7 @@ const LobbyScreen = ({ navigation, create1v1Round, user }) => {
   }, [users]);
 
   const handlePlay = () => {
-    navigation.navigate('CountdownScreen');
+    navigation.navigate('CountdownScreen', { user: user });
   };
 
   const handleLeaving = () => {

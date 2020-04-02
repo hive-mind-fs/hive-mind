@@ -15,7 +15,7 @@ import {
   getInitialStateFromProps
 } from './gameBoardController';
 
-function GameBoardScreen(props) {
+function GameBoardScreen(props, { user }) {
   const {
     cl,
     otherLetters,
@@ -34,22 +34,29 @@ function GameBoardScreen(props) {
   [gameTimer, setGameTimer] = useState(300);
   [isActive, toggleActive] = useState(true);
 
-  useEffect(() => {
-    setTimeout(() => {
-      if (gameTimer > 0) {
-        setGameTimer(gameTimer - 1);
-      } else {
-        let userWords = roundDictObjs.filter(word =>
-          correctWords.includes(word.word)
-        );
-        props.saveRound(props.round.id, score, userWords);
-        props.navigation.navigate('PostRoundScreen', {
-          words: userWords,
-          score: score
-        });
-      }
-    }, 1000);
-  }, [gameTimer]);
+  console.log(
+    'these are the props',
+    props,
+    'this is the user',
+    props.user.username
+  );
+  useEffect(() => {});
+  // useEffect(() => {
+  //   setTimeout(() => {
+  //     if (gameTimer > 0) {
+  //       setGameTimer(gameTimer - 1);
+  //     } else {
+  //       let userWords = roundDictObjs.filter(word =>
+  //         correctWords.includes(word.word)
+  //       );
+  //       props.saveRound(props.round.id, score, userWords);
+  //       props.navigation.navigate('PostRoundScreen', {
+  //         words: userWords,
+  //         score: score
+  //       });
+  //     }
+  //   }, 1000);
+  // }, [gameTimer]);
 
   err = str => {
     setError([...error, str]);
@@ -220,7 +227,8 @@ const styles = StyleSheet.create({
 
 const mapState = state => {
   return {
-    round: state.game.round
+    round: state.game.round,
+    user: state.user
   };
 };
 
