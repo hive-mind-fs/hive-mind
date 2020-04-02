@@ -15,6 +15,7 @@ import {
   LoginScreen,
   PlayScreen,
   PostRoundScreen,
+  PostRound1v1Screen,
   ProfileScreen,
   RulesScreen,
   SignupScreen,
@@ -27,8 +28,9 @@ import { StyleProvider } from 'native-base';
 import getTheme from './native-base-theme/components';
 import customMaterial from './native-base-theme/variables/customMaterial';
 
-// establishes socket connection
 import './socket';
+console.disableYellowBox = true;
+
 
 const Stack = createStackNavigator();
 
@@ -79,6 +81,13 @@ const after = (
   <Stack.Screen
     name="PostRoundScreen"
     component={PostRoundScreen}
+    options={{ headerShown: false }}
+  />
+);
+const after1v1 = (
+  <Stack.Screen
+    name="PostRound1v1Screen"
+    component={PostRound1v1Screen}
     options={{ headerShown: false }}
   />
 );
@@ -162,12 +171,11 @@ export function App() {
           <NavigationContainer>
             <Stack.Navigator>
               {home}
-              {/* {play} */}
               {rules}
               {countdown}
               {game}
               {after}
-              {/* {profile} */}
+              {after1v1}
               {landing}
               {login}
               {signup}
@@ -188,12 +196,11 @@ export function App() {
               {landing}
               {signup}
               {home}
-              {/* {play} */}
               {rules}
               {countdown}
               {game}
               {after}
-              {/* {profile} */}
+              {after1v1}
               {login}
             </Stack.Navigator>
           </NavigationContainer>
