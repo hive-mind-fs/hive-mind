@@ -73,18 +73,24 @@ router.put('/:practiceRoundId', async (req, res, next) => {
 router.get('/:userId', async (req, res, next) => {
   try {
     const { userId } = +req.params;
-
-    const userRound = await UserRound.findAll({
-      where: { userId: userId },
-      attributes: USERROUND_ATTRIBUTES,
-      include: [
-        {
-          model: Round,
-          attributes: ROUND_ATTRIBUTES,
-          include: [{ model: Word }]
-        }
-      ]
-    });
+    let userRound = 'This sucks';
+    try {
+      userRound = await UserRound.findAll({
+        where: { userId: userId },
+        // where: { userId: 53 },
+        attributes: USERROUND_ATTRIBUTES,
+        include: [
+          { model: Word, attributes: WORD_ATTRIBUTES },
+          {
+            model: Round,
+            attributes: ROUND_ATTRIBUTES,
+            include: [{ model: Word }]
+          }
+        ]
+      });
+    } catch (err) {
+      next(err);
+    }
 
     res.send(userRound);
   } catch (err) {

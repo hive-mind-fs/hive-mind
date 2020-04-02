@@ -6,7 +6,8 @@ import { BASE_URL } from '../utils/constants';
  */
 const defaultGame = {
   gameStatus: 'countdown',
-  practiceRound: {}
+  practiceRound: {},
+  userRounds: {}
 };
 
 /**
@@ -14,6 +15,7 @@ const defaultGame = {
  */
 const SET_PRACTICE_ROUND = 'SET_PRACTICE_ROUND';
 const SAVED_PRACTICE_ROUND = 'SAVED_PRACTICE_ROUND';
+const GOT_USER_STATS = 'GOT_USER_STATS';
 
 /**
  * ACTION CREATORS
@@ -26,6 +28,15 @@ const setPracticeRound = practiceRound => ({
 const savedPracticeRound = practiceRound => ({
   type: SAVED_PRACTICE_ROUND,
   practiceRound
+});
+
+const gotUserStats = userRounds => ({
+  type: GOT_USER_STATS,
+  userRounds: {
+    score,
+    totalRounds,
+    wordsGotten
+  }
 });
 
 /**
@@ -69,6 +80,20 @@ export const savePracticeRound = (
   }
 };
 
+export const getUserStats = userId => async dispatch => {
+  try {
+    let userStats;
+    try {
+      userStats = await axios.get(`${BASE_URL}/api/userRounds/${userId}`);
+    } catch (error) {
+      userStats = await axios.get(`/api/userRounds/${userId}`);
+    }
+    dispatch(gotUserStats(userStats.data));
+  } catch (err) {
+    console.error(err);
+  }
+};
+
 /**
  * REDUCER
  */
@@ -78,6 +103,8 @@ export default function(state = defaultGame, action) {
       return { ...state, practiceRound: action.practiceRound };
     case SAVED_PRACTICE_ROUND:
       return { ...state, practiceRound: action.practiceRound };
+    case GOT_USER_STATS:
+      return { ...state, userRounds: action.userRounds };
     default:
       return state;
   }

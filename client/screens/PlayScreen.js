@@ -9,7 +9,6 @@ function PlayScreen({ navigation, createUserRound, user }) {
 
   const handleSubmit = () => {
     console.log('user id', user.id);
-    console.log('user id', user.id);
     createUserRound(user.id);
     navigation.navigate('CountdownScreen');
   };
