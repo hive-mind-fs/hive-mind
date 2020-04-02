@@ -9,6 +9,15 @@ const {
 
 module.exports = router;
 
+router.get('/:userId', async (req, res, next) => {
+  try {
+    const round = await Round.getRandom();
+    res.send(round);
+  } catch (err) {
+    next(err);
+  }
+});
+
 // Create
 // Given user id, create new user rounds entry with random round
 router.post('/:userId', async (req, res, next) => {

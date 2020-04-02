@@ -1,5 +1,6 @@
 const Sequelize = require('sequelize');
 const db = require('../db');
+const Word = require('./word');
 
 const Round = db.define('round', {
   letters: {
@@ -44,9 +45,10 @@ Round.beforeBulkCreate(Round => {
  * Class Methods
  **/
 
-Round.getRandom = async function() {
+Round.getRandom = async function(options = {}) {
   const round = await Round.findOne({
-    order: [Sequelize.fn('RANDOM')]
+    order: [Sequelize.fn('RANDOM')],
+    ...options
   });
   return round;
 };

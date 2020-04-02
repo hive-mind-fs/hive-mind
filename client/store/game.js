@@ -31,15 +31,10 @@ const savedPracticeRound = practiceRound => ({
 /**
  * THUNK CREATORS
  */
-export const fetchPracticeRound = userId => async dispatch => {
+export const fetchPracticeRound = () => async dispatch => {
   try {
-    let practiceRound;
-    try {
-      practiceRound = await axios.post(`${BASE_URL}/api/userRounds/${userId}`);
-    } catch (error) {
-      practiceRound = await axios.post(`/api/userRounds/${userId}`);
-    }
-    dispatch(setPracticeRound(practiceRound.data));
+    const { data } = await axios.get(`${BASE_URL}/api/puzzle/random`);
+    dispatch(setPracticeRound(data));
   } catch (err) {
     console.error(err);
   }

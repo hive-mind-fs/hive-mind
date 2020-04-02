@@ -1,6 +1,6 @@
 const router = require('express').Router();
 
-router.use('/rounds', require('./rounds'));
+router.use('/puzzle', require('./puzzle'));
 router.use('/userRounds', require('./userRounds'));
 
 router.use((req, res, next) => {

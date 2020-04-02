@@ -4,7 +4,7 @@ import { Button, Card, Container, H1, Text } from 'native-base';
 import { Stats, Logo } from '../components';
 import { fetchPracticeRound } from '../store/game';
 
-function PostRoundScreen({ route, navigation, createUserRound, user }) {
+function PostRoundScreen({ getPuzzle, route, navigation }) {
   const words = route.params.words;
   const score = route.params.score;
 
@@ -33,7 +33,7 @@ function PostRoundScreen({ route, navigation, createUserRound, user }) {
         rounded
         title="Play Again"
         onPress={() => {
-          createUserRound(user.id);
+          getPuzzle();
           navigation.navigate('HomeScreen', { screen: 'CountdownScreen' });
         }}
       >
@@ -62,7 +62,7 @@ const mapState = state => {
 
 const mapDispatch = dispatch => {
   return {
-    createUserRound: userId => dispatch(fetchPracticeRound(userId))
+    getPuzzle: () => dispatch(fetchPracticeRound())
   };
 };
 

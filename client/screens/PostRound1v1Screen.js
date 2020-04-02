@@ -6,7 +6,7 @@ import { Button, Footer, Card, Container, H1, H3, Text } from 'native-base';
 import { Stats, Logo, BarChartGrouped } from '../components';
 import { fetchPracticeRound } from '../store/game';
 
-function PostRound1v1Screen({ route, navigation, createUserRound, user }) {
+function PostRound1v1Screen({ getPuzzle, navigation }) {
   //   const words = route.params.words;
   //   const score = route.params.score;
 
@@ -72,7 +72,7 @@ function PostRound1v1Screen({ route, navigation, createUserRound, user }) {
           marginTopL
           title="Play Again"
           onPress={() => {
-            createUserRound(user.id);
+            getPuzzle();
             navigation.navigate('HomeScreen', { screen: 'CountdownScreen' });
           }}
         >
@@ -145,7 +145,7 @@ const mapState = state => {
 
 const mapDispatch = dispatch => {
   return {
-    createUserRound: userId => dispatch(fetchPracticeRound(userId))
+    getPuzzle: () => dispatch(fetchPracticeRound())
   };
 };
 
