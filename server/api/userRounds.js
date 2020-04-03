@@ -107,8 +107,8 @@ router.get('/leaderboard', async (req, res, next) => {
           [sequelize.fn('sum', sequelize.col('score')), 'totalScore']
         ],
         include: [{ model: User, attributes: ['id', 'username', 'photo'] }],
-        group: ['user.id']
-        // order: sequelize.literal('totalScore DESC'),
+        group: ['user.id'],
+        order: sequelize.col('totalScore'),
       });
 
       leaderboardObj = leaderboard
@@ -124,7 +124,7 @@ router.get('/leaderboard', async (req, res, next) => {
       next(err);
     }
 
-    res.send(leaderboardObj);
+    res.send(leaderboard);
   } catch (err) {
     next(err);
   }
