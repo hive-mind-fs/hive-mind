@@ -22,7 +22,7 @@ async function seed() {
   const distinctWords = {};
 
   // Seed rounds without words associations
-  rounds.slice(0, 100).map((round, roundIndex) => {
+  rounds.map((round, roundIndex) => {
     // Create and push round model
     const coreLetter = round[0];
     const letters = round[1];
@@ -92,15 +92,7 @@ async function seed() {
   const user1 = await User.findByPk(1);
   await defaultRound.setWinner(user1);
 
-  // don't really need this anymore, function below should work
-  // const user2 = await User.findByPk(2);
-  // const user3 = await User.findByPk(3);
-  // const user4 = await User.findByPk(4);
-  // //Seed userRounds thru table
-  // await defaultRound.addUsers([user1, user2, user3, user4]);
-
   // Seed userRounds
-  // NEEDS TO BE TESTED
   const userRoundsToCreate = async () => {
     let arr = [];
     let numRounds;
@@ -125,22 +117,22 @@ async function seed() {
           roundId,
           score
         };
-        await UserRound.findOrCreate(userRoundToAdd);
+        const userRound = await UserRound.findOne({ where: { userId: userId, roundId: roundId} });
+        if (userRound) {
+          console.log('user round exists', userRound)
+          userRound.score = score
+          await userRound.save
+        } else {
+          console.log('user round no exist', userRound)
+          await UserRound.create(userRoundToAdd)
+        }
       }
     }
     // console.log()
     return arr;
   };
 
-  console.log(`seeding ${userRoundsToCreate().length} distinct userRounds`);
-  // await UserRound.findOrCreate(userRoundsToCreate());
-
-  // guessedWords seeding
-  // Need to finish creating this...
-  // await GuessedWord.bulkCreate(guessedWordsToCreate);
-
-  //Seed UserRoundWords thru table aka "GuessedWords"
-  //Start by defining which users were in which rounds.
+  await userRoundsToCreate()
 }
 
 // We've separated the `seed` function from the `runSeed` function.
