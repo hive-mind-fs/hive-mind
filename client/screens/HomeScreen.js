@@ -52,7 +52,6 @@ export default function Nav() {
           )
         }}
       />
-      <Tab.Screen name="LobbyScreen" component={LobbyScreen} />
     </Tab.Navigator>
   );
 }

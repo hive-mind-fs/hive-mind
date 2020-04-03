@@ -133,6 +133,7 @@ export default class BarChartStacked extends PureComponent {
 
             {/* top axis */}
             <Line
+              key="top-axis"
               x1="0"
               y1={y(topValue) * -1}
               x2={graphWidth}
@@ -144,6 +145,7 @@ export default class BarChartStacked extends PureComponent {
 
             {/* bottom axis */}
             <Line
+              key="bottom-axis"
               x1="0"
               y1="2"
               x2={graphWidth}
@@ -154,6 +156,7 @@ export default class BarChartStacked extends PureComponent {
 
             {/* left axis */}
             <Line
+              key="left-axis"
               x1="0"
               y1="2"
               x2="0"
@@ -164,7 +167,7 @@ export default class BarChartStacked extends PureComponent {
 
             {/* bars */}
             {data.map((item, idx) => (
-              <>
+              <Fragment key={'fragment' + idx}>
                 <Rect
                   key={'bar-possible' + item.label}
                   x={x(item.label) - GRAPH_BAR_WIDTH + 15}
@@ -183,7 +186,7 @@ export default class BarChartStacked extends PureComponent {
                   height={y(item.player)}
                   fill={colors.bars1}
                 />
-              </>
+              </Fragment>
             ))}
 
             {/* X labels */}
@@ -201,8 +204,8 @@ export default class BarChartStacked extends PureComponent {
               Points
             </Text>
 
-            {yValues().map(yValue => (
-              <>
+            {yValues().map((yValue, idx) => (
+              <Fragment key={'fragment' + idx}>
                 <Text
                   key={yValue.value}
                   fontSize="8"
@@ -223,7 +226,7 @@ export default class BarChartStacked extends PureComponent {
                   strokeDasharray={[3, 3]}
                   strokeWidth="0.5"
                 />
-              </>
+              </Fragment>
             ))}
           </G>
         </Svg>

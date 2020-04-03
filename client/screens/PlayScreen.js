@@ -10,10 +10,10 @@ function PlayScreen({ navigation, createUserRound, user }) {
   const handlePracticeRound = async () => {
     await createUserRound(user.id);
     navigation.navigate('PracticeRoundScreen');
-  }
+  };
 
   const handleRandomLobbying = () => {
-    navigation.navigate('HomeScreen', { screen: 'LobbyScreen' });
+    navigation.navigate('LobbyScreen');
   };
 
   return (
@@ -48,9 +48,9 @@ function PlayScreen({ navigation, createUserRound, user }) {
 
       <Button
         primary
-        block
         rounded
-        marginTopL
+        block
+        marginTop
         title="Practice"
         onPress={() => handlePracticeRound()}
       >
@@ -66,6 +66,16 @@ function PlayScreen({ navigation, createUserRound, user }) {
         onPress={() => navigation.navigate('RulesScreen')}
       >
         <Text>How To Play</Text>
+      </Button>
+
+      <Button
+        light
+        block
+        rounded
+        marginTop
+        onPress={() => navigation.navigate('PostRound1v1Screen')}
+      >
+        <Text>Post1v1</Text>
       </Button>
     </Container>
   );
