@@ -20,7 +20,8 @@ import {
   RulesScreen,
   SignupScreen,
   LobbyScreen,
-  PracticeRoundScreen
+  PracticeRoundScreen,
+  GameOfTheDayScreen
 } from './screens';
 import store, { getUser } from './store';
 import colors from './utils/styles';
@@ -132,6 +133,14 @@ const practiceRound = (
   />
 );
 
+const gameOfDay = (
+  <Stack.Screen
+    name="GameOfTheDayScreen"
+    component={GameOfTheDayScreen}
+    options={{ headerShown: false }}
+  />
+);
+
 const profile = <Stack.Screen name="ProfileScreen" component={ProfileScreen} />;
 
 export function App() {
@@ -179,6 +188,7 @@ export function App() {
               {signup}
               {lobby}
               {practiceRound}
+              {gameOfDay}
             </Stack.Navigator>
           </NavigationContainer>
         </StyleProvider>

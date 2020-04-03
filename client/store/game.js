@@ -12,7 +12,7 @@ const defaultGame = {
     wordsGotten: '-',
     graphPoints: []
   },
-  leaderboard: []
+  leaderboard: [],
   gameStatus: 'countdown',
   round: {},
   room: ''
