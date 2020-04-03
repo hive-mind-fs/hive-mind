@@ -68,7 +68,7 @@ async function seed() {
 
   const maxInserts = 100000
   for (let i = 0; i < allRoundWordAssociations.length; i = i + maxInserts) {
-    await db.model('roundWords').bulkCreate(allRoundWordAssociations.slice(0, i))
+    await db.model('roundWords').bulkCreate(allRoundWordAssociations.slice(i, i + maxInserts))
   }
 
   // Seed game & winner associations for first 50 rounds
