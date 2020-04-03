@@ -73,6 +73,7 @@ async function seed() {
   }
 
   // Seed game & winner associations for first 50 rounds
+  console.log(`seeding 50 game and winner associations`);
   for (let i = 1; i <= 50; i++) {
     //A game can have many rounds
     let game = await Game.findByPk(i);
@@ -86,54 +87,54 @@ async function seed() {
   }
 
   // Create default round 'ANONYMOUS'
-  // const DEFAULT_ROUND_ID = 368;
-  // const defaultRound = await Round.findByPk(DEFAULT_ROUND_ID);
-  // let game51 = await Game.findByPk(51);
-  // await game51.setWinner(1);
-  // await game51.addRound(defaultRound);
-  // await defaultRound.setWinner(user1);
+  const DEFAULT_ROUND_ID = 97;
+  const defaultRound = await Round.findByPk(DEFAULT_ROUND_ID);
+  let game51 = await Game.findByPk(51);
+  await game51.setWinner(1);
+  await game51.addRound(defaultRound);
+  const user1 = await User.findByPk(1);
+  await defaultRound.setWinner(user1);
 
-  // // don't really need this anymore, function below should work
-  // const user1 = await User.findByPk(1);
-  // const user2 = await User.findByPk(2);
-  // const user3 = await User.findByPk(3);
-  // const user4 = await User.findByPk(4);
-  // //Seed userRounds thru table
-  // await defaultRound.addUsers([user1, user2, user3, user4]);
+  // Seed userRounds
+  const userRoundsToCreate = async () => {
+    let arr = [];
+    let numRounds;
+    let roundId;
+    let score;
+    let userId;
+    let userRoundToAdd;
 
-  // seed userRounds
-  // NEEDS TO BE TESTED
-  // const userRoundsToCreate = () => {
-  //   let arr = [];
-  //   // create userRounds for userId 1-4
-  //   for (let i = 1; i <= 4; i++) {
-  //     let userId = i;
-  //     let numRounds = Math.floor(Math.random() * Math.floor(10) + 7); // Create diff num of rounds for each user so their stats are different (min 7 rounds for graphs)
+    // create userRounds for userId 1-4
+    for (let i = 1; i <= 4; i++) {
+      userId = i;
+      numRounds = Math.floor(Math.random() * Math.floor(10) + 7); // Create diff num of rounds for each user so their stats are different (min 7 rounds for graphs)
 
-  //     for let (j = 0; j < 5) {
-  //       let roundId = Math.floor(Math.random() * Math.floor(1000) + 1); // randomly pick a roundId
-  //       let score = Math.floor(Math.random() * Math.floor(100) + 1); // randomly pick a score
+      // Create userRounds for each user
+      for (let j = 0; j < numRounds; j++) {
+        roundId = Math.floor(Math.random() * 70 + 1); // randomly pick a roundId
+        score = Math.floor(Math.random() * 100 + 1); // randomly pick a score
 
-  //       // push userRound object into arr
-  //       arr.push({
-  //         userId,
-  //         roundId,
-  //         score
-  //       })
-  //     }
-  //   }
+        // push userRound object into arr
+        userRoundToAdd = {
+          userId,
+          roundId,
+          score
+        };
+        const userRound = await UserRound.findOne({
+          where: { userId: userId, roundId: roundId }
+        });
+        if (userRound) {
+          userRound.score = score
+          await userRound.save
+        } else {
+          await UserRound.create(userRoundToAdd)
+        }
+      }
+    }
+    return arr;
+  };
 
-  //   return arr
-  // };
-
-  // await UserRound.bulkCreate(userRoundsToCreate);
-
-  // guessedWords seeding
-  // Need to finish creating this...
-  // await GuessedWord.bulkCreate(guessedWordsToCreate);
-
-  //Seed UserRoundWords thru table aka "GuessedWords"
-  //Start by defining which users were in which rounds.
+  await userRoundsToCreate();
 }
 
 // We've separated the `seed` function from the `runSeed` function.

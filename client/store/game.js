@@ -102,7 +102,7 @@ export const saveRound = (
   roundId,
   score,
   correctWords,
-  opId
+  opId = null
 ) => async dispatch => {
   try {
     let round;
