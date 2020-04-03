@@ -1,12 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
 import { StyleSheet, View } from 'react-native';
-import { Button, Container, Text, Icon } from 'native-base';
+import { Button, Container, Text, Icon, Thumbnail } from 'native-base';
 import Hive from '../components/Hive';
 import Input from '../components/Input';
 import Error from '../components/Error';
 import CorrectWords from '../components/CorrectWords';
 import { saveRound } from '../store';
+import socket from '../socket';
 
 import {
   shuffle,
@@ -15,7 +16,7 @@ import {
   getInitialStateFromProps
 } from './gameBoardController';
 
-function GameBoardScreen(props) {
+function GameBoardScreen(props, { user }) {
   const {
     cl,
     otherLetters,
@@ -25,31 +26,55 @@ function GameBoardScreen(props) {
     possiblePoints
   } = getInitialStateFromProps(props);
 
-  [input, setInput] = useState([]);
-  [correctWords, setCorrectWords] = useState([]);
-  [lettersOrdering, setLettersOrdering] = useState(otherLetters);
-  [score, setScore] = useState(0);
-  [rank, setRank] = useState('Beginner');
-  [error, setError] = useState([]);
-  [gameTimer, setGameTimer] = useState(300);
-  [isActive, toggleActive] = useState(true);
+  const [input, setInput] = useState([]);
+  const [correctWords, setCorrectWords] = useState([]);
+  const [lettersOrdering, setLettersOrdering] = useState(otherLetters);
+  const [score, setScore] = useState(0);
+  const [rank, setRank] = useState('Beginner');
+  const [error, setError] = useState([]);
+  const [gameTimer, setGameTimer] = useState(300);
+  const [isActive, toggleActive] = useState(true);
+  const [gameStart, setGameStart] = useState(true);
+
+  console.log(
+    'these are the props',
+    props,
+    'this is the username:',
+    props.user.username,
+    ',this is the user photo:',
+    props.user.photo
+  );
 
   useEffect(() => {
-    setTimeout(() => {
-      if (gameTimer > 0) {
-        setGameTimer(gameTimer - 1);
-      } else {
-        let userWords = roundDictObjs.filter(word =>
-          correctWords.includes(word.word)
-        );
-        props.saveRound(props.round.id, score, userWords);
-        props.navigation.navigate('PostRoundScreen', {
-          words: userWords,
-          score: score
-        });
-      }
-    }, 1000);
-  }, [gameTimer]);
+    if (gameStart) {
+      socket.emit(
+        'game start',
+        JSON.stringify({
+          user: props.user,
+          username: props.user.username,
+          photo: props.user.photo
+        })
+      );
+      setGameStart(false);
+    }
+  }); //, [gameStart]); //only run once ...
+
+  // useEffect(() => {
+  //   setTimeout(() => {
+  //     if (gameTimer > 0) {
+  //       setGameTimer(gameTimer - 1);
+  //     } else {
+  //       let userWords = roundDictObjs.filter(word =>
+  //         correctWords.includes(word.word)
+  //       );
+  //       props.saveRound(props.round.id, score, userWords);
+  //       props.navigation.navigate('PostRoundScreen', {
+  //         words: userWords,
+  //         score: score
+  //       });
+  //     }
+  //   }, 1000);
+  // }, [gameTimer]);
 
   err = str => {
     setError([...error, str]);
@@ -93,23 +118,26 @@ function GameBoardScreen(props) {
   let secondsCalc = gameTimer - minutes * 60;
   let seconds = secondsCalc <= 9 ? '0' + secondsCalc : secondsCalc;
 
+  let profPic = props.user.photo + '.jpg';
+  // profPic = profPic + '.jpg';
+  console.log('profile picture', profPic);
   return (
     <Container style={styles.container}>
       <View style={styles.topBar}>
+        <Thumbnail center large source={{ uri: profPic }} />
+        {/* <Image style={styles.topBarPhoto} source={{ uri: props.user.photo }} /> */}
+        <Text style={styles.topBarItem}>
+          {score + ' '}
+          {props.user.username}
+        </Text>
         <Text style={styles.topBarItem}>
           <Icon classes={styles.topBarIcon} name="alarm" />
           {'  '}
           {minutes}:{seconds}
         </Text>
         <Text style={styles.topBarItem}>
-          <Icon classes={styles.topBarIcon} name="trophy" />
-          {'  '}
-          {score}
-        </Text>
-        <Text style={styles.topBarItem}>
-          <Icon classes={styles.topBarIcon} name="school" />
-          {'  '}
-          {rank}
+          {score + ' '}
+          {props.user.username}
         </Text>
       </View>
       <View style={styles.correctWordsCont}>
@@ -162,6 +190,74 @@ function GameBoardScreen(props) {
         </Button>
       </View>
     </Container>
+    // <Container style={styles.container}>
+    //   <View style={styles.topBar}>
+    //     <Text style={styles.topBarItem}>
+    //       <Icon classes={styles.topBarIcon} name="alarm" />
+    //       {'  '}
+    //       {minutes}:{seconds}
+    //     </Text>
+    //     <Text style={styles.topBarItem}>
+    //       <Icon classes={styles.topBarIcon} name="trophy" />
+    //       {'  '}
+    //       {score}
+    //     </Text>
+    //     <Text style={styles.topBarItem}>
+    //       <Icon classes={styles.topBarIcon} name="school" />
+    //       {'  '}
+    //       {rank}
+    //     </Text>
+    //   </View>
+    //   <View style={styles.correctWordsCont}>
+    //     <Text marginT10>You've found {correctWords.length} correct words</Text>
+    //     <CorrectWords words={correctWords.join('   ')} />
+    //   </View>
+    //   <View style={styles.inputCont}>
+    //     <Input style={styles.textCenter} inputLetters={input} />
+    //     <Error error={error} />
+    //   </View>
+    //   <Hive
+    //     style={styles.gameBoard}
+    //     centerLetter={cl} // comes from redux now
+    //     otherLetters={lettersOrdering}
+    //     onLetterPress={letter => handleLetterPress(letter)}
+    //   />
+    //   <View style={styles.flexRow}>
+    //     <Button
+    //       style={styles.gameButtons}
+    //       block
+    //       bordered
+    //       rounded
+    //       large
+    //       title="Delete"
+    //       onPress={() => handleDelete()}
+    //     >
+    //       <Text>Delete</Text>
+    //     </Button>
+    //     <Button
+    //       style={styles.gameButtons}
+    //       block
+    //       bordered
+    //       rounded
+    //       large
+    //       title="Shuffle"
+    //       onPress={() => handleShuffle()}
+    //     >
+    //       <Text>Shuffle</Text>
+    //     </Button>
+    //     <Button
+    //       style={styles.gameButtons}
+    //       block
+    //       bordered
+    //       rounded
+    //       large
+    //       title="Enter"
+    //       onPress={() => handleEnter()}
+    //     >
+    //       <Text>Enter</Text>
+    //     </Button>
+    //   </View>
+    // </Container>
   );
 }
 
@@ -180,6 +276,12 @@ const styles = StyleSheet.create({
   },
   topBarIcon: {
     paddingRight: 15
+  },
+  topBarPhoto: {
+    paddingRight: 15,
+    width: 10,
+    height: 10,
+    borderRadius: 50
   },
   correctWordsCont: {
     // flex: 1
@@ -220,7 +322,8 @@ const styles = StyleSheet.create({
 
 const mapState = state => {
   return {
-    round: state.game.round
+    round: state.game.round,
+    user: state.user
   };
 };
 

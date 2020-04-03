@@ -36,6 +36,12 @@ module.exports = io => {
       }
     });
 
+    socket.on('game start', data => {
+      const userData = JSON.parse(data);
+      console.log(`Weve got data from the gameboard`); //, gameData);
+      conosle.log('userData:', userData);
+    });
+
     socket.on('leave room', function(data) {
       console.log(`${data.user.username} leaving room ${data.room}`);
       console.log('users before leaving:', users);

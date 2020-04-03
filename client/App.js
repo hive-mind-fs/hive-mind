@@ -27,7 +27,6 @@ import colors from './utils/styles';
 import { StyleProvider } from 'native-base';
 import getTheme from './native-base-theme/components';
 import customMaterial from './native-base-theme/variables/customMaterial';
-// establishes socket connection
 import './socket';
 console.disableYellowBox = true;
 

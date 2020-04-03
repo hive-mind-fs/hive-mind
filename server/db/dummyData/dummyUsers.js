@@ -1,5 +1,16 @@
 const dummyUsers = [
   {
+    facebookId: null,
+    email: 'Bobby@hive-mind.com',
+    password: 'Fishhead3033!',
+    photo: 'https://imgur.com/8Qhuju8',
+    location: 10003,
+    gender: 'male',
+    age: 23,
+    isAdmin: false,
+    isOnboarded: true
+  },
+  {
     facebookId: 'd3333e4010df9c4055df6ea3b10747b1b6481a64',
     email: 'pscardafield0@dagondesign.org',
     password: 'AyaQk2FO7',
@@ -535,17 +546,6 @@ const dummyUsers = [
     location: 39376,
     gender: 'other',
     age: 99,
-    isAdmin: true,
-    isOnboarded: true
-  },
-  {
-    facebookId: 'f0d1bea3b4ba78689daa7f8fba970ad2698ef4ed',
-    email: 'dbrunicke1d@ed.gov',
-    password: 'v9xNA4',
-    photo: 'https://i.imgur.com/UMFJ5Gm.jpg',
-    location: 32032,
-    gender: 'female',
-    age: 57,
     isAdmin: true,
     isOnboarded: true
   }
