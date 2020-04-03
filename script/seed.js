@@ -2,13 +2,7 @@
 const db = require('../server/db');
 const { read, getPossiblePoints } = require('../dictionary');
 
-const {
-  User,
-  Round,
-  Game,
-  Word,
-  UserRound
-} = require('../server/db/models');
+const { User, Round, Game, Word, UserRound } = require('../server/db/models');
 
 const dummyUsers = require('../server/db/dummyData/dummyUsers.js');
 const dummyGames = require('../server/db/dummyData/dummyGames.js');
@@ -20,55 +14,62 @@ async function seed() {
   await Game.bulkCreate(dummyGames);
 
   // Get rounds from algo.ts (after running ts-node dictionary/Algo.ts, add to npm run seed)
-  const roundsJSON = await read('../dictionary/Solutions.json')
-  const rounds = JSON.parse(roundsJSON)
+  const roundsJSON = await read('../dictionary/Solutions.json');
+  const rounds = JSON.parse(roundsJSON);
 
-  const allRoundWordAssociations = []
-  const roundModels = []
-  const distinctWords = {}
+  const allRoundWordAssociations = [];
+  const roundModels = [];
+  const distinctWords = {};
 
   // Seed rounds without words associations
   rounds.map((round, roundIndex) => {
-
     // Create and push round model
-    const coreLetter = round[0]
-    const letters = round[1]
-    const wordsAndIndices = round[3]
-    const words = wordsAndIndices.filter((word, index) => !(index % 2))
-    const pangramsAndIndices = round[2]
-    const pangramList = pangramsAndIndices.filter((word, index) => !(index % 2))
-    const possiblePoints = getPossiblePoints(words, pangramList)
-    roundModels.push({letters, coreLetter, pangramList, possiblePoints})
+    const coreLetter = round[0];
+    const letters = round[1];
+    const wordsAndIndices = round[3];
+    const words = wordsAndIndices.filter((word, index) => !(index % 2));
+    const pangramsAndIndices = round[2];
+    const pangramList = pangramsAndIndices.filter(
+      (word, index) => !(index % 2)
+    );
+    const possiblePoints = getPossiblePoints(words, pangramList);
+    roundModels.push({ letters, coreLetter, pangramList, possiblePoints });
 
     // Create and push roundWords model
     // Store word index -> word
-    const wordIndices = wordsAndIndices.filter((word, index) => index % 2)
+    const wordIndices = wordsAndIndices.filter((word, index) => index % 2);
     const roundWordAssociations = wordIndices.map((wordIndex, ind) => {
-        distinctWords[wordIndex] = words[ind]
-        return {roundId: roundIndex + 1, wordId: wordIndex}
-    })
-    allRoundWordAssociations.push(...roundWordAssociations)
-  })
+      distinctWords[wordIndex] = words[ind];
+      return { roundId: roundIndex + 1, wordId: wordIndex };
+    });
+    allRoundWordAssociations.push(...roundWordAssociations);
+  });
 
-  console.log(`seeding ${roundModels.length} distinct rounds`)
+  console.log(`seeding ${roundModels.length} distinct rounds`);
 
-  await Round.bulkCreate(roundModels)
+  await Round.bulkCreate(roundModels);
 
   // Seed distinct words
-  console.log(`seeding ${Object.keys(distinctWords).length} distinct words`)
+  console.log(`seeding ${Object.keys(distinctWords).length} distinct words`);
 
-  const wordModels = []
+  const wordModels = [];
 
-  Object.keys(distinctWords).forEach(wordKey => (wordModels.push({word: distinctWords[wordKey], id: wordKey})))
+  Object.keys(distinctWords).forEach(wordKey =>
+    wordModels.push({ word: distinctWords[wordKey], id: wordKey })
+  );
 
-  await Word.bulkCreate(wordModels)
+  await Word.bulkCreate(wordModels);
 
   // Seed associations manually, 100k at a time
-  console.log(`seeding ${allRoundWordAssociations.length} distinct round word associations`)
+  console.log(
+    `seeding ${allRoundWordAssociations.length} distinct round word associations`
+  );
 
-  const maxInserts = 100000
+  const maxInserts = 100000;
   for (let i = 0; i < allRoundWordAssociations.length; i = i + maxInserts) {
-    await db.model('roundWords').bulkCreate(allRoundWordAssociations.slice(i, i + maxInserts))
+    await db
+      .model('roundWords')
+      .bulkCreate(allRoundWordAssociations.slice(i, i + maxInserts));
   }
 
   // Seed game & winner associations for first 50 rounds
@@ -84,21 +85,21 @@ async function seed() {
     await round.setWinner(user);
   }
 
-  // Create default round 'ANONYMOUS'
-  const DEFAULT_ROUND_ID = 368;
-  const defaultRound = await Round.findByPk(DEFAULT_ROUND_ID);
-  let game51 = await Game.findByPk(51);
-  await game51.setWinner(1);
-  await game51.addRound(defaultRound);
-  await defaultRound.setWinner(user1);
+  // // Create default round 'ANONYMOUS'
+  // const DEFAULT_ROUND_ID = 368;
+  // const defaultRound = await Round.findByPk(DEFAULT_ROUND_ID);
+  // let game51 = await Game.findByPk(51);
+  // await game51.setWinner(1);
+  // await game51.addRound(defaultRound);
+  // await defaultRound.setWinner(user1);
 
-  // don't really need this anymore, function below should work
-  const user1 = await User.findByPk(1);
-  const user2 = await User.findByPk(2);
-  const user3 = await User.findByPk(3);
-  const user4 = await User.findByPk(4);
-  //Seed userRounds thru table
-  await defaultRound.addUsers([user1, user2, user3, user4]);
+  // // don't really need this anymore, function below should work
+  // const user1 = await User.findByPk(1);
+  // const user2 = await User.findByPk(2);
+  // const user3 = await User.findByPk(3);
+  // const user4 = await User.findByPk(4);
+  // //Seed userRounds thru table
+  // await defaultRound.addUsers([user1, user2, user3, user4]);
 
   // seed userRounds
   // NEEDS TO BE TESTED

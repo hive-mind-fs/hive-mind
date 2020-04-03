@@ -16,7 +16,7 @@ const toVchar = (cs: string) => {
       let ordinal =
         (function(c: any) {
           return c.charCodeAt == null ? c : c.charCodeAt(0);
-        })(c) - 'a'.charCodeAt(0);
+        })(c) - 'A'.charCodeAt(0);
       cv |= 1 << ordinal;
     }
   }
@@ -57,8 +57,8 @@ const puzzleMaster = (dict: any, minLen: number, maxLets: number) => {
     for (let j = 0; j < charArr.length; j++) {
       let c = charArr[j];
       if (
-        c.charCodeAt(0) < 'a'.charCodeAt(0) ||
-        c.charCodeAt(0) > 'z'.charCodeAt(0)
+        c.charCodeAt(0) < 'A'.charCodeAt(0) ||
+        c.charCodeAt(0) > 'Z'.charCodeAt(0)
       ) {
         continue loop1;
       }
