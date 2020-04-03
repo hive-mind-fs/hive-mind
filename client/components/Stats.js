@@ -1,17 +1,12 @@
-import React, { Fragment } from 'react';
+import React from 'react';
 import { FlatList } from 'react-native';
-import { List, ListItem, Left, Right, Text } from 'native-base';
-import { useNavigation } from '@react-navigation/native';
-import { color } from 'react-native-reanimated';
-// import { FlatList } from 'react-native-gesture-handler';
+import { ListItem, Left, Right, Text } from 'native-base';
 
 export default function Stats({ stats, header }) {
-  const navigation = useNavigation();
-
   return (
     <FlatList
       data={stats}
-      keyExtractor={(item, idx) => idx}
+      keyExtractor={(_, idx) => idx.toString()}
       ListHeaderComponent={
         header && (
           <ListItem>
