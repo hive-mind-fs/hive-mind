@@ -2,13 +2,7 @@
 const db = require('../server/db');
 const { read, getPossiblePoints } = require('../dictionary');
 
-const {
-  User,
-  Round,
-  Game,
-  Word,
-  UserRound
-} = require('../server/db/models');
+const { User, Round, Game, Word, UserRound } = require('../server/db/models');
 
 const dummyUsers = require('../server/db/dummyData/dummyUsers.js');
 const dummyGames = require('../server/db/dummyData/dummyGames.js');
@@ -20,58 +14,63 @@ async function seed() {
   await Game.bulkCreate(dummyGames);
 
   // Get rounds from algo.ts (after running ts-node dictionary/Algo.ts, add to npm run seed)
-  const roundsJSON = await read('../dictionary/Solutions.json')
-  const rounds = JSON.parse(roundsJSON)
+  const roundsJSON = await read('../dictionary/Solutions.json');
+  const rounds = JSON.parse(roundsJSON);
 
-  const allRoundWordAssociations = []
-  const roundModels = []
-  const distinctWords = {}
+  const allRoundWordAssociations = [];
+  const roundModels = [];
+  const distinctWords = {};
 
   // Seed rounds without words associations
-  rounds.map((round, roundIndex) => {
-
+  rounds.slice(0, 100).map((round, roundIndex) => {
     // Create and push round model
-    const coreLetter = round[0]
-    const letters = round[1]
-    const wordsAndIndices = round[3]
-    const words = wordsAndIndices.filter((word, index) => !(index % 2))
-    const pangramsAndIndices = round[2]
-    const pangramList = pangramsAndIndices.filter((word, index) => !(index % 2))
-    const possiblePoints = getPossiblePoints(words, pangramList)
-    roundModels.push({letters, coreLetter, pangramList, possiblePoints})
+    const coreLetter = round[0];
+    const letters = round[1];
+    const wordsAndIndices = round[3];
+    const words = wordsAndIndices.filter((word, index) => !(index % 2));
+    const pangramsAndIndices = round[2];
+    const pangramList = pangramsAndIndices.filter(
+      (word, index) => !(index % 2)
+    );
+    const possiblePoints = getPossiblePoints(words, pangramList);
+    roundModels.push({ letters, coreLetter, pangramList, possiblePoints });
 
     // Create and push roundWords model
     // Store word index -> word
-    const wordIndices = wordsAndIndices.filter((word, index) => index % 2)
+    const wordIndices = wordsAndIndices.filter((word, index) => index % 2);
     const roundWordAssociations = wordIndices.map((wordIndex, ind) => {
-        distinctWords[wordIndex] = words[ind]
-        return {roundId: roundIndex + 1, wordId: wordIndex}
-    })
-    allRoundWordAssociations.push(...roundWordAssociations)
-  })
+      distinctWords[wordIndex] = words[ind];
+      return { roundId: roundIndex + 1, wordId: wordIndex };
+    });
+    allRoundWordAssociations.push(...roundWordAssociations);
+  });
 
-  console.log(`seeding ${roundModels.length} distinct rounds`)
+  console.log(`seeding ${roundModels.length} distinct rounds`);
 
-  await Round.bulkCreate(roundModels)
+  await Round.bulkCreate(roundModels);
 
   // Seed distinct words
-  console.log(`seeding ${Object.keys(distinctWords).length} distinct words`)
-
-  const wordModels = []
-
-  Object.keys(distinctWords).forEach(wordKey => (wordModels.push({word: distinctWords[wordKey], id: wordKey})))
-
-  await Word.bulkCreate(wordModels)
+  console.log(`seeding ${Object.keys(distinctWords).length} distinct words`);
+  const wordModels = [];
+  Object.keys(distinctWords).forEach(wordKey =>
+    wordModels.push({ word: distinctWords[wordKey], id: wordKey })
+  );
+  await Word.bulkCreate(wordModels);
 
   // Seed associations manually, 100k at a time
-  console.log(`seeding ${allRoundWordAssociations.length} distinct round word associations`)
+  console.log(
+    `seeding ${allRoundWordAssociations.length} distinct round word associations`
+  );
 
-  const maxInserts = 100000
+  const maxInserts = 100000;
   for (let i = 0; i < allRoundWordAssociations.length; i = i + maxInserts) {
-    await db.model('roundWords').bulkCreate(allRoundWordAssociations.slice(i, i + maxInserts))
+    await db
+      .model('roundWords')
+      .bulkCreate(allRoundWordAssociations.slice(i, i + maxInserts));
   }
 
   // Seed game & winner associations for first 50 rounds
+  console.log(`seeding 50 game and winner associations`);
   for (let i = 1; i <= 50; i++) {
     //A game can have many rounds
     let game = await Game.findByPk(i);
@@ -85,47 +84,56 @@ async function seed() {
   }
 
   // Create default round 'ANONYMOUS'
-  const DEFAULT_ROUND_ID = 368;
+  const DEFAULT_ROUND_ID = 97;
   const defaultRound = await Round.findByPk(DEFAULT_ROUND_ID);
   let game51 = await Game.findByPk(51);
   await game51.setWinner(1);
   await game51.addRound(defaultRound);
+  const user1 = await User.findByPk(1);
   await defaultRound.setWinner(user1);
 
   // don't really need this anymore, function below should work
-  const user1 = await User.findByPk(1);
-  const user2 = await User.findByPk(2);
-  const user3 = await User.findByPk(3);
-  const user4 = await User.findByPk(4);
-  //Seed userRounds thru table
-  await defaultRound.addUsers([user1, user2, user3, user4]);
+  // const user2 = await User.findByPk(2);
+  // const user3 = await User.findByPk(3);
+  // const user4 = await User.findByPk(4);
+  // //Seed userRounds thru table
+  // await defaultRound.addUsers([user1, user2, user3, user4]);
 
-  // seed userRounds
+  // Seed userRounds
   // NEEDS TO BE TESTED
-  // const userRoundsToCreate = () => {
-  //   let arr = [];
-  //   // create userRounds for userId 1-4
-  //   for (let i = 1; i <= 4; i++) {
-  //     let userId = i;
-  //     let numRounds = Math.floor(Math.random() * Math.floor(10) + 7); // Create diff num of rounds for each user so their stats are different (min 7 rounds for graphs)
+  const userRoundsToCreate = async () => {
+    let arr = [];
+    let numRounds;
+    let roundId;
+    let score;
+    let userId;
+    let userRoundToAdd;
 
-  //     for let (j = 0; j < 5) {
-  //       let roundId = Math.floor(Math.random() * Math.floor(1000) + 1); // randomly pick a roundId
-  //       let score = Math.floor(Math.random() * Math.floor(100) + 1); // randomly pick a score
+    // create userRounds for userId 1-4
+    for (let i = 1; i <= 4; i++) {
+      userId = i;
+      numRounds = Math.floor(Math.random() * Math.floor(10) + 7); // Create diff num of rounds for each user so their stats are different (min 7 rounds for graphs)
 
-  //       // push userRound object into arr
-  //       arr.push({
-  //         userId,
-  //         roundId,
-  //         score
-  //       })
-  //     }
-  //   }
+      // Create userRounds for each user
+      for (let j = 0; j < numRounds; j++) {
+        roundId = Math.floor(Math.random() * 70 + 1); // randomly pick a roundId
+        score = Math.floor(Math.random() * 100 + 1); // randomly pick a score
 
-  //   return arr
-  // };
+        // push userRound object into arr
+        userRoundToAdd = {
+          userId,
+          roundId,
+          score
+        };
+        await UserRound.findOrCreate(userRoundToAdd);
+      }
+    }
+    // console.log()
+    return arr;
+  };
 
-  // await UserRound.bulkCreate(userRoundsToCreate);
+  console.log(`seeding ${userRoundsToCreate().length} distinct userRounds`);
+  // await UserRound.findOrCreate(userRoundsToCreate());
 
   // guessedWords seeding
   // Need to finish creating this...
