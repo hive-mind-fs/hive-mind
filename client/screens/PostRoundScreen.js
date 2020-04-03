@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import { View } from 'react-native';
 import { Button, Card, Container, H1, Text } from 'native-base';
 import { Stats, Logo } from '../components';
-import { fetchPracticeRound } from '../store/game';
+import { fetchRound } from '../store/game';
 
 function PostRoundScreen({ route, navigation, createUserRound, user }) {
   const words = route.params.words;
@@ -65,7 +65,7 @@ const mapState = state => {
 
 const mapDispatch = dispatch => {
   return {
-    createUserRound: userId => dispatch(fetchPracticeRound(userId))
+    createUserRound: userId => dispatch(fetchRound(userId))
   };
 };
 

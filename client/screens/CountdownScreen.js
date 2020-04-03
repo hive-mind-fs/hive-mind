@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
+import { connect } from 'react-redux';
 import { StyleSheet } from 'react-native';
 import { Container, H1, H3 } from 'native-base';
 
-export default function CountdownScreen({ navigation }) {
+function CountdownScreen({ navigation }) {
   const preGameTimer = 3;
 
   const [countdownTimer, setCountdownTimer] = useState(preGameTimer);
@@ -28,7 +29,9 @@ export default function CountdownScreen({ navigation }) {
   return (
     <Container>
       <H3>Game Starts In</H3>
-      <H1 style={ styles.countdown }>{countdownTimer === 0 ? 'Go!' : countdownTimer}</H1>
+      <H1 style={styles.countdown}>
+        {countdownTimer === 0 ? 'Go!' : countdownTimer}
+      </H1>
     </Container>
   );
 }
@@ -36,6 +39,15 @@ export default function CountdownScreen({ navigation }) {
 const styles = StyleSheet.create({
   countdown: {
     fontSize: 100,
-    lineHeight: 120,
-  },
+    lineHeight: 120
+  }
 });
+
+const mapState = state => {
+  return {
+    user: state.user,
+    room: state.game.room
+  };
+};
+
+export default connect(mapState)(CountdownScreen);

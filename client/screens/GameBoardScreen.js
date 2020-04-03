@@ -1,12 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
 import { StyleSheet, View } from 'react-native';
-import { Button, Container, Text, Icon } from 'native-base';
+import { Button, Container, Text, Icon, Thumbnail } from 'native-base';
 import Hive from '../components/Hive';
 import Input from '../components/Input';
 import Error from '../components/Error';
 import CorrectWords from '../components/CorrectWords';
-import { savePracticeRound } from '../store';
+import { saveRound } from '../store';
+import socket from '../socket';
 
 import {
   shuffle,
@@ -25,14 +26,64 @@ function GameBoardScreen(props) {
     possiblePoints
   } = getInitialStateFromProps(props);
 
-  [input, setInput] = useState([]);
-  [correctWords, setCorrectWords] = useState([]);
-  [lettersOrdering, setLettersOrdering] = useState(otherLetters);
-  [score, setScore] = useState(0);
-  [rank, setRank] = useState('Beginner');
-  [error, setError] = useState([]);
-  [gameTimer, setGameTimer] = useState(10);
-  [isActive, toggleActive] = useState(true);
+
+  const [input, setInput] = useState([]);
+  const [correctWords, setCorrectWords] = useState([]);
+  const [lettersOrdering, setLettersOrdering] = useState(otherLetters);
+  const [score, setScore] = useState(0);
+  const [opScore, setOpScore] = useState(0);
+  const [rank, setRank] = useState('Beginner');
+  const [error, setError] = useState([]);
+  const [gameTimer, setGameTimer] = useState(10);
+  const [isActive, toggleActive] = useState(true);
+  const [gameStart, setGameStart] = useState(true);
+  const [opName, setOpName] = useState('');
+  const [opPhoto, setOpPhoto] = useState('');
+  const [gotOp, setGotOp] = useState(false);
+  const [opId, setOpId] = useState('');
+
+  //runs once on component did mount
+  useEffect(() => {
+    if (gameStart) {
+      socket.emit('game start', {
+        user: props.user,
+        username: props.user.username,
+        photo: props.user.photo,
+        room: props.room,
+        id: props.user.id
+      });
+    }
+  });
+
+  useEffect(() => {
+    if (!gotOp) {
+      socket.on('opponent', function(data) {
+        if (data.username !== props.user.username) {
+          let username = data.username;
+          let photo = data.photo;
+          let id = data.id;
+          setOpId(id);
+          setOpName(username);
+          setOpPhoto(photo);
+          setGotOp(true);
+        }
+      });
+    }
+  }, [gotOp]);
+
+  useEffect(() => {
+    socket.emit('my score changed', {
+      room: props.room,
+      score: score
+    });
+
+    socket.on('ops score changed', function(data) {
+      console.log('this is your oponents score', data.score);
+      setOpScore(data.score);
+      console.log('this is the score on state:', opScore);
+    });
+  }, [score]);
+  //Runs everytime the score changes
 
   useEffect(() => {
     setTimeout(() => {
@@ -42,7 +93,7 @@ function GameBoardScreen(props) {
         let userWords = roundDictObjs.filter(word =>
           correctWords.includes(word.word)
         );
-        props.savePracticeRound(props.practiceRound.id, score, userWords);
+        props.saveRound(props.round.id, score, userWords, opId);
         props.navigation.navigate('PostRoundScreen', {
           words: userWords,
           score: score
@@ -93,23 +144,29 @@ function GameBoardScreen(props) {
   let secondsCalc = gameTimer - minutes * 60;
   let seconds = secondsCalc <= 9 ? '0' + secondsCalc : secondsCalc;
 
+  let profPic = props.user.photo + '.jpg';
+  let opProfPic = opPhoto + '.jpg';
+  let loading = 'Loading...';
+
   return (
     <Container style={styles.container}>
       <View style={styles.topBar}>
+        <Thumbnail center large source={{ uri: profPic }} />
+        <Text style={styles.topBarItem}>
+          {score + ' '}
+          {props.user.username}
+        </Text>
         <Text style={styles.topBarItem}>
           <Icon classes={styles.topBarIcon} name="alarm" />
           {'  '}
           {minutes}:{seconds}
         </Text>
+        <Thumbnail center large source={{ uri: opProfPic }} />
         <Text style={styles.topBarItem}>
-          <Icon classes={styles.topBarIcon} name="trophy" />
-          {'  '}
-          {score}
-        </Text>
-        <Text style={styles.topBarItem}>
-          <Icon classes={styles.topBarIcon} name="school" />
-          {'  '}
-          {rank}
+          {opScore + ' '}
+          {opName.length === 0 && loading}
+          {opName.length > 0 && opName}
+          {opId && opId}
         </Text>
       </View>
       <View style={styles.correctWordsCont}>
@@ -181,6 +238,12 @@ const styles = StyleSheet.create({
   topBarIcon: {
     paddingRight: 15
   },
+  topBarPhoto: {
+    paddingRight: 15,
+    width: 10,
+    height: 10,
+    borderRadius: 50
+  },
   correctWordsCont: {
     // flex: 1
     // width: 100
@@ -220,14 +283,16 @@ const styles = StyleSheet.create({
 
 const mapState = state => {
   return {
-    practiceRound: state.game.practiceRound
+    round: state.game.round,
+    user: state.user,
+    room: state.game.room
   };
 };
 
 const mapDispatch = dispatch => {
   return {
-    savePracticeRound: (userRoundId, score, correctWords) =>
-      dispatch(savePracticeRound(userRoundId, score, correctWords))
+    saveRound: (userRoundId, score, correctWords, opId) =>
+      dispatch(saveRound(userRoundId, score, correctWords, opId))
   };
 };
 

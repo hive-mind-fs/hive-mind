@@ -26,7 +26,8 @@ const User = db.define('user', {
 
   username: {
     type: Sequelize.STRING,
-    unique: true
+    unique: true,
+    allowNull: false
   },
 
   photo: {
@@ -91,8 +92,14 @@ User.encryptPassword = function(plainText, salt) {
 };
 
 /**
- * hooks
+ * Hooks
  */
+
+User.addHook('beforeValidate', (user, options) => {
+  user.username = user.email.split('@')[0];
+});
+
+
 const setSaltAndPassword = user => {
   if (user.changed('password')) {
     user.salt = User.generateSalt();
@@ -100,10 +107,15 @@ const setSaltAndPassword = user => {
   }
 };
 
+const addUserName = user => {
+  user.username = user.email.split('@')[0];
+}
+
 User.beforeCreate(setSaltAndPassword);
 User.beforeUpdate(setSaltAndPassword);
 User.beforeBulkCreate(User => {
   User.forEach(setSaltAndPassword);
+  User.forEach(addUserName);
 });
 
 module.exports = User;

@@ -8,7 +8,7 @@ const ROUND_ATTRIBUTES = [
   'pangramList'
 ];
 
-const USERROUND_ATTRIBUTES = ['id', 'userId', 'roundId', 'score'];
+const USERROUND_ATTRIBUTES = ['id', 'userId', 'roundId', 'score', 'opId'];
 
 const WORD_ATTRIBUTES = ['id', 'word'];
 
