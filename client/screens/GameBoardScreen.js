@@ -117,19 +117,19 @@ function GameBoardScreen(props) {
   };
 
   handleEnter = () => {
-    let word = input.join('').toLowerCase();
+    let word = input.join('');
     // Clear input
     setInput([]);
     //Clear error message everytime enter is pressed
     setError(error.slice(0, error.length - 1));
     if (word.length < 4) {
       err('Your word is too short');
-    } else if (!word.includes(cl.toLowerCase())) {
+    } else if (!word.includes(cl)) {
       err('Your word must contain the center letter.');
     } else if (correctWords.includes(word)) {
       err("You've already found this word");
     } else if (roundDict.includes(word)) {
-      setCorrectWords([...correctWords, word.toUpperCase()]);
+      setCorrectWords([...correctWords, word]);
       // Score function
       setScore(score + getScore(word, pangramList));
     } else {
