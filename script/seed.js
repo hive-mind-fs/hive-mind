@@ -1,7 +1,5 @@
 'use strict';
 const db = require('../server/db');
-const fs = require('fs');
-const readline = require('readline');
 const { read, getPossiblePoints } = require('../dictionary');
 
 const {
