@@ -7,7 +7,6 @@ const Tab = createBottomTabNavigator();
 
 export default function Nav() {
   return (
-    // <NavigationContainer>
     <Tab.Navigator
       initialRouteName="Feed"
       tabBarOptions={{
@@ -52,7 +51,6 @@ export default function Nav() {
           )
         }}
       />
-      <Tab.Screen name="LobbyScreen" component={LobbyScreen} />
     </Tab.Navigator>
   );
 }

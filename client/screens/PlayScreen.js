@@ -10,10 +10,10 @@ function PlayScreen({ navigation, createUserRound, user }) {
   const handlePracticeRound = async () => {
     await createUserRound(user.id);
     navigation.navigate('PracticeRoundScreen');
-  }
+  };
 
   const handleRandomLobbying = () => {
-    navigation.navigate('HomeScreen', { screen: 'LobbyScreen' });
+    navigation.navigate('LobbyScreen');
   };
 
   return (
