@@ -13,7 +13,7 @@
     "ios": "expo start --ios",
     "lint": "eslint ./ --ignore-path .gitignore",
     "lint-fix": "npm run lint -- --fix",
-    "seed": "ts-node dictionary/Algo.ts & node script/seed.js",
+    "seed": "node script/seed.js",
     "start": "node server",
     "start-client": "expo start",
     "start-server": "nodemon server -e html,js,scss --ignore public --ignore client",
