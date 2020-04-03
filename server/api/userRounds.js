@@ -10,34 +10,33 @@ const {
 
 module.exports = router;
 
-// Create
-// Given user id, create new user rounds entry with random round
-// router.post('/:userId', async (req, res, next) => {
-//   try {
-//     const userId = +req.params.userId;
-//     const round = await Round.getRandom();
+//Create Given user id, create new user rounds entry with random round
+router.post('/:userId', async (req, res, next) => {
+  try {
+    const userId = +req.params.userId;
+    const round = await Round.getRandom();
 
-//     const userRound = await UserRound.findOrCreate({
-//       where: { userId: userId, roundId: round.id }
-//     });
+    const userRound = await UserRound.findOrCreate({
+      where: { userId: userId, roundId: round.id }
+    });
 
-//     const userRoundWithAttributes = await UserRound.findByPk(userRound[0].id, {
-//       attributes: USERROUND_ATTRIBUTES,
-//       include: [
-//         { model: Word, attributes: WORD_ATTRIBUTES },
-//         {
-//           model: Round,
-//           attributes: ROUND_ATTRIBUTES,
-//           include: [{ model: Word }]
-//         }
-//       ]
-//     });
+    const userRoundWithAttributes = await UserRound.findByPk(userRound[0].id, {
+      attributes: USERROUND_ATTRIBUTES,
+      include: [
+        { model: Word, attributes: WORD_ATTRIBUTES },
+        {
+          model: Round,
+          attributes: ROUND_ATTRIBUTES,
+          include: [{ model: Word }]
+        }
+      ]
+    });
 
-//     res.send(userRoundWithAttributes);
-//   } catch (err) {
-//     next(err);
-//   }
-// });
+    res.send(userRoundWithAttributes);
+  } catch (err) {
+    next(err);
+  }
+});
 
 // Given a user and round id, create new user rounds entry with specific
 router.post('/:userId/:roundId', async (req, res, next) => {

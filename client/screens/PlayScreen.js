@@ -7,19 +7,12 @@ import { fetchRound } from '../store/game';
 function PlayScreen({ navigation, createUserRound, user }) {
   console.log('we have user', user);
 
-
-  const handlePracticeRound = () => {
-    createUserRound(user.id);
-    navigation.navigate('CountdownScreen');
-  };
-
-  const handleFriendLobbying = () => {
-    navigation.navigate('FriendLobbyScreen');
-  };
+  const handlePracticeRound = async () => {
+    await createUserRound(user.id);
+    navigation.navigate('PracticeRoundScreen');
+  }
 
   const handleRandomLobbying = () => {
-    console.log('user id', user.id);
-    // we don't know whether we will create round or not
     navigation.navigate('HomeScreen', { screen: 'LobbyScreen' });
   };
 
@@ -36,22 +29,22 @@ function PlayScreen({ navigation, createUserRound, user }) {
         block
         rounded
         marginTopL
-        title="FindFriend"
-        onPress={() => handleFriendLobbying()}
-      >
-        <Text>Play A Friend</Text>
-      </Button>
-
-      <Button
-        primary
-        block
-        rounded
-        marginTopL
         title="FindOpponent"
         onPress={() => handleRandomLobbying()}
       >
         <Text>Play A Stranger</Text>
       </Button>
+      {/*
+      <Button
+        primary
+        block
+        rounded
+        marginTopL
+        title="GameOfTheDay"
+        onPress={() => handleGOD()}
+      >
+        <Text>Game Of The Day</Text>
+      </Button> */}
 
       <Button
         primary
