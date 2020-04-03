@@ -74,13 +74,19 @@ export const fetch1v1Round = (userId, roundId) => async dispatch => {
   }
 };
 
-export const saveRound = (roundId, score, correctWords) => async dispatch => {
+export const saveRound = (
+  roundId,
+  score,
+  correctWords,
+  opId
+) => async dispatch => {
   try {
     let round;
     try {
       round = await axios.put(`${BASE_URL}/api/userRounds/${roundId}`, {
         score: score,
-        words: correctWords
+        words: correctWords,
+        opId: opId
       });
     } catch (error) {
       console.error(err);

@@ -39,6 +39,7 @@ function GameBoardScreen(props) {
   const [opName, setOpName] = useState('');
   const [opPhoto, setOpPhoto] = useState('');
   const [gotOp, setGotOp] = useState(false);
+  const [opId, setOpId] = useState('');
 
   //runs once on component did mount
   useEffect(() => {
@@ -47,7 +48,8 @@ function GameBoardScreen(props) {
         user: props.user,
         username: props.user.username,
         photo: props.user.photo,
-        room: props.room
+        room: props.room,
+        id: props.user.id
       });
     }
   });
@@ -58,6 +60,8 @@ function GameBoardScreen(props) {
         if (data.username !== props.user.username) {
           let username = data.username;
           let photo = data.photo;
+          let id = data.id;
+          setOpId(id);
           setOpName(username);
           setOpPhoto(photo);
           setGotOp(true);
@@ -88,7 +92,7 @@ function GameBoardScreen(props) {
         let userWords = roundDictObjs.filter(word =>
           correctWords.includes(word.word)
         );
-        props.saveRound(props.round.id, score, userWords);
+        props.saveRound(props.round.id, score, userWords, opId);
         props.navigation.navigate('PostRoundScreen', {
           words: userWords,
           score: score
