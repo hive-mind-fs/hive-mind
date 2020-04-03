@@ -68,12 +68,12 @@ router.post('/:userId/:roundId', async (req, res, next) => {
 
 // Update
 // Given userRound id, persist to database
-router.put('/:roundId', async (req, res, next) => {
+router.put('/:userRoundId', async (req, res, next) => {
   try {
-    let roundId = +req.params.roundId;
-    const userRound = await UserRound.findByPk(roundId, {
+    let userRoundId = +req.params.userRoundId;
+    const userRound = await UserRound.findByPk(userRoundId, {
       returning: true,
-      where: { id: roundId },
+      where: { id: userRoundId },
       include: [
         { model: Word, attributes: WORD_ATTRIBUTES },
         {
@@ -86,7 +86,7 @@ router.put('/:roundId', async (req, res, next) => {
     const updatedRound = await userRound.update(req.body);
     // Potential Optimization: Figure out a way to do the below  within the update above
     const guessedWords = req.body.words.map(word => {
-      return { wordId: word.id, userRoundId: roundId };
+      return { wordId: word.id, userRoundId: userRoundId };
     });
     await GuessedWord.bulkCreate(guessedWords);
 
