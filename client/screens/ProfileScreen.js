@@ -5,7 +5,6 @@ import {
   Container,
   Content,
   H1,
-  Icon,
   Tab,
   Tabs,
   TabHeading,
@@ -29,7 +28,7 @@ const ProfileScreen = ({
 
   const stats = [
     {
-      title: 'Total Score',
+      title: 'Total Points',
       stat: `${userStats.totalScore}`
     },
     {
@@ -44,67 +43,70 @@ const ProfileScreen = ({
 
   return (
     <Container>
-      <Content>
-        <Button
-          iconLeft
-          transparent
-          marginTopL
-          title="Log Out"
-          onPress={() => {
-            console.log('attempting to logout');
-            handleLogout();
-            navigation.navigate('LandingScreen');
-          }}
-          style={{ marginLeft: 'auto' }}
+      {/* <Content> */}
+      <Button
+        // iconLeft
+        transparent
+        marginTopL
+        title="Log Out"
+        onPress={() => {
+          console.log('attempting to logout');
+          handleLogout();
+          navigation.navigate('LandingScreen');
+        }}
+        style={{ marginLeft: 'auto' }}
+      >
+        {/* <Icon name="cog" /> */}
+        <Text>Log Out</Text>
+      </Button>
+      {user.photo ? (
+        <Thumbnail center large source={{ uri: user.photo }} />
+      ) : (
+        <Logo />
+      )}
+      <H1 marginT20 center>
+        {user.username ? user.username : 'You'}
+      </H1>
+      <Tabs style={styles.Tabs}>
+        <Tab
+          heading={
+            <TabHeading>
+              <Text>Stats</Text>
+            </TabHeading>
+          }
         >
-          {/* <Icon name="cog" /> */}
-          <Text>Log Out</Text>
-        </Button>
-        {user.photo ? (
-          <Thumbnail center large source={{ uri: user.photo }} />
-        ) : (
-          <Logo />
-        )}
-        <H1 marginT20 center>
-          {user.username ? user.username : 'You'}
-        </H1>
-        <Tabs style={styles.Tabs}>
-          <Tab
-            heading={
-              <TabHeading>
-                <Text>Stats</Text>
-              </TabHeading>
-            }
+          <View
+          // onLayout={event => {
+          //   var { x, y, width, height } = event.nativeEvent.layout;
+          // }}
           >
-            <View
-            // onLayout={event => {
-            //   var { x, y, width, height } = event.nativeEvent.layout;
-            // }}
-            >
-              <Stats stats={stats} />
-              {userStats.roundsPlayed >= 7 && (
-                <BarChartStacked round="250" data={userStats.graphPoints} />
-              )}
-              {/* <BarChartGrouped width={320} round={1} unit="€" /> */}
-            </View>
-          </Tab>
-          <Tab
-            heading={
-              <TabHeading>
-                <Text>Game Log</Text>
-              </TabHeading>
-            }
-          >
-            {userStats.roundsPlayed > 0 ? (
-              <Stats stats={userStats.graphPoints} navigation={navigation} />
-            ) : (
-              <Text center marginT20>
-                You haven't played any games yet!
-              </Text>
+            <Stats stats={stats} />
+            {userStats.roundsPlayed >= 7 && (
+              <BarChartStacked round="250" data={userStats.graphPoints} />
             )}
-          </Tab>
-        </Tabs>
-      </Content>
+            {/* <BarChartGrouped width={320} round={1} unit="€" /> */}
+          </View>
+        </Tab>
+        <Tab
+          heading={
+            <TabHeading>
+              <Text>Game Log</Text>
+            </TabHeading>
+          }
+        >
+          {userStats.roundsPlayed > 0 ? (
+            <Stats
+              stats={userStats.graphPoints}
+              header={['LETTERS', 'SCORE']}
+            />
+          ) : (
+            <Text center marginT20>
+              You haven't played any games yet!
+            </Text>
+          )}
+        </Tab>
+      </Tabs>
+      {/* </Content> */}
     </Container>
   );
 };

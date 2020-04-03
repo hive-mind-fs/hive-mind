@@ -81,16 +81,18 @@ router.get('/leaderboard', async (req, res, next) => {
         ],
         include: [{ model: User, attributes: ['id', 'username', 'photo'] }],
         group: ['user.id']
-        // order: sequelize.literal('totalScore DESC')
+        // order: sequelize.literal('totalScore DESC'),
       });
 
-      leaderboardObj = leaderboard.map(rank => {
-        return {
-          totalScore: rank.dataValues.totalScore,
-          username: rank.user.username,
-          photo: rank.user.photo
-        };
-      });
+      leaderboardObj = leaderboard
+        .map(rank => {
+          return {
+            totalScore: rank.dataValues.totalScore,
+            username: rank.user.username,
+            photo: rank.user.photo
+          };
+        })
+        .sort((a, b) => (a.totalScore > b.totalScore ? 1 : -1));
     } catch (err) {
       next(err);
     }
