@@ -48,9 +48,9 @@ function PlayScreen({ navigation, createUserRound, user }) {
 
       <Button
         primary
-        block
         rounded
-        marginTopL
+        block
+        marginTop
         title="Practice"
         onPress={() => handlePracticeRound()}
       >

@@ -1,9 +1,8 @@
-import React, { useEffect, useState } from 'react';
-import { StyleSheet, View, DatePickerIOSComponent } from 'react-native';
+import React, { useEffect } from 'react';
+import { StyleSheet, View } from 'react-native';
 import {
   Button,
   Container,
-  Content,
   H1,
   Tab,
   Tabs,
@@ -43,9 +42,7 @@ const ProfileScreen = ({
 
   return (
     <Container>
-      {/* <Content> */}
       <Button
-        // iconLeft
         transparent
         marginTopL
         title="Log Out"
@@ -106,7 +103,6 @@ const ProfileScreen = ({
           )}
         </Tab>
       </Tabs>
-      {/* </Content> */}
     </Container>
   );
 };

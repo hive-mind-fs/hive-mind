@@ -1,15 +1,22 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { View } from 'react-native';
-import { Button, Card, Container, H1, Text } from 'native-base';
+import {
+  Button,
+  Content,
+  Container,
+  H1,
+  Text,
+  Tabs,
+  Tab,
+  TabHeading
+} from 'native-base';
 import { Stats, Logo } from '../components';
 import { fetchRound } from '../store/game';
 
 function PostRoundScreen({ route, navigation, createUserRound, user }) {
   const words = route.params.words;
   const score = route.params.score;
-
-  console.log('SCORE', score);
 
   const postRound = [
     {
@@ -26,9 +33,12 @@ function PostRoundScreen({ route, navigation, createUserRound, user }) {
     <Container>
       <Logo />
       <H1>Round Over</H1>
-      {/* <Card style={{ marginTop: 20 }}> */}
-      <Stats style={{ width: '400' }} stats={postRound} words={words} />
-      {/* </Card> */}
+
+      <Tabs>
+        <Tab heading={<TabHeading>{/* <Text>Stats</Text> */}</TabHeading>}>
+          <Stats style={{ height: 100 }} stats={postRound} />
+        </Tab>
+      </Tabs>
       <Button
         block
         rounded
