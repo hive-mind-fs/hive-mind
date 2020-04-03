@@ -1,7 +1,15 @@
 import React, { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
 import { StyleSheet, View } from 'react-native';
-import { Button, Container, Text, Icon, Thumbnail } from 'native-base';
+import {
+  Button,
+  Container,
+  Text,
+  Icon,
+  Thumbnail,
+  Content,
+  Accordion
+} from 'native-base';
 import Hive from '../components/Hive';
 import Input from '../components/Input';
 import Error from '../components/Error';
@@ -77,9 +85,7 @@ function GameBoardScreen(props) {
     });
 
     socket.on('ops score changed', function(data) {
-      console.log('this is your oponents score', data.score);
       setOpScore(data.score);
-      console.log('this is the score on state:', opScore);
     });
   }, [score]);
   //Runs everytime the score changes
@@ -147,10 +153,22 @@ function GameBoardScreen(props) {
   let opProfPic = opPhoto + '.jpg';
   let loading = 'Loading...';
 
+  const correctWordsArray = [
+    {
+      title: "You've found " + correctWords.length + ' correct words',
+      content: correctWords.join('   ')
+    }
+  ];
+
   return (
     <Container style={styles.container}>
       <View style={styles.topBar}>
-        <Thumbnail center large source={{ uri: profPic }} />
+        <Thumbnail
+          style={styles.topBarPhoto}
+          center
+          large
+          source={{ uri: profPic }}
+        />
         <Text style={styles.topBarItem}>
           {score + ' '}
           {props.user.username}
@@ -160,7 +178,12 @@ function GameBoardScreen(props) {
           {'  '}
           {minutes}:{seconds}
         </Text>
-        <Thumbnail center large source={{ uri: opProfPic }} />
+        <Thumbnail
+          style={styles.topBarPhoto}
+          center
+          large
+          source={{ uri: opProfPic }}
+        />
         <Text style={styles.topBarItem}>
           {opScore + ' '}
           {opName.length === 0 && loading}
@@ -168,20 +191,21 @@ function GameBoardScreen(props) {
         </Text>
       </View>
       <View style={styles.correctWordsCont}>
-        <Text marginT10>You've found {correctWords.length} correct words</Text>
-        <CorrectWords words={correctWords.join('   ')} />
+        <Content padder>
+          <Accordion dataArray={correctWordsArray} />
+        </Content>
       </View>
       <View style={styles.inputCont}>
         <Input style={styles.textCenter} inputLetters={input} />
         <Error error={error} />
       </View>
       <Hive
-        style={styles.gameBoard}
+        style={styles.hive}
         centerLetter={cl} // comes from redux now
         otherLetters={lettersOrdering}
         onLetterPress={letter => handleLetterPress(letter)}
       />
-      <View style={styles.flexRow}>
+      <View style={styles.bottom}>
         <Button
           style={styles.gameButtons}
           block
@@ -221,58 +245,62 @@ function GameBoardScreen(props) {
 }
 
 const styles = StyleSheet.create({
+  container: {
+    display: 'flex',
+    flexDirection: 'column'
+  },
   topBar: {
-    position: 'absolute',
-    top: 70,
-    // flex: 2,
+    width: '100%',
+    flex: 1,
+    marginTop: 15,
     display: 'flex',
     justifyContent: 'space-around',
-    flexDirection: 'row'
+    alignItems: 'center',
+    flexDirection: 'row',
+    backgroundColor: 'red'
   },
   topBarItem: {
-    flex: 1,
+    flexDirection: 'column',
     textAlign: 'center'
   },
   topBarIcon: {
+    flexDirection: 'column',
     paddingRight: 15
   },
   topBarPhoto: {
     paddingRight: 15,
-    width: 10,
-    height: 10,
+    width: 50,
+    height: 50,
     borderRadius: 50
   },
   correctWordsCont: {
-    // flex: 1
-    // width: 100
-    position: 'absolute',
-    top: 130,
-    alignItems: 'center'
+    flex: 1,
+    alignItems: 'center',
+    backgroundColor: 'yellow'
   },
   inputCont: {
-    // flex: 4,
-    position: 'absolute',
-    top: 200
+    width: '100%',
+    flex: 3,
+    justifyContent: 'flex-end',
+    backgroundColor: 'blue'
   },
-  gameBoard: {
+  hive: {
     alignItems: 'center',
-    justifyContent: 'center',
-    // flex: 5,
-    position: 'absolute',
-    bottom: 200
+    flex: 10,
+    width: '100%',
+    backgroundColor: 'orange'
   },
-  flexRow: {
+  bottom: {
     display: 'flex',
     flexDirection: 'row',
     justifyContent: 'space-around',
-    position: 'absolute',
-    bottom: 40
-    // flex: 1
+    flex: 2
   },
   gameButtons: {
     flex: 1,
     marginLeft: 5,
-    marginRight: 5
+    marginRight: 5,
+    backgroundColor: 'cyan'
   },
   textCenter: {
     textAlign: 'center'
