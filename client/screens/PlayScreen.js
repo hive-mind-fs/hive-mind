@@ -1,11 +1,11 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { connect } from 'react-redux';
 import { Container, H1, Button, Text } from 'native-base';
 import { Logo } from '../components';
 import { fetchRound } from '../store/game';
 
 function PlayScreen({ navigation, createUserRound, user }) {
-  console.log('we have user', user);
+  const [disabled, setDisabled] = useState(false);
 
   const handlePracticeRound = async () => {
     await createUserRound(user.id);
@@ -13,6 +13,7 @@ function PlayScreen({ navigation, createUserRound, user }) {
   };
 
   const handleGOD = async () => {
+    setDisabled(true);
     await createUserRound(user.id);
     navigation.navigate('GameOfTheDayScreen');
   };
@@ -46,6 +47,7 @@ function PlayScreen({ navigation, createUserRound, user }) {
         rounded
         marginTopL
         title="GameOfTheDay"
+        disabled={disabled}
         onPress={() => handleGOD()}
       >
         <Text>Game Of The Day</Text>
