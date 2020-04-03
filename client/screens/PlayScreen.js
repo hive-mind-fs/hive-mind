@@ -1,16 +1,47 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { connect } from 'react-redux';
 import { Container, H1, Button, Text } from 'native-base';
 import { Logo } from '../components';
-import { fetchRound } from '../store/game';
+import { fetchRound, fetchGODRound } from '../store/game';
+var moment = require('moment');
+function PlayScreen({ navigation, createUserRound, createGODUserRound, user }) {
+  let [disabled, setDisabled] = useState(false);
+  let [godRoundId, setGODRoundId] = useState(0);
+  const GODRounds = [
+    19580,
+    17103,
+    29493,
+    30172,
+    41358,
+    17096,
+    19588,
+    15962,
+    15130,
+    822
+  ];
 
-function PlayScreen({ navigation, createUserRound, user }) {
-  console.log('we have user', user);
+  const timeToMidnight = () => {
+    var now = new Date();
+    var end = moment().endOf('day');
+    return end - now + 1000;
+  };
+
+  const updateGOD = () => {
+    setGODRoundId(godRoundId++);
+    setDisabled(false);
+    setTimeout(updateGOD, timeToMidnight());
+  };
 
   const handlePracticeRound = async () => {
     await createUserRound(user.id);
     navigation.navigate('PracticeRoundScreen');
-  }
+  };
+
+  const handleGOD = async () => {
+    setDisabled(true);
+    await createGODUserRound(user.id, GODRounds[godRoundId]);
+    navigation.navigate('GameOfTheDayScreen');
+  };
 
   const handleRandomLobbying = () => {
     navigation.navigate('HomeScreen', { screen: 'LobbyScreen' });
@@ -34,17 +65,18 @@ function PlayScreen({ navigation, createUserRound, user }) {
       >
         <Text>Play A Stranger</Text>
       </Button>
-      {/*
+
       <Button
         primary
         block
         rounded
         marginTopL
         title="GameOfTheDay"
+        disabled={disabled}
         onPress={() => handleGOD()}
       >
         <Text>Game Of The Day</Text>
-      </Button> */}
+      </Button>
 
       <Button
         primary
@@ -80,6 +112,8 @@ const mapState = state => {
 const mapDispatch = dispatch => {
   return {
     createUserRound: userId => dispatch(fetchRound(userId)),
+    createGODUserRound: (userId, RoundId) =>
+      dispatch(fetchGODRound(userId, RoundId)),
     logout: () => dispatch(logout())
   };
 };

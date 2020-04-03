@@ -21,3 +21,4 @@ export { default as SignupScreen } from './SignupScreen';
 export { default as FBLoginScreen } from './FBLoginScreen';
 export { default as FriendLobbyScreen } from './LobbyScreen';
 export { default as PracticeRoundScreen } from './PracticeRoundScreen';
+export { default as GameOfTheDayScreen } from './GameOfTheDayScreen';
