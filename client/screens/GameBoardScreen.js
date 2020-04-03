@@ -36,8 +36,8 @@ function GameBoardScreen(props) {
   const [gameTimer, setGameTimer] = useState(300);
   const [isActive, toggleActive] = useState(true);
   const [gameStart, setGameStart] = useState(true);
-  const [opName, setOpName] = useState([]);
-  const [opPhoto, setOpPhoto] = useState([]);
+  const [opName, setOpName] = useState('');
+  const [opPhoto, setOpPhoto] = useState('');
 
   //runs once on component did mount
   useEffect(() => {
@@ -61,9 +61,15 @@ function GameBoardScreen(props) {
       socket.on('opponent', function(data) {
         // setOpName(opName.push(data.username));
         // setOpPhoto(opPhoto.push(data.photo));
+        if (data) {
+          let username = data.username;
+          let photo = data.photo;
+          setOpName(username);
+          setOpPhoto(photo);
+          console.log('oponent data on state:', opName);
+          console.log('oponent data on state:', opPhoto);
+        }
         console.log('this is the data from the oponent', data);
-        console.log('oponent data on state:', opName);
-        console.log('oponent data on state:', opPhoto);
 
         //const dataForOp = JSON.parse(data);
         // console.log('heres the data fro the op', dataForOp);
@@ -148,7 +154,10 @@ function GameBoardScreen(props) {
   let seconds = secondsCalc <= 9 ? '0' + secondsCalc : secondsCalc;
 
   let profPic = props.user.photo + '.jpg';
-  let opProfPic = opPhoto[0] + '.jpg';
+  let opProfPic = opPhoto + '.jpg';
+  console.log(opProfPic);
+  let opUserName = opName;
+  console.log(opUserName);
   let loading = 'Loading...';
 
   return (
@@ -168,7 +177,7 @@ function GameBoardScreen(props) {
         <Text style={styles.topBarItem}>
           {score + ' '}
           {opName.length === 0 && loading}
-          {opName.length > 0 && opName[0]}
+          {opName.length > 0 && opName}
         </Text>
       </View>
       <View style={styles.correctWordsCont}>
