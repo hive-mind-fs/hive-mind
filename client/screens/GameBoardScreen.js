@@ -33,7 +33,7 @@ function GameBoardScreen(props) {
   const [opScore, setOpScore] = useState(0);
   const [rank, setRank] = useState('Beginner');
   const [error, setError] = useState([]);
-  const [gameTimer, setGameTimer] = useState(300);
+  const [gameTimer, setGameTimer] = useState(10);
   const [isActive, toggleActive] = useState(true);
   const [gameStart, setGameStart] = useState(true);
   const [opName, setOpName] = useState('');
@@ -145,7 +145,6 @@ function GameBoardScreen(props) {
 
   let profPic = props.user.photo + '.jpg';
   let opProfPic = opPhoto + '.jpg';
-  let opUserName = opName;
   let loading = 'Loading...';
 
   return (
@@ -166,6 +165,7 @@ function GameBoardScreen(props) {
           {opScore + ' '}
           {opName.length === 0 && loading}
           {opName.length > 0 && opName}
+          {opId && opId}
         </Text>
       </View>
       <View style={styles.correctWordsCont}>
@@ -358,8 +358,8 @@ const mapState = state => {
 
 const mapDispatch = dispatch => {
   return {
-    saveRound: (userRoundId, score, correctWords) =>
-      dispatch(saveRound(userRoundId, score, correctWords))
+    saveRound: (userRoundId, score, correctWords, opId) =>
+      dispatch(saveRound(userRoundId, score, correctWords, opId))
   };
 };
 

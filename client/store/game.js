@@ -68,6 +68,7 @@ export const fetch1v1Round = (userId, roundId) => async dispatch => {
     } catch (error) {
       round = await axios.post(`/api/userRounds/${userId}/${roundId}`);
     }
+    console.log('round data in thunk', round.data);
     dispatch(set1v1Round(round.data));
   } catch (err) {
     console.error(err);
@@ -82,6 +83,7 @@ export const saveRound = (
 ) => async dispatch => {
   try {
     let round;
+    console.log('in save roudn thunk', opId);
     try {
       round = await axios.put(`${BASE_URL}/api/userRounds/${roundId}`, {
         score: score,
@@ -89,7 +91,7 @@ export const saveRound = (
         opId: opId
       });
     } catch (error) {
-      console.error(err);
+      console.error(error);
     }
     dispatch(savedRound(round.data));
   } catch (err) {
