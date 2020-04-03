@@ -33,7 +33,7 @@ function PracticeRoundScreen(props) {
   const [score, setScore] = useState(0);
   const [rank, setRank] = useState('Beginner');
   const [error, setError] = useState([]);
-  const [gameTimer, setGameTimer] = useState(20);
+  const [gameTimer, setGameTimer] = useState(300);
 
   useEffect(() => {
     setTimeout(() => {
@@ -94,6 +94,8 @@ function PracticeRoundScreen(props) {
   let secondsCalc = gameTimer - minutes * 60;
   let seconds = secondsCalc <= 9 ? '0' + secondsCalc : secondsCalc;
 
+  console.log(error);
+
   return (
     <Container style={styles.container}>
       <View style={styles.topBar}>
@@ -118,16 +120,20 @@ function PracticeRoundScreen(props) {
         <CorrectWords words={correctWords.join('   ')} />
       </View>
       <View style={styles.inputCont}>
-        <Input style={styles.textCenter} inputLetters={input} />
-        <Error error={error} />
+        {error.length > 0 ? (
+          <Error error={error} />
+        ) : (
+          <Input style={styles.textCenter} inputLetters={input} />
+        )}
       </View>
-      <Hive
-        style={styles.gameBoard}
-        centerLetter={cl} // comes from redux now
-        otherLetters={lettersOrdering}
-        onLetterPress={letter => handleLetterPress(letter)}
-      />
-      <View style={styles.flexRow}>
+      <View style={styles.hive}>
+        <Hive
+          centerLetter={cl} // comes from redux now
+          otherLetters={lettersOrdering}
+          onLetterPress={letter => handleLetterPress(letter)}
+        />
+      </View>
+      <View style={styles.bottom}>
         <Button
           style={styles.gameButtons}
           block
@@ -167,47 +173,44 @@ function PracticeRoundScreen(props) {
 }
 
 const styles = StyleSheet.create({
+  container: {
+    display: 'flex',
+    flexDirection: 'column'
+  },
   topBar: {
-    position: 'absolute',
-    top: 70,
-    // flex: 2,
+    width: '100%',
+    flex: 1,
+    marginTop: 15,
     display: 'flex',
     justifyContent: 'space-around',
+    alignItems: 'center',
     flexDirection: 'row'
   },
   topBarItem: {
-    flex: 1,
     textAlign: 'center'
   },
   topBarIcon: {
     paddingRight: 15
   },
   correctWordsCont: {
-    // flex: 1
-    // width: 100
-    position: 'absolute',
-    top: 130,
+    flex: 1,
     alignItems: 'center'
   },
   inputCont: {
-    // flex: 4,
-    position: 'absolute',
-    top: 200
+    width: '100%',
+    flex: 3,
+    justifyContent: 'flex-end'
   },
-  gameBoard: {
+  hive: {
     alignItems: 'center',
-    justifyContent: 'center',
-    // flex: 5,
-    position: 'absolute',
-    bottom: 200
+    flex: 10,
+    width: '100%'
   },
-  flexRow: {
+  bottom: {
     display: 'flex',
     flexDirection: 'row',
     justifyContent: 'space-around',
-    position: 'absolute',
-    bottom: 40
-    // flex: 1
+    flex: 2
   },
   gameButtons: {
     flex: 1,

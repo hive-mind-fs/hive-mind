@@ -4,7 +4,7 @@ import HiveShape from './HiveShape';
 
 const Hive = ({ centerLetter, otherLetters, onLetterPress }) => {
   return (
-    <View style={{ width: 400, height: 400, position: 'absolute', bottom: 130 }}>
+    <View style={{ width: 400, height: 400 }}>
       <HiveShape
         top="33.333%"
         left="30%"

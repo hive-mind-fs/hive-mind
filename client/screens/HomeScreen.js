@@ -7,7 +7,6 @@ const Tab = createBottomTabNavigator();
 
 export default function Nav() {
   return (
-    // <NavigationContainer>
     <Tab.Navigator
       initialRouteName="Feed"
       tabBarOptions={{
