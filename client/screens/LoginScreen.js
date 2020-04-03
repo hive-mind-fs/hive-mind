@@ -19,7 +19,7 @@ const LoginScreen = ({ handleSubmit, navigation, user }) => {
 
   useEffect(() => {
     if (user.id) {
-      navigation.navigate('PlayScreen');
+      navigation.navigate('HomeScreen', { screen: 'PlayScreen' });
     }
   });
 
