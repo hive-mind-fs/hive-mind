@@ -41,12 +41,19 @@ module.exports = io => {
       const userData = data;
       console.log(`Weve got data from the gameboard`, userData);
       //socket.to(v1Room).emit('opponent', { data });
-      socket.emit('opponent', { data });
+      socket.emit('opponent', userData);
+      // const mydata = JSON.parse(data);
+      // //socket.broadcast
+      //   .to(v1Room)
+      //   .emit(
+      //     'opponent',
+      //     JSON.stringify({ photo: mydata.photo, username: mydata.username })
+      //   );
     });
 
     socket.on('my score changed', function(data) {
       const v1Room = `room_${roomCtr}`;
-      //socket.to(v1Room).emit('ops score changed' { data });
+      //socket.broadcast.to(v1Room).emit('ops score changed', data);
       socket.emit('ops score changed', data);
     });
 

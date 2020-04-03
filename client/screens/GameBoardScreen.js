@@ -36,7 +36,8 @@ function GameBoardScreen(props) {
   const [gameTimer, setGameTimer] = useState(300);
   const [isActive, toggleActive] = useState(true);
   const [gameStart, setGameStart] = useState(true);
-  const [opData, setOpData] = useState({});
+  const [opName, setOpName] = useState([]);
+  const [opPhoto, setOpPhoto] = useState([]);
 
   //runs once on component did mount
   useEffect(() => {
@@ -46,28 +47,45 @@ function GameBoardScreen(props) {
         username: props.user.username,
         photo: props.user.photo
       });
+
+      // socket.broadcast.to(room).emit(
+      //   'game start',
+      //   JSON.stringify({
+      //     user: props.user,
+      //     username: props.user.username,
+      //     photo: props.user.photo
+      //   })
+      // );
+
       setGameStart(false);
       socket.on('opponent', function(data) {
-        setOpData(data);
-        console.log('data:', data.username);
-        console.log('state:', opData.username);
+        // setOpName(opName.push(data.username));
+        // setOpPhoto(opPhoto.push(data.photo));
+        console.log('this is the data from the oponent', data);
+        console.log('oponent data on state:', opName);
+        console.log('oponent data on state:', opPhoto);
+
+        //const dataForOp = JSON.parse(data);
+        // console.log('heres the data fro the op', dataForOp);
+        // setOpName(dataForOp.username);
+        // setOpPhoto(dataForOp.photo);
       });
     }
   });
 
-  useEffect(() => {
-    socket.emit('my score changed', {
-      score: score
-    });
+  // useEffect(() => {
+  //   socket.emit('my score changed', {
+  //     score: score
+  //   });
 
-    socket.on('ops score changed', function(data) {
-      // const scoreData = Object.values(data.data.score);
-      // const score = scoreData.score;
-      console.log('this is your oponents score', data.score);
-      setOpScore(data.score);
-      console.log('this is the score on state:', opScore);
-    });
-  }, [score]);
+  //   socket.on('ops score changed', function(data) {
+  //     // const scoreData = Object.values(data.data.score);
+  //     // const score = scoreData.score;
+  //     console.log('this is your oponents score', data.score);
+  //     setOpScore(data.score);
+  //     console.log('this is the score on state:', opScore);
+  //   });
+  // }, [score]);
   //Runs everytime the score changes
 
   // useEffect(() => {
@@ -130,13 +148,13 @@ function GameBoardScreen(props) {
   let seconds = secondsCalc <= 9 ? '0' + secondsCalc : secondsCalc;
 
   let profPic = props.user.photo + '.jpg';
-  // profPic = profPic + '.jpg';
-  console.log('profile picture', profPic);
+  let opProfPic = opPhoto[0] + '.jpg';
+  let loading = 'Loading...';
+
   return (
     <Container style={styles.container}>
       <View style={styles.topBar}>
         <Thumbnail center large source={{ uri: profPic }} />
-        {/* <Image style={styles.topBarPhoto} source={{ uri: props.user.photo }} /> */}
         <Text style={styles.topBarItem}>
           {score + ' '}
           {props.user.username}
@@ -146,9 +164,11 @@ function GameBoardScreen(props) {
           {'  '}
           {minutes}:{seconds}
         </Text>
+        <Thumbnail center large source={{ uri: opProfPic }} />
         <Text style={styles.topBarItem}>
           {score + ' '}
-          {props.user.username}
+          {opName.length === 0 && loading}
+          {opName.length > 0 && opName[0]}
         </Text>
       </View>
       <View style={styles.correctWordsCont}>
