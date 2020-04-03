@@ -16,7 +16,7 @@ const toVchar = (cs: string) => {
       let ordinal =
         (function(c: any) {
           return c.charCodeAt == null ? c : c.charCodeAt(0);
-        })(c) - 'a'.charCodeAt(0);
+        })(c) - 'A'.charCodeAt(0);
       cv |= 1 << ordinal;
     }
   }
@@ -57,8 +57,8 @@ const puzzleMaster = (dict: any, minLen: number, maxLets: number) => {
     for (let j = 0; j < charArr.length; j++) {
       let c = charArr[j];
       if (
-        c.charCodeAt(0) < 'a'.charCodeAt(0) ||
-        c.charCodeAt(0) > 'z'.charCodeAt(0)
+        c.charCodeAt(0) < 'A'.charCodeAt(0) ||
+        c.charCodeAt(0) > 'Z'.charCodeAt(0)
       ) {
         continue loop1;
       }
@@ -204,8 +204,8 @@ const SolvePuzzles = async (dictPath: string) => {
   const { puzzles } = puzzleMaster(words, 4, 7); //Create all puzzles
 
   console.log('Solutions:');
-  //console.log(solver(puzzles, wordsByVector)); //If you dont do the write file: ⏱  SolvePuzzles took 1421.117 milliseconds
-  //console.log(wordsByVector);
+  console.log(solver(puzzles, wordsByVector)); //If you dont do the write file: ⏱  SolvePuzzles took 1421.117 milliseconds
+
   const gameData = JSON.stringify(solver(puzzles, wordsByVector)); //Else: ⏱  SolvePuzzles took 2939.944 milliseconds.
   await writeFileAsync(__dirname + '/Solutions.json', gameData);
 
@@ -214,7 +214,7 @@ const SolvePuzzles = async (dictPath: string) => {
 };
 
 (async () => {
-  await SolvePuzzles('/ubuntu-wamerican.txt'); //"/dictionary.txt"); //if you switch to this dict you have to change the characthervector function to use lower case letters
+  await SolvePuzzles('/dictionary.txt');
 })();
 
 /*
