@@ -2,10 +2,35 @@ import React, { useState } from 'react';
 import { connect } from 'react-redux';
 import { Container, H1, Button, Text } from 'native-base';
 import { Logo } from '../components';
-import { fetchRound } from '../store/game';
+import { fetchRound, fetchGODRound } from '../store/game';
+var moment = require('moment');
+function PlayScreen({ navigation, createUserRound, createGODUserRound, user }) {
+  let [disabled, setDisabled] = useState(false);
+  let [godRoundId, setGODRoundId] = useState(0);
+  const GODRounds = [
+    19580,
+    17103,
+    29493,
+    30172,
+    41358,
+    17096,
+    19588,
+    15962,
+    15130,
+    822
+  ];
 
-function PlayScreen({ navigation, createUserRound, user }) {
-  const [disabled, setDisabled] = useState(false);
+  const timeToMidnight = () => {
+    var now = new Date();
+    var end = moment().endOf('day');
+    return end - now + 1000;
+  };
+
+  const updateGOD = () => {
+    setGODRoundId(godRoundId++);
+    setDisabled(false);
+    setTimeout(updateGOD, timeToMidnight());
+  };
 
   const handlePracticeRound = async () => {
     await createUserRound(user.id);
@@ -14,7 +39,7 @@ function PlayScreen({ navigation, createUserRound, user }) {
 
   const handleGOD = async () => {
     setDisabled(true);
-    await createUserRound(user.id);
+    await createGODUserRound(user.id, GODRounds[godRoundId]);
     navigation.navigate('GameOfTheDayScreen');
   };
 
@@ -87,6 +112,8 @@ const mapState = state => {
 const mapDispatch = dispatch => {
   return {
     createUserRound: userId => dispatch(fetchRound(userId)),
+    createGODUserRound: (userId, RoundId) =>
+      dispatch(fetchGODRound(userId, RoundId)),
     logout: () => dispatch(logout())
   };
 };

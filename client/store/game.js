@@ -6,6 +6,7 @@ import { BASE_URL } from '../utils/constants';
  */
 const defaultGame = {
   practiceRound: {},
+  godRound: {},
   userStats: {
     totalScore: '-',
     roundsPlayed: '-',
@@ -28,6 +29,7 @@ const GOT_USER_STATS = 'GOT_USER_STATS';
 const GOT_LEADERBOARD = 'GOT_LEADERBOARD';
 const SET_ROUND = 'SET_ROUND';
 const SET_1V1_ROUND = 'SET_1V1_ROUND';
+const SET_GOD_ROUND = 'SET_GOD_ROUND';
 const SAVED_ROUND = 'SAVED_ROUND';
 const SET_USER_ROOM = 'SET_ROOM';
 
@@ -41,6 +43,11 @@ const setRound = round => ({
 
 const set1v1Round = round => ({
   type: SET_1V1_ROUND,
+  round
+});
+
+const setGODRound = round => ({
+  type: SET_GOD_ROUND,
   round
 });
 
@@ -93,6 +100,23 @@ export const fetch1v1Round = (userId, roundId) => async dispatch => {
     }
     console.log('round data in thunk', round.data);
     dispatch(set1v1Round(round.data));
+  } catch (err) {
+    console.error(err);
+  }
+};
+
+export const fetchGODRound = (userId, roundId) => async dispatch => {
+  try {
+    let round;
+    try {
+      round = await axios.post(
+        `${BASE_URL}/api/userRounds/${userId}/${roundId}`
+      );
+    } catch (error) {
+      round = await axios.post(`/api/userRounds/${userId}/${roundId}`);
+    }
+    console.log('round data in thunk', round.data);
+    dispatch(setGODRound(round.data));
   } catch (err) {
     console.error(err);
   }
@@ -163,6 +187,8 @@ export default function(state = defaultGame, action) {
       return { ...state, practiceRound: action.practiceRound };
     case SAVED_PRACTICE_ROUND:
       return { ...state, practiceRound: action.practiceRound };
+    case SET_GOD_ROUND:
+      return { ...state, godRound: action.round };
     case GOT_USER_STATS:
       return { ...state, userStats: action.userStats };
     case GOT_LEADERBOARD:

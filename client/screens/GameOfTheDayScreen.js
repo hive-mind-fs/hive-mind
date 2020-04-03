@@ -34,6 +34,7 @@ function GameOfTheDayScreen(props) {
   const [gameTimer, setGameTimer] = useState(300);
   const [isActive, toggleActive] = useState(true);
 
+  console.log(props);
   useEffect(() => {
     setTimeout(() => {
       if (gameTimer > 0) {
@@ -220,7 +221,7 @@ const styles = StyleSheet.create({
 
 const mapState = state => {
   return {
-    round: state.game.round
+    round: state.game.godRound
   };
 };
 
