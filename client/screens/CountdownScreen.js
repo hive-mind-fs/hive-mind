@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import { StyleSheet } from 'react-native';
 import { Container, H1, H3 } from 'native-base';
 
-function CountdownScreen({ navigation, user }) {
+function CountdownScreen({ navigation }) {
   const preGameTimer = 3;
 
   const [countdownTimer, setCountdownTimer] = useState(preGameTimer);
@@ -45,7 +45,8 @@ const styles = StyleSheet.create({
 
 const mapState = state => {
   return {
-    user: state.user
+    user: state.user,
+    room: state.game.room
   };
 };
 

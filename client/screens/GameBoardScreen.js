@@ -46,7 +46,8 @@ function GameBoardScreen(props) {
       socket.emit('game start', {
         user: props.user,
         username: props.user.username,
-        photo: props.user.photo
+        photo: props.user.photo,
+        room: props.room
       });
     }
   });
@@ -67,6 +68,7 @@ function GameBoardScreen(props) {
 
   useEffect(() => {
     socket.emit('my score changed', {
+      room: props.room,
       score: score
     });
 
@@ -345,7 +347,8 @@ const styles = StyleSheet.create({
 const mapState = state => {
   return {
     round: state.game.round,
-    user: state.user
+    user: state.user,
+    room: state.game.room
   };
 };
 

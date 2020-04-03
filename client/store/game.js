@@ -6,7 +6,8 @@ import { BASE_URL } from '../utils/constants';
  */
 const defaultGame = {
   gameStatus: 'countdown',
-  round: {}
+  round: {},
+  room: ''
 };
 
 /**
@@ -15,6 +16,7 @@ const defaultGame = {
 const SET_ROUND = 'SET_ROUND';
 const SET_1V1_ROUND = 'SET_1V1_ROUND';
 const SAVED_ROUND = 'SAVED_ROUND';
+const SET_USER_ROOM = 'SET_ROOM';
 
 /**
  * ACTION CREATORS
@@ -32,6 +34,11 @@ const set1v1Round = round => ({
 const savedRound = round => ({
   type: SAVED_ROUND,
   round
+});
+
+export const setUserRoom = room => ({
+  type: SET_USER_ROOM,
+  room
 });
 
 /**
@@ -91,6 +98,8 @@ export default function(state = defaultGame, action) {
   switch (action.type) {
     case SET_ROUND:
       return { ...state, round: action.round };
+    case SET_USER_ROOM:
+      return { ...state, room: action.room };
     case SET_1V1_ROUND:
       return { ...state, round: action.round };
     case SAVED_ROUND:

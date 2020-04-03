@@ -40,14 +40,16 @@ module.exports = io => {
     });
 
     socket.on('game start', function(data) {
-      const v1Room = `room_${roomCtr}`;
+      const room = data.room;
       const userData = data;
-      socket.broadcast.to('room_0').emit('opponent', userData);
+      //socket.broadcast.to('room_0').emit('opponent', userData);
+      socket.broadcast.to(room).emit('opponent', userData);
     });
 
     socket.on('my score changed', function(data) {
-      const v1Room = `room_${roomCtr}`;
-      socket.broadcast.to('room_0').emit('ops score changed', data);
+      const room = data.room;
+      //socket.broadcast.to('room_0').emit('ops score changed', data);
+      socket.broadcast.to(room).emit('ops score changed', data);
     });
 
     socket.on('leave room', function(data) {
