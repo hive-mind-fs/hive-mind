@@ -97,22 +97,22 @@ function GameBoardScreen(props) {
   }, [score]);
   //Runs everytime the score changes
 
-  // useEffect(() => {
-  //   setTimeout(() => {
-  //     if (gameTimer > 0) {
-  //       setGameTimer(gameTimer - 1);
-  //     } else {
-  //       let userWords = roundDictObjs.filter(word =>
-  //         correctWords.includes(word.word)
-  //       );
-  //       props.saveRound(props.round.id, score, userWords);
-  //       props.navigation.navigate('PostRoundScreen', {
-  //         words: userWords,
-  //         score: score
-  //       });
-  //     }
-  //   }, 1000);
-  // }, [gameTimer]);
+  useEffect(() => {
+    setTimeout(() => {
+      if (gameTimer > 0) {
+        setGameTimer(gameTimer - 1);
+      } else {
+        let userWords = roundDictObjs.filter(word =>
+          correctWords.includes(word.word)
+        );
+        props.saveRound(props.round.id, score, userWords);
+        props.navigation.navigate('PostRoundScreen', {
+          words: userWords,
+          score: score
+        });
+      }
+    }, 1000);
+  }, [gameTimer]);
 
   err = str => {
     setError([...error, str]);
