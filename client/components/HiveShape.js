@@ -14,10 +14,10 @@ const styles = StyleSheet.create({
   },
   hexagon: { width: '100%', height: '100%' },
   letter: {
+    color: 'black',
     position: 'absolute',
     textAlign: 'center',
-    fontSize: 40,
-    fontWeight: 'bold'
+    fontSize: 40
   }
 });
 
@@ -27,7 +27,11 @@ const HiveShape = ({ top, left, fill, letter, onLetterPress }) => {
       onPress={() => {
         onLetterPress(letter);
       }}
-      style={{ ...styles.letterButton, top: top, left: left }}
+      style={{
+        ...styles.letterButton,
+        top: top,
+        left: left
+      }}
     >
       <Svg viewBox="0 0 120 103.92304845413263" style={styles.hexagon}>
         <Polygon
