@@ -20,7 +20,7 @@ import {
   RulesScreen,
   SignupScreen,
   LobbyScreen,
-  FriendLobbyScreen
+  PracticeRoundScreen
 } from './screens';
 import store, { getUser } from './store';
 import colors from './utils/styles';
@@ -29,7 +29,6 @@ import getTheme from './native-base-theme/components';
 import customMaterial from './native-base-theme/variables/customMaterial';
 import './socket';
 console.disableYellowBox = true;
-
 
 const Stack = createStackNavigator();
 
@@ -125,10 +124,10 @@ const lobby = (
   />
 );
 
-const friendlobby = (
+const practiceRound = (
   <Stack.Screen
-    name="FriendLobbyScreen"
-    component={FriendLobbyScreen}
+    name="PracticeRoundScreen"
+    component={PracticeRoundScreen}
     options={{ headerShown: false }}
   />
 );
@@ -179,7 +178,7 @@ export function App() {
               {login}
               {signup}
               {lobby}
-              {friendlobby}
+              {practiceRound}
             </Stack.Navigator>
           </NavigationContainer>
         </StyleProvider>

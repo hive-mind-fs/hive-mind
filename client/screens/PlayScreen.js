@@ -11,12 +11,16 @@ function PlayScreen({ navigation, createUserRound, user }) {
     console.log('user id', user.id);
 
     createUserRound(user.id);
-    navigation.navigate('CountdownScreen');
+    navigation.navigate('HomeScreen', { screen: 'PracticeRoundScreen' });
   };
 
-  const handleFriendLobbying = () => {
-    navigation.navigate('FriendLobbyScreen');
-  };
+  // const handleFriendLobbying = () => {
+  //   navigation.navigate('FriendLobbyScreen');
+  // };
+
+  // const handleGOD = () => {
+  //   navigation.navigate('FriendLobbyScreen');
+  // };
 
   const handleRandomLobbying = () => {
     console.log('user id', user.id);
@@ -32,7 +36,7 @@ function PlayScreen({ navigation, createUserRound, user }) {
         How many words can you make{'\n'}with 7 letters?
       </Text>
 
-      <Button
+      {/* <Button
         primary
         block
         rounded
@@ -41,7 +45,7 @@ function PlayScreen({ navigation, createUserRound, user }) {
         onPress={() => handleFriendLobbying()}
       >
         <Text>Play A Friend</Text>
-      </Button>
+      </Button> */}
 
       <Button
         primary
@@ -53,6 +57,17 @@ function PlayScreen({ navigation, createUserRound, user }) {
       >
         <Text>Play A Stranger</Text>
       </Button>
+      {/*
+      <Button
+        primary
+        block
+        rounded
+        marginTopL
+        title="GameOfTheDay"
+        onPress={() => handleGOD()}
+      >
+        <Text>Game Of The Day</Text>
+      </Button> */}
 
       <Button
         primary
