@@ -20,10 +20,6 @@ export const getScore = (word, pangramList) => {
 };
 
 export const getInitialStateFromProps = props => {
-  console.log(
-    'props for god round---------------------------------------------------------------',
-    props
-  );
   const round = props.round.round;
   const cl = round.coreLetter;
   const otherLetters = getOtherLetters(round, cl);

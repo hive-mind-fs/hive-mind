@@ -98,7 +98,6 @@ export const fetch1v1Round = (userId, roundId) => async dispatch => {
     } catch (error) {
       round = await axios.post(`/api/userRounds/${userId}/${roundId}`);
     }
-    console.log('round data in thunk', round.data);
     dispatch(set1v1Round(round.data));
   } catch (err) {
     console.error(err);
@@ -115,7 +114,6 @@ export const fetchGODRound = (userId, roundId) => async dispatch => {
     } catch (error) {
       round = await axios.post(`/api/userRounds/${userId}/${roundId}`);
     }
-    console.log('round data in thunk', round.data);
     dispatch(setGODRound(round.data));
   } catch (err) {
     console.error(err);

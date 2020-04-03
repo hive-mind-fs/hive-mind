@@ -34,7 +34,6 @@ function GameOfTheDayScreen(props) {
   const [gameTimer, setGameTimer] = useState(300);
   const [isActive, toggleActive] = useState(true);
 
-  console.log(props);
   useEffect(() => {
     setTimeout(() => {
       if (gameTimer > 0) {
