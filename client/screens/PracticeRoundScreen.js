@@ -67,19 +67,19 @@ function PracticeRoundScreen(props, { navigation }) {
   };
 
   const handleEnter = () => {
-    let word = input.join('');
+    let word = input.join('').toLowerCase();
     // Clear input
     setInput([]);
     //Clear error message everytime enter is pressed
     setError(error.slice(0, error.length - 1));
     if (word.length < 4) {
       err('Your word is too short');
-    } else if (!word.includes(cl)) {
+    } else if (!word.includes(cl.toLowerCase())) {
       err('Your word must contain the center letter.');
     } else if (correctWords.includes(word)) {
       err("You've already found this word");
     } else if (roundDict.includes(word)) {
-      setCorrectWords([...correctWords, word]);
+      setCorrectWords([...correctWords, word.toUpperCase()]);
       // Score function
       setScore(score + getScore(word, pangramList));
     } else {
