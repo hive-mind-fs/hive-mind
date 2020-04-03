@@ -48,38 +48,19 @@ function GameBoardScreen(props) {
         username: props.user.username,
         photo: props.user.photo
       });
-      // socket.emit('game start', {
-      //   user: props.user,
-      //   username: props.user.username,
-      //   photo: props.user.photo
-      // });
-
-      // socket.broadcast.to(room).emit(
-      //   'game start',
-      //   JSON.stringify({
-      //     user: props.user,
-      //     username: props.user.username,
-      //     photo: props.user.photo
-      //   })
-      // );
     }
   });
 
   useEffect(() => {
     if (!gotOp) {
       socket.on('opponent', function(data) {
-        // setOpName(opName.push(data.username));
-        // setOpPhoto(opPhoto.push(data.photo));
         if (data.username !== props.user.username) {
           let username = data.username;
           let photo = data.photo;
           setOpName(username);
           setOpPhoto(photo);
-          // console.log('oponent data on state:', opName);
-          // console.log('oponent data on state:', opPhoto);
           setGotOp(true);
         }
-        // console.log('this is the data from the oponent', data);
       });
     }
   }, [gotOp]);
@@ -158,9 +139,7 @@ function GameBoardScreen(props) {
 
   let profPic = props.user.photo + '.jpg';
   let opProfPic = opPhoto + '.jpg';
-  console.log(opProfPic);
   let opUserName = opName;
-  console.log(opUserName);
   let loading = 'Loading...';
 
   return (

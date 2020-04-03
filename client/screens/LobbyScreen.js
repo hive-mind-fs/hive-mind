@@ -10,6 +10,7 @@ const LobbyScreen = ({ navigation, create1v1Round, user }) => {
   const [inRoom, setInRoom] = useState(true);
   const [users, setUsers] = useState({});
   const [room, setRoom] = useState('');
+  const [usersReady, setUsersReady] = useState([]);
 
   /*
   Notes: I think that there should be two modes,
@@ -30,15 +31,41 @@ const LobbyScreen = ({ navigation, create1v1Round, user }) => {
   useEffect(() => {
     socket.on('game ready!', data => {
       const gameData = JSON.parse(data);
-      console.log(`Me ${user.username} has data for game`, gameData.room); //, gameData);
+      console.log(`Me ${user.username} has data for game`, gameData.room);
       setUsers(gameData.users);
       setRoom(gameData.room);
-      //console.log(gameData.round.id);
       create1v1Round(user.id, gameData.round.id);
+      navigation.navigate('CountdownScreen', { user: user });
     });
   }, [users]);
 
   const handlePlay = () => {
+    // socket.emit('op clicked play', { username: user.username });
+    // socket.on('recieved play click', data => {
+    //   let arr = usersReady;
+    //   if (!arr.includes(data.username)) {
+    //     arr.push(data.username);
+    //   }
+    //   setUsersReady(arr);
+    // });
+
+    // let arr = usersReady;
+    // if (!arr.includes(user.username)) {
+    //   arr.push(user.username);
+    // }
+    // setUsersReady(arr);
+
+    // console.log(usersReady);
+    // if (usersReady.length === 2) {
+    //   socket.emit('start game ', { bool: true });
+    //   socket.on('game starting', data => {
+    //     if (data.bool) {
+    //       navigation.navigate('CountdownScreen', { user: user });
+    //     }
+    //   });
+
+    //   navigation.navigate('CountdownScreen', { user: user });
+    // }
     navigation.navigate('CountdownScreen', { user: user });
   };
 
