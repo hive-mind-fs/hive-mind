@@ -169,26 +169,29 @@ function GameBoardScreen(props) {
           large
           source={{ uri: profPic }}
         />
-        <Text style={styles.topBarItem}>
-          {score + ' '}
-          {props.user.username}
-        </Text>
-        <Text style={styles.topBarItem}>
+        <View style={styles.topBarUserInfo}>
+          <Text style={styles.topBarScore}>{score}</Text>
+          <Text style={styles.topBarItem}>{props.user.username}</Text>
+        </View>
+        <View style={styles.topBarClock}>
           <Icon classes={styles.topBarIcon} name="alarm" />
-          {'  '}
-          {minutes}:{seconds}
-        </Text>
+          <Text style={styles.topBarItem}>
+            {minutes}:{seconds}
+          </Text>
+        </View>
         <Thumbnail
           style={styles.topBarPhoto}
           center
           large
           source={{ uri: opProfPic }}
         />
-        <Text style={styles.topBarItem}>
-          {opScore + ' '}
-          {opName.length === 0 && loading}
-          {opName.length > 0 && opName}
-        </Text>
+        <View style={styles.topBarUserInfo}>
+          <Text style={styles.topBarScore}>{opScore}</Text>
+          <Text style={styles.topBarItem}>
+            {opName.length === 0 && loading}
+            {opName.length > 0 && opName}
+          </Text>
+        </View>
       </View>
       <View style={styles.correctWordsCont}>
         <Content padder>
@@ -257,26 +260,53 @@ const styles = StyleSheet.create({
     justifyContent: 'space-around',
     alignItems: 'center',
     flexDirection: 'row',
-    backgroundColor: 'red'
+    backgroundColor: 'orange'
+  },
+  topBarUserInfo: {
+    flex: 1,
+    display: 'flex',
+    flexDirection: 'column',
+    textAlign: 'center',
+    justifyContent: 'center',
+    backgroundColor: 'cyan',
+    margin: 1
   },
   topBarItem: {
+    flex: 1,
     flexDirection: 'column',
-    textAlign: 'center'
+    textAlign: 'center',
+    justifyContent: 'flex-start',
+    backgroundColor: 'red'
+  },
+  topBarScore: {
+    flex: 1,
+    flexDirection: 'column',
+    textAlign: 'center',
+    justifyContent: 'flex-end',
+    backgroundColor: 'cyan'
+  },
+  topBarClock: {
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+    textAlign: 'center',
+    justifyContent: 'flex-start',
+    flex: 1,
+    backgroundColor: 'blue'
   },
   topBarIcon: {
-    flexDirection: 'column',
-    paddingRight: 15
+    flex: 1
   },
   topBarPhoto: {
     paddingRight: 15,
     width: 50,
-    height: 50,
-    borderRadius: 50
+    height: 50
   },
   correctWordsCont: {
     flex: 1,
     alignItems: 'center',
-    backgroundColor: 'yellow'
+    backgroundColor: 'yellow',
+    zIndex: 1000
   },
   inputCont: {
     width: '100%',
@@ -287,8 +317,7 @@ const styles = StyleSheet.create({
   hive: {
     alignItems: 'center',
     flex: 10,
-    width: '100%',
-    backgroundColor: 'orange'
+    width: '100%'
   },
   bottom: {
     display: 'flex',
