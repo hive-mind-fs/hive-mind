@@ -108,7 +108,7 @@ router.get('/leaderboard', async (req, res, next) => {
         ],
         include: [{ model: User, attributes: ['id', 'username', 'photo'] }],
         group: ['user.id'],
-        order: sequelize.col('totalScore'),
+        order: [[sequelize.col('totalScore'), 'DESC']],
       });
 
       leaderboardObj = leaderboard
