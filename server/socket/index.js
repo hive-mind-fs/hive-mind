@@ -22,10 +22,7 @@ module.exports = io => {
 
       if (Object.keys(users).length === 1) {
         // TO DO: get a round once
-        round = await Round.getRandom();
-        // round = await Round.getRandom({
-        //   include: [{ model: Word, attributes: ['word', 'id'] }]
-        // });
+        round = await Round.getRandom({ include: [{ model: Word }] });
       } else {
         io.to(v1Room).emit(
           'game ready!',
@@ -36,10 +33,16 @@ module.exports = io => {
       }
     });
 
-    socket.on('game start', data => {
-      const userData = JSON.parse(data);
-      console.log(`Weve got data from the gameboard`); //, gameData);
-      conosle.log('userData:', userData);
+    socket.on('game start', function(data) {
+      const room = data.room;
+      const userData = data;
+      //socket.broadcast.to('room_0').emit('opponent', userData);
+      socket.broadcast.to(room).emit('opponent', userData);
+    });
+
+    socket.on('my score changed', function(data) {
+      const room = data.room;
+      socket.broadcast.to(room).emit('ops score changed', data);
     });
 
     socket.on('leave room', function(data) {

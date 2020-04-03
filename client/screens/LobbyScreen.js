@@ -2,14 +2,15 @@ import React, { Fragment, useState, useEffect } from 'react';
 import { connect } from 'react-redux';
 import { StyleSheet } from 'react-native';
 import { Container, H1, H3, Text, Button, List, ListItem } from 'native-base';
-import { fetch1v1Round } from '../store/game';
+import { fetch1v1Round, setUserRoom } from '../store/game';
 import socket from '../socket';
 import { set } from 'react-native-reanimated';
 
-const LobbyScreen = ({ navigation, create1v1Round, user }) => {
+const LobbyScreen = ({ navigation, create1v1Round, setUserRoom, user }) => {
   const [inRoom, setInRoom] = useState(true);
   const [users, setUsers] = useState({});
   const [room, setRoom] = useState('');
+  const [usersReady, setUsersReady] = useState([]);
 
   /*
   Notes: I think that there should be two modes,
@@ -30,11 +31,12 @@ const LobbyScreen = ({ navigation, create1v1Round, user }) => {
   useEffect(() => {
     socket.on('game ready!', data => {
       const gameData = JSON.parse(data);
-      console.log(`Me ${user.username} has data for game`); //, gameData);
+      console.log(`Me ${user.username} has data for game`, gameData.room);
       setUsers(gameData.users);
       setRoom(gameData.room);
-      console.log(gameData.round.id);
+      setUserRoom(gameData.room);
       create1v1Round(user.id, gameData.round.id);
+      navigation.navigate('CountdownScreen', { user: user });
     });
   }, [users]);
 
@@ -129,7 +131,8 @@ const mapState = state => {
 const mapDispatch = dispatch => {
   return {
     create1v1Round: (userId, roundId) =>
-      dispatch(fetch1v1Round(userId, roundId))
+      dispatch(fetch1v1Round(userId, roundId)),
+    setUserRoom: room => dispatch(setUserRoom(room))
   };
 };
 

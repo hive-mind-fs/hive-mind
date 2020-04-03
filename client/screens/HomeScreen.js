@@ -1,7 +1,6 @@
 import React from 'react';
 import { Icon } from 'native-base';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import {LeaderboardScreen, PlayScreen, ProfileScreen, LobbyScreen } from '.';
 import { LeaderboardScreen, PlayScreen, ProfileScreen, LobbyScreen } from '.';
 
 const Tab = createBottomTabNavigator();
@@ -53,11 +52,7 @@ export default function Nav() {
           )
         }}
       />
-      <Tab.Screen
-        name="LobbyScreen"
-        component={LobbyScreen}
-      />
-
+      <Tab.Screen name="LobbyScreen" component={LobbyScreen} />
     </Tab.Navigator>
   );
 }

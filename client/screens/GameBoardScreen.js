@@ -16,7 +16,7 @@ import {
   getInitialStateFromProps
 } from './gameBoardController';
 
-function GameBoardScreen(props, { user }) {
+function GameBoardScreen(props) {
   const {
     cl,
     otherLetters,
@@ -30,51 +30,76 @@ function GameBoardScreen(props, { user }) {
   const [correctWords, setCorrectWords] = useState([]);
   const [lettersOrdering, setLettersOrdering] = useState(otherLetters);
   const [score, setScore] = useState(0);
+  const [opScore, setOpScore] = useState(0);
   const [rank, setRank] = useState('Beginner');
   const [error, setError] = useState([]);
-  const [gameTimer, setGameTimer] = useState(300);
+  const [gameTimer, setGameTimer] = useState(10);
   const [isActive, toggleActive] = useState(true);
   const [gameStart, setGameStart] = useState(true);
+  const [opName, setOpName] = useState('');
+  const [opPhoto, setOpPhoto] = useState('');
+  const [gotOp, setGotOp] = useState(false);
+  const [opId, setOpId] = useState('');
 
-  console.log(
-    'these are the props',
-    props,
-    'this is the username:',
-    props.user.username,
-    ',this is the user photo:',
-    props.user.photo
-  );
-
+  //runs once on component did mount
   useEffect(() => {
     if (gameStart) {
-      socket.emit(
-        'game start',
-        JSON.stringify({
-          user: props.user,
-          username: props.user.username,
-          photo: props.user.photo
-        })
-      );
-      setGameStart(false);
+      socket.emit('game start', {
+        user: props.user,
+        username: props.user.username,
+        photo: props.user.photo,
+        room: props.room,
+        id: props.user.id
+      });
     }
-  }); //, [gameStart]); //only run once ...
+  });
 
-  // useEffect(() => {
-  //   setTimeout(() => {
-  //     if (gameTimer > 0) {
-  //       setGameTimer(gameTimer - 1);
-  //     } else {
-  //       let userWords = roundDictObjs.filter(word =>
-  //         correctWords.includes(word.word)
-  //       );
-  //       props.saveRound(props.round.id, score, userWords);
-  //       props.navigation.navigate('PostRoundScreen', {
-  //         words: userWords,
-  //         score: score
-  //       });
-  //     }
-  //   }, 1000);
-  // }, [gameTimer]);
+  useEffect(() => {
+    if (!gotOp) {
+      socket.on('opponent', function(data) {
+        if (data.username !== props.user.username) {
+          let username = data.username;
+          let photo = data.photo;
+          let id = data.id;
+          setOpId(id);
+          setOpName(username);
+          setOpPhoto(photo);
+          setGotOp(true);
+        }
+      });
+    }
+  }, [gotOp]);
+
+  useEffect(() => {
+    socket.emit('my score changed', {
+      room: props.room,
+      score: score
+    });
+
+    socket.on('ops score changed', function(data) {
+      console.log('this is your oponents score', data.score);
+      setOpScore(data.score);
+      console.log('this is the score on state:', opScore);
+    });
+  }, [score]);
+  //Runs everytime the score changes
+
+  useEffect(() => {
+    setTimeout(() => {
+      if (gameTimer > 0) {
+        setGameTimer(gameTimer - 1);
+      } else {
+        let userWords = roundDictObjs.filter(word =>
+          correctWords.includes(word.word)
+        );
+        props.saveRound(props.round.id, score, userWords, opId);
+        props.navigation.navigate('PostRoundScreen', {
+          words: userWords,
+          score: score
+        });
+      }
+    }, 1000);
+  }, [gameTimer]);
 
   err = str => {
     setError([...error, str]);
@@ -119,13 +144,13 @@ function GameBoardScreen(props, { user }) {
   let seconds = secondsCalc <= 9 ? '0' + secondsCalc : secondsCalc;
 
   let profPic = props.user.photo + '.jpg';
-  // profPic = profPic + '.jpg';
-  console.log('profile picture', profPic);
+  let opProfPic = opPhoto + '.jpg';
+  let loading = 'Loading...';
+
   return (
     <Container style={styles.container}>
       <View style={styles.topBar}>
         <Thumbnail center large source={{ uri: profPic }} />
-        {/* <Image style={styles.topBarPhoto} source={{ uri: props.user.photo }} /> */}
         <Text style={styles.topBarItem}>
           {score + ' '}
           {props.user.username}
@@ -135,9 +160,12 @@ function GameBoardScreen(props, { user }) {
           {'  '}
           {minutes}:{seconds}
         </Text>
+        <Thumbnail center large source={{ uri: opProfPic }} />
         <Text style={styles.topBarItem}>
-          {score + ' '}
-          {props.user.username}
+          {opScore + ' '}
+          {opName.length === 0 && loading}
+          {opName.length > 0 && opName}
+          {opId && opId}
         </Text>
       </View>
       <View style={styles.correctWordsCont}>
@@ -323,14 +351,15 @@ const styles = StyleSheet.create({
 const mapState = state => {
   return {
     round: state.game.round,
-    user: state.user
+    user: state.user,
+    room: state.game.room
   };
 };
 
 const mapDispatch = dispatch => {
   return {
-    saveRound: (userRoundId, score, correctWords) =>
-      dispatch(saveRound(userRoundId, score, correctWords))
+    saveRound: (userRoundId, score, correctWords, opId) =>
+      dispatch(saveRound(userRoundId, score, correctWords, opId))
   };
 };
 

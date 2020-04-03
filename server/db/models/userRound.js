@@ -8,6 +8,10 @@ const UserRound = db.define('userRound', {
     autoIncrement: true,
     allowNull: false
   },
+  opId: {
+    type: Sequelize.INTEGER,
+    allowNull: true
+  },
   score: {
     type: Sequelize.INTEGER,
     defaultValue: 0
