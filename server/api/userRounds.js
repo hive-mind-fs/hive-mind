@@ -1,4 +1,5 @@
 const router = require('express').Router();
+const sequelize = require('sequelize');
 const { Round, Word, User, UserRound, GuessedWord } = require('../db/models');
 const { isAdmin, isCorrectUser, isSession } = require('./gateway');
 const {
@@ -95,25 +96,91 @@ router.put('/:roundId', async (req, res, next) => {
   }
 });
 
-// GET FOR STATS
+// GET FOR LEADERBOARD
+router.get('/leaderboard', async (req, res, next) => {
+  try {
+    let leaderboard = null;
+    let leaderboardObj = null;
+    try {
+      leaderboard = await UserRound.findAll({
+        attributes: [
+          [sequelize.fn('sum', sequelize.col('score')), 'totalScore']
+        ],
+        include: [{ model: User, attributes: ['id', 'username', 'photo'] }],
+        group: ['user.id']
+        // order: sequelize.literal('totalScore DESC'),
+      });
 
+      leaderboardObj = leaderboard
+        .map(rank => {
+          return {
+            totalScore: rank.dataValues.totalScore,
+            username: rank.user.username,
+            photo: rank.user.photo
+          };
+        })
+        .sort((a, b) => (a.totalScore > b.totalScore ? 1 : -1));
+    } catch (err) {
+      next(err);
+    }
+
+    res.send(leaderboardObj);
+  } catch (err) {
+    next(err);
+  }
+});
+
+// GET FOR STATS
 router.get('/:userId', async (req, res, next) => {
   try {
-    const { userId } = +req.params;
+    let userId = +req.params.userId;
 
-    const userRound = await UserRound.findAll({
-      where: { userId: userId },
-      attributes: USERROUND_ATTRIBUTES,
-      include: [
-        {
-          model: Round,
-          attributes: ROUND_ATTRIBUTES,
-          include: [{ model: Word }]
-        }
-      ]
-    });
+    let userStats = {
+      totalScore: 0,
+      roundsPlayed: 0,
+      wordsGotten: 0,
+      graphPoints: null
+    };
 
-    res.send(userRound);
+    try {
+      let userRounds = await UserRound.findAll({
+        where: { userId: userId },
+        // where: { userId: 53 }, // In case you need it hardcoded
+        attributes: USERROUND_ATTRIBUTES,
+        include: [
+          { model: Word, attributes: WORD_ATTRIBUTES },
+          {
+            model: Round,
+            attributes: ROUND_ATTRIBUTES,
+            include: [{ model: Word }]
+          }
+        ]
+      });
+
+      if (userRounds.length > 0) {
+        userStats.totalScore = userRounds
+          .map(userRound => userRound.score)
+          .reduce((acc, curr) => acc + curr);
+
+        userStats.roundsPlayed = userRounds.length;
+
+        userStats.wordsGotten = userRounds
+          .map(userRound => userRound.words.length)
+          .reduce((acc, curr) => acc + curr);
+
+        userStats.graphPoints = userRounds.map(userRound => {
+          return {
+            label: userRound.round.letters,
+            player: userRound.score,
+            totalPossible: userRound.round.possiblePoints
+          };
+        });
+      }
+    } catch (err) {
+      next(err);
+    }
+
+    res.send(userStats);
   } catch (err) {
     next(err);
   }

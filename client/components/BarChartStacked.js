@@ -16,13 +16,12 @@ const colorsArr = [colors.bars1, colors.bars2];
 export default class BarChartStacked extends PureComponent {
   render() {
     // Dimensions
-    const SVGHeight = 200;
+    const SVGHeight = 250;
     const SVGWidth = 400;
     const graphHeight = SVGHeight - 2 * GRAPH_MARGIN;
     const graphWidth = SVGWidth - 2 * GRAPH_MARGIN;
-    // const data = this.props.data;
 
-    const data = [
+    let data = [
       {
         label: 'PANGRAM',
         player: 40,
@@ -60,6 +59,10 @@ export default class BarChartStacked extends PureComponent {
       }
     ];
 
+    if (this.props.data) {
+      data = this.props.data.slice(data.length - 7);
+    }
+
     // X scale point
     const xDomain = data.map(item => item.label);
     const xRange = [0, graphWidth];
@@ -81,6 +84,7 @@ export default class BarChartStacked extends PureComponent {
       .domain(yDomain)
       .range(yRange);
 
+    // Create y-axis value labels and lines
     const yValues = () => {
       let arr = [];
 
@@ -88,7 +92,7 @@ export default class BarChartStacked extends PureComponent {
         let yCoord = (graphHeight / topValue) * i;
         let value = i;
 
-        if (i % 50 === 0) {
+        if (i % this.props.round === 0) {
           arr.push({
             value,
             yCoord
@@ -109,7 +113,7 @@ export default class BarChartStacked extends PureComponent {
             Points Per Game
           </Text>
           <G y={graphHeight + GRAPH_MARGIN - 5} x={GRAPH_MARGIN / 2}>
-            {/* Top value label */}
+            {/* LEGEND - Top value label */}
             {['You', 'Possible'].map((name, i) => (
               <Text
                 key={name}
@@ -119,7 +123,7 @@ export default class BarChartStacked extends PureComponent {
                 fontWeight="100"
                 textAnchor="end"
                 x={graphWidth}
-                y={-graphHeight + 15 + i * 15}
+                y={-graphHeight - 15 + i * 15}
                 // x="0"
                 // y={5 + i * 15}
               >
@@ -196,6 +200,7 @@ export default class BarChartStacked extends PureComponent {
             >
               Points
             </Text>
+
             {yValues().map(yValue => (
               <>
                 <Text

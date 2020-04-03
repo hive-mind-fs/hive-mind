@@ -4,7 +4,11 @@ import { Thumbnail } from 'native-base';
 export default function Logo() {
   return (
     <React.Fragment>
-        <Thumbnail xlarge source={require('../assets/bee-logo-square.png')}/>
+      <Thumbnail
+        center
+        xlarge
+        source={require('../assets/bee-logo-square.png')}
+      />
     </React.Fragment>
   );
 }
