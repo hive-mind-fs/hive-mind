@@ -47,7 +47,7 @@ async function seed() {
         distinctWords[wordIndex] = words[ind]
         return {roundId: roundIndex + 1, wordId: wordIndex}
     })
-    allRoundWordAssociations.push(roundWordAssociations)
+    allRoundWordAssociations.push(...roundWordAssociations)
   })
 
   console.log(`seeding ${roundModels.length} distinct rounds`)
@@ -63,10 +63,13 @@ async function seed() {
 
   await Word.bulkCreate(wordModels)
 
-  // Seed associations manually
-  console.log(`seeding ${allRoundWordAssociations.flat().length} distinct round word associations`)
+  // Seed associations manually, 100k at a time
+  console.log(`seeding ${allRoundWordAssociations.length} distinct round word associations`)
 
-  await db.model('roundWords').bulkCreate(allRoundWordAssociations.flat())
+  const maxInserts = 100000
+  for (let i = 0; i < allRoundWordAssociations.length; i = i + maxInserts) {
+    await db.model('roundWords').bulkCreate(allRoundWordAssociations.slice(0, i))
+  }
 
   // Seed game & winner associations for first 50 rounds
   for (let i = 1; i <= 50; i++) {
