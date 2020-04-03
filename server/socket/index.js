@@ -30,12 +30,6 @@ module.exports = io => {
         ); // emit this to all clients in waiting room
         roomCtr++;
         users = {};
-        //   socket.on('op clicked play', data => {
-        //     //socket.broadcast.to('room_0').emit('recieved play click', data);
-        //     io.to(v1Room).emit('recieved play click', data);
-        //   });
-        //   socket.on('stat game', data => {
-        //     socket.emit('game starting', data);
       }
     });
 
@@ -48,7 +42,6 @@ module.exports = io => {
 
     socket.on('my score changed', function(data) {
       const room = data.room;
-      //socket.broadcast.to('room_0').emit('ops score changed', data);
       socket.broadcast.to(room).emit('ops score changed', data);
     });
 

@@ -41,32 +41,6 @@ const LobbyScreen = ({ navigation, create1v1Round, setUserRoom, user }) => {
   }, [users]);
 
   const handlePlay = () => {
-    // socket.emit('op clicked play', { username: user.username });
-    // socket.on('recieved play click', data => {
-    //   let arr = usersReady;
-    //   if (!arr.includes(data.username)) {
-    //     arr.push(data.username);
-    //   }
-    //   setUsersReady(arr);
-    // });
-
-    // let arr = usersReady;
-    // if (!arr.includes(user.username)) {
-    //   arr.push(user.username);
-    // }
-    // setUsersReady(arr);
-
-    // console.log(usersReady);
-    // if (usersReady.length === 2) {
-    //   socket.emit('start game ', { bool: true });
-    //   socket.on('game starting', data => {
-    //     if (data.bool) {
-    //       navigation.navigate('CountdownScreen', { user: user });
-    //     }
-    //   });
-
-    //   navigation.navigate('CountdownScreen', { user: user });
-    // }
     navigation.navigate('CountdownScreen', { user: user });
   };
 
