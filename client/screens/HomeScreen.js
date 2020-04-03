@@ -2,6 +2,7 @@ import React from 'react';
 import { Icon } from 'native-base';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import {LeaderboardScreen, PlayScreen, ProfileScreen, LobbyScreen } from '.';
+import { LeaderboardScreen, PlayScreen, ProfileScreen, LobbyScreen } from '.';
 
 const Tab = createBottomTabNavigator();
 
