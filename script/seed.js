@@ -22,7 +22,7 @@ async function seed() {
   const distinctWords = {};
 
   // Seed rounds without words associations
-  rounds.map((round, roundIndex) => {
+  rounds.slice(0, 100).map((round, roundIndex) => {
     // Create and push round model
     const coreLetter = round[0];
     const letters = round[1];
@@ -117,22 +117,21 @@ async function seed() {
           roundId,
           score
         };
-        const userRound = await UserRound.findOne({ where: { userId: userId, roundId: roundId} });
+        const userRound = await UserRound.findOne({
+          where: { userId: userId, roundId: roundId }
+        });
         if (userRound) {
-          console.log('user round exists', userRound)
-          userRound.score = score
-          await userRound.save
+          userRound.score = score;
+          await userRound.save;
         } else {
-          console.log('user round no exist', userRound)
-          await UserRound.create(userRoundToAdd)
+          await UserRound.create(userRoundToAdd);
         }
       }
     }
-    // console.log()
     return arr;
   };
 
-  await userRoundsToCreate()
+  await userRoundsToCreate();
 }
 
 // We've separated the `seed` function from the `runSeed` function.
