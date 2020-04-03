@@ -119,11 +119,9 @@ async function seed() {
         };
         const userRound = await UserRound.findOne({ where: { userId: userId, roundId: roundId} });
         if (userRound) {
-          console.log('user round exists', userRound)
           userRound.score = score
           await userRound.save
         } else {
-          console.log('user round no exist', userRound)
           await UserRound.create(userRoundToAdd)
         }
       }
