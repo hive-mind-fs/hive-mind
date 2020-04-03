@@ -75,11 +75,11 @@ function GameBoardScreen(props) {
           let photo = data.photo;
           setOpName(username);
           setOpPhoto(photo);
-          console.log('oponent data on state:', opName);
-          console.log('oponent data on state:', opPhoto);
+          // console.log('oponent data on state:', opName);
+          // console.log('oponent data on state:', opPhoto);
           setGotOp(true);
         }
-        console.log('this is the data from the oponent', data);
+        // console.log('this is the data from the oponent', data);
       });
     }
   }, [gotOp]);
@@ -90,8 +90,6 @@ function GameBoardScreen(props) {
     });
 
     socket.on('ops score changed', function(data) {
-      // const scoreData = Object.values(data.data.score);
-      // const score = scoreData.score;
       console.log('this is your oponents score', data.score);
       setOpScore(data.score);
       console.log('this is the score on state:', opScore);
@@ -180,7 +178,7 @@ function GameBoardScreen(props) {
         </Text>
         <Thumbnail center large source={{ uri: opProfPic }} />
         <Text style={styles.topBarItem}>
-          {score + ' '}
+          {opScore + ' '}
           {opName.length === 0 && loading}
           {opName.length > 0 && opName}
         </Text>
