@@ -22,7 +22,7 @@ async function seed() {
   const distinctWords = {};
 
   // Seed rounds without words associations
-  rounds.slice(0, 100).map((round, roundIndex) => {
+  rounds.map((round, roundIndex) => {
     // Create and push round model
     const coreLetter = round[0];
     const letters = round[1];
@@ -51,10 +51,13 @@ async function seed() {
 
   // Seed distinct words
   console.log(`seeding ${Object.keys(distinctWords).length} distinct words`);
+
   const wordModels = [];
+
   Object.keys(distinctWords).forEach(wordKey =>
     wordModels.push({ word: distinctWords[wordKey], id: wordKey })
   );
+
   await Word.bulkCreate(wordModels);
 
   // Seed associations manually, 100k at a time

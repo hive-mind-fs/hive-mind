@@ -15,7 +15,7 @@ import {
   getInitialStateFromProps
 } from './gameBoardController';
 
-function PracticeRoundScreen(props, { navigation }) {
+function PracticeRoundScreen(props) {
   const {
     cl,
     otherLetters,
@@ -31,7 +31,7 @@ function PracticeRoundScreen(props, { navigation }) {
   const [score, setScore] = useState(0);
   const [rank, setRank] = useState('Beginner');
   const [error, setError] = useState([]);
-  const [gameTimer, setGameTimer] = useState(300);
+  const [gameTimer, setGameTimer] = useState(1);
   const [isActive, toggleActive] = useState(true);
 
   useEffect(() => {
