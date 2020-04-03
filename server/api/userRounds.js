@@ -119,12 +119,11 @@ router.get('/leaderboard', async (req, res, next) => {
             photo: rank.user.photo
           };
         })
-        .sort((a, b) => (a.totalScore > b.totalScore ? 1 : -1));
     } catch (err) {
       next(err);
     }
 
-    res.send(leaderboard);
+    res.send(leaderboardObj);
   } catch (err) {
     next(err);
   }
