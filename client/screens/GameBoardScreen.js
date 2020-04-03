@@ -84,19 +84,19 @@ function GameBoardScreen(props) {
     }
   }, [gotOp]);
 
-  // useEffect(() => {
-  //   socket.emit('my score changed', {
-  //     score: score
-  //   });
+  useEffect(() => {
+    socket.emit('my score changed', {
+      score: score
+    });
 
-  //   socket.on('ops score changed', function(data) {
-  //     // const scoreData = Object.values(data.data.score);
-  //     // const score = scoreData.score;
-  //     console.log('this is your oponents score', data.score);
-  //     setOpScore(data.score);
-  //     console.log('this is the score on state:', opScore);
-  //   });
-  // }, [score]);
+    socket.on('ops score changed', function(data) {
+      // const scoreData = Object.values(data.data.score);
+      // const score = scoreData.score;
+      console.log('this is your oponents score', data.score);
+      setOpScore(data.score);
+      console.log('this is the score on state:', opScore);
+    });
+  }, [score]);
   //Runs everytime the score changes
 
   // useEffect(() => {

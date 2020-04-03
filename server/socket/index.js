@@ -53,8 +53,8 @@ module.exports = io => {
 
     socket.on('my score changed', function(data) {
       const v1Room = `room_${roomCtr}`;
-      //socket.broadcast.to(v1Room).emit('ops score changed', data);
-      socket.emit('ops score changed', data);
+      socket.broadcast.to('room_0').emit('ops score changed', data);
+      //socket.emit('ops score changed', data);
     });
 
     socket.on('leave room', function(data) {
