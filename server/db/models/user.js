@@ -33,7 +33,7 @@ const User = db.define('user', {
   photo: {
     type: Sequelize.STRING,
     allowNull: true,
-    defaultValue: 'https://i.imgur.com/UMFJ5Gm.jpg'
+    defaultValue: 'https://i.imgur.com/34jE5RS.png'
   },
 
   location: {

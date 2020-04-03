@@ -26,6 +26,7 @@ function GameBoardScreen(props) {
     possiblePoints
   } = getInitialStateFromProps(props);
 
+
   const [input, setInput] = useState([]);
   const [correctWords, setCorrectWords] = useState([]);
   const [lettersOrdering, setLettersOrdering] = useState(otherLetters);
@@ -218,74 +219,6 @@ function GameBoardScreen(props) {
         </Button>
       </View>
     </Container>
-    // <Container style={styles.container}>
-    //   <View style={styles.topBar}>
-    //     <Text style={styles.topBarItem}>
-    //       <Icon classes={styles.topBarIcon} name="alarm" />
-    //       {'  '}
-    //       {minutes}:{seconds}
-    //     </Text>
-    //     <Text style={styles.topBarItem}>
-    //       <Icon classes={styles.topBarIcon} name="trophy" />
-    //       {'  '}
-    //       {score}
-    //     </Text>
-    //     <Text style={styles.topBarItem}>
-    //       <Icon classes={styles.topBarIcon} name="school" />
-    //       {'  '}
-    //       {rank}
-    //     </Text>
-    //   </View>
-    //   <View style={styles.correctWordsCont}>
-    //     <Text marginT10>You've found {correctWords.length} correct words</Text>
-    //     <CorrectWords words={correctWords.join('   ')} />
-    //   </View>
-    //   <View style={styles.inputCont}>
-    //     <Input style={styles.textCenter} inputLetters={input} />
-    //     <Error error={error} />
-    //   </View>
-    //   <Hive
-    //     style={styles.gameBoard}
-    //     centerLetter={cl} // comes from redux now
-    //     otherLetters={lettersOrdering}
-    //     onLetterPress={letter => handleLetterPress(letter)}
-    //   />
-    //   <View style={styles.flexRow}>
-    //     <Button
-    //       style={styles.gameButtons}
-    //       block
-    //       bordered
-    //       rounded
-    //       large
-    //       title="Delete"
-    //       onPress={() => handleDelete()}
-    //     >
-    //       <Text>Delete</Text>
-    //     </Button>
-    //     <Button
-    //       style={styles.gameButtons}
-    //       block
-    //       bordered
-    //       rounded
-    //       large
-    //       title="Shuffle"
-    //       onPress={() => handleShuffle()}
-    //     >
-    //       <Text>Shuffle</Text>
-    //     </Button>
-    //     <Button
-    //       style={styles.gameButtons}
-    //       block
-    //       bordered
-    //       rounded
-    //       large
-    //       title="Enter"
-    //       onPress={() => handleEnter()}
-    //     >
-    //       <Text>Enter</Text>
-    //     </Button>
-    //   </View>
-    // </Container>
   );
 }
 

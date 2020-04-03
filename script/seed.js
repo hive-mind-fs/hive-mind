@@ -90,18 +90,49 @@ async function seed() {
   let game51 = await Game.findByPk(51);
   await game51.setWinner(1);
   await game51.addRound(defaultRound);
-  let user1 = await User.findByPk(1);
   await defaultRound.setWinner(user1);
 
-  //Seed userRounds thru table
+  // don't really need this anymore, function below should work
+  const user1 = await User.findByPk(1);
   const user2 = await User.findByPk(2);
-  await defaultRound.addUsers([user1, user2]);
+  const user3 = await User.findByPk(3);
+  const user4 = await User.findByPk(4);
+  //Seed userRounds thru table
+  await defaultRound.addUsers([user1, user2, user3, user4]);
+
+  // seed userRounds
+  // NEEDS TO BE TESTED
+  // const userRoundsToCreate = () => {
+  //   let arr = [];
+  //   // create userRounds for userId 1-4
+  //   for (let i = 1; i <= 4; i++) {
+  //     let userId = i;
+  //     let numRounds = Math.floor(Math.random() * Math.floor(10) + 7); // Create diff num of rounds for each user so their stats are different (min 7 rounds for graphs)
+
+  //     for let (j = 0; j < 5) {
+  //       let roundId = Math.floor(Math.random() * Math.floor(1000) + 1); // randomly pick a roundId
+  //       let score = Math.floor(Math.random() * Math.floor(100) + 1); // randomly pick a score
+
+  //       // push userRound object into arr
+  //       arr.push({
+  //         userId,
+  //         roundId,
+  //         score
+  //       })
+  //     }
+  //   }
+
+  //   return arr
+  // };
+
+  // await UserRound.bulkCreate(userRoundsToCreate);
+
+  // guessedWords seeding
+  // Need to finish creating this...
+  // await GuessedWord.bulkCreate(guessedWordsToCreate);
 
   //Seed UserRoundWords thru table aka "GuessedWords"
   //Start by defining which users were in which rounds.
-  await UserRound.bulkCreate([
-    { userId: 1, roundId: 50 } //This UserRound will get id 3
-  ]);
 }
 
 // We've separated the `seed` function from the `runSeed` function.

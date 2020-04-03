@@ -7,9 +7,8 @@ import { fetchRound } from '../store/game';
 function PlayScreen({ navigation, createUserRound, user }) {
   console.log('we have user', user);
 
-  const handlePracticeRound = () => {
-    console.log('user id', user.id);
 
+  const handlePracticeRound = () => {
     createUserRound(user.id);
     navigation.navigate('CountdownScreen');
   };

@@ -7,8 +7,17 @@ export default (variables /* : * */ = variable) => {
     color: variables.textColor,
     fontSize: variables.fontSizeH1,
     lineHeight: variables.lineHeightH1,
+    '.center': {
+      textAlign: 'center'
+    },
+    '.marginT5': {
+      marginTop: 5
+    },
     '.marginT10': {
       marginTop: 10
+    },
+    '.marginT20': {
+      marginTop: 20
     }
   };
 
