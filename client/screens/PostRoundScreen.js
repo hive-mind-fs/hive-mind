@@ -9,6 +9,8 @@ function PostRoundScreen({ route, navigation, createUserRound, user }) {
   const words = route.params.words;
   const score = route.params.score;
 
+  console.log('SCORE', score);
+
   const postRound = [
     {
       title: 'Total Score',
@@ -25,12 +27,8 @@ function PostRoundScreen({ route, navigation, createUserRound, user }) {
       <Logo />
       <H1>Round Over</H1>
       {/* <Card style={{ marginTop: 20 }}> */}
-      <View>
-        <Stats stats={postRound} words={words} />
-      </View>
+      <Stats style={{ width: '400' }} stats={postRound} words={words} />
       {/* </Card> */}
-      <Card></Card>
-
       <Button
         block
         rounded
