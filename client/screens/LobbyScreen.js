@@ -30,7 +30,7 @@ const LobbyScreen = ({ navigation, create1v1Round, user }) => {
   useEffect(() => {
     socket.on('game ready!', data => {
       const gameData = JSON.parse(data);
-      //console.log(`Me ${user.username} has data for game`); //, gameData);
+      console.log(`Me ${user.username} has data for game`, gameData.room); //, gameData);
       setUsers(gameData.users);
       setRoom(gameData.room);
       //console.log(gameData.round.id);

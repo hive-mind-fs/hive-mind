@@ -38,6 +38,7 @@ function GameBoardScreen(props) {
   const [gameStart, setGameStart] = useState(true);
   const [opName, setOpName] = useState('');
   const [opPhoto, setOpPhoto] = useState('');
+  const [gotOp, setGotOp] = useState(false);
 
   //runs once on component did mount
   useEffect(() => {
@@ -47,6 +48,11 @@ function GameBoardScreen(props) {
         username: props.user.username,
         photo: props.user.photo
       });
+      // socket.emit('game start', {
+      //   user: props.user,
+      //   username: props.user.username,
+      //   photo: props.user.photo
+      // });
 
       // socket.broadcast.to(room).emit(
       //   'game start',
@@ -56,28 +62,27 @@ function GameBoardScreen(props) {
       //     photo: props.user.photo
       //   })
       // );
+    }
+  });
 
-      setGameStart(false);
+  useEffect(() => {
+    if (!gotOp) {
       socket.on('opponent', function(data) {
         // setOpName(opName.push(data.username));
         // setOpPhoto(opPhoto.push(data.photo));
-        if (data) {
+        if (data.username !== props.user.username) {
           let username = data.username;
           let photo = data.photo;
           setOpName(username);
           setOpPhoto(photo);
           console.log('oponent data on state:', opName);
           console.log('oponent data on state:', opPhoto);
+          setGotOp(true);
         }
         console.log('this is the data from the oponent', data);
-
-        //const dataForOp = JSON.parse(data);
-        // console.log('heres the data fro the op', dataForOp);
-        // setOpName(dataForOp.username);
-        // setOpPhoto(dataForOp.photo);
       });
     }
-  });
+  }, [gotOp]);
 
   // useEffect(() => {
   //   socket.emit('my score changed', {

@@ -39,9 +39,9 @@ module.exports = io => {
     socket.on('game start', function(data) {
       const v1Room = `room_${roomCtr}`;
       const userData = data;
-      console.log(`Weve got data from the gameboard`, userData);
-      //socket.to(v1Room).emit('opponent', { data });
-      socket.emit('opponent', userData);
+      // console.log(`Weve got data from the gameboard`, userData);
+      socket.broadcast.to('room_0').emit('opponent', userData);
+      // socket.emit('opponent', userData);
       // const mydata = JSON.parse(data);
       // //socket.broadcast
       //   .to(v1Room)
