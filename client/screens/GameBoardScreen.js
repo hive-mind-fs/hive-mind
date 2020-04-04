@@ -14,6 +14,7 @@ import Hive from '../components/Hive';
 import Input from '../components/Input';
 import Error from '../components/Error';
 import CorrectWords from '../components/CorrectWords';
+import CorrectWordsModal from '../components/CorrectWordsModal';
 import { saveRound } from '../store';
 import socket from '../socket';
 
@@ -194,9 +195,12 @@ function GameBoardScreen(props) {
         </View>
       </View>
       <View style={styles.correctWordsCont}>
-        <Content padder>
-          <Accordion dataArray={correctWordsArray} />
-        </Content>
+        <CorrectWordsModal
+          correctWords={correctWords}
+          correctWordsArray={correctWordsArray}
+          modalVisible={modalVisible}
+          setModalVisible={setModalVisible}
+        />
       </View>
       <View style={styles.inputCont}>
         {input.map(i =>
