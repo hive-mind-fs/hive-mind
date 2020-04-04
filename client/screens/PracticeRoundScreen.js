@@ -68,6 +68,8 @@ function PracticeRoundScreen(props) {
     setInput(input.slice(0, input.length - 1));
   };
   const handleShuffle = () => {
+    console.log('letters are', otherLetters)
+    console.log('words are', roundDict)
     setLettersOrdering(shuffle(lettersOrdering));
   };
   const handleLetterPress = letter => {
@@ -76,6 +78,7 @@ function PracticeRoundScreen(props) {
   };
 
   const handleEnter = () => {
+
     let word = input.join('');
     // Clear input
     setInput([]);

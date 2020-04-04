@@ -30,12 +30,12 @@ function GameBoardScreen(props) {
   const [correctWords, setCorrectWords] = useState([]);
   const [lettersOrdering, setLettersOrdering] = useState(otherLetters);
   const [score, setScore] = useState(0);
-  const [opScore, setOpScore] = useState(0);
   const [rank, setRank] = useState('Beginner');
   const [error, setError] = useState([]);
-  const [gameTimer, setGameTimer] = useState(20);
+  const [gameTimer, setGameTimer] = useState(10);
   const [isActive, toggleActive] = useState(true);
   const [gameStart, setGameStart] = useState(true);
+  const [opScore, setOpScore] = useState(0);
   const [opName, setOpName] = useState('');
   const [opPhoto, setOpPhoto] = useState('');
   const [gotOp, setGotOp] = useState(false);
@@ -92,10 +92,19 @@ function GameBoardScreen(props) {
         let userWords = roundDictObjs.filter(word =>
           correctWords.includes(word.word)
         );
+        let userPangrams = userWords.filter(word => {
+          const uniqueLetters = new Set(...word.split(''))
+          return uniqueLetters === 7
+        })
         props.saveRound(props.round.id, score, userWords, opId);
-        props.navigation.navigate('PostRoundScreen', {
+        props.navigation.navigate('PostRound1v1Screen', {user: {
           words: userWords,
-          score: score
+          score: score,
+          pangrams: userPangrams}, opponent: {
+            username: opName,
+            photo: opPhoto,
+            score: opScore
+          }
         });
       }
     }, 1000);

@@ -13,13 +13,12 @@ import {
 } from 'native-base';
 import { Stats, Logo } from '../components';
 import { fetchRound } from '../store/game';
+import { getAverageWordLength } from './postRoundUtils'
 
 function PostRoundScreen({ route, navigation, createUserRound, user }) {
   const words = route.params.words;
   const score = route.params.score;
-
-  const sumWordLength = (acc, curr ) => acc + curr.word.length
-  const averageWordLength = words.length ? words.reduce(sumWordLength,0)/words.length : 0
+  const averageWordLength = getAverageWordLength(words)
 
   return (
     <Container>
