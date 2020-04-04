@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
-import { StyleSheet, View } from 'react-native';
+import { StyleSheet, View, Modal, TouchableHighlight } from 'react-native';
 import { Button, Container, Text, Icon, Content, Accordion } from 'native-base';
 import Hive from '../components/Hive';
 import Input from '../components/Input';
@@ -31,8 +31,9 @@ function PracticeRoundScreen(props) {
   const [score, setScore] = useState(0);
   const [rank, setRank] = useState('Beginner');
   const [error, setError] = useState([]);
-  const [gameTimer, setGameTimer] = useState(300);
+  const [gameTimer, setGameTimer] = useState(30000);
   const [isActive, toggleActive] = useState(true);
+  const [modalVisible, setModalVisible] = useState(false);
 
   useEffect(() => {
     setTimeout(() => {
@@ -95,9 +96,10 @@ function PracticeRoundScreen(props) {
   const correctWordsArray = [
     {
       title: "You've found " + correctWords.length + ' correct words',
-      content: correctWords.join('\n')
+      content: correctWords.join(' ')
     }
   ];
+
   return (
     <Container style={styles.container}>
       <View style={styles.topBar}>
@@ -118,9 +120,37 @@ function PracticeRoundScreen(props) {
         </Text>
       </View>
       <View style={styles.correctWordsCont}>
-        <Content padder>
-          <Accordion dataArray={correctWordsArray} />
-        </Content>
+        <Modal
+          animationType="slide"
+          transparent={true}
+          visible={modalVisible}
+          onRequestClose={() => {}}
+        >
+          <View style={styles.centeredView}>
+            <View style={styles.modalView}>
+              <Content padder>
+                <Accordion dataArray={correctWordsArray} expanded={0} />
+              </Content>
+
+              <TouchableHighlight
+                style={{ ...styles.openButton, backgroundColor: '#2196F3' }}
+                onPress={() => {
+                  setModalVisible(!modalVisible);
+                }}
+              >
+                <Text style={styles.textStyle}>Back To Game</Text>
+              </TouchableHighlight>
+            </View>
+          </View>
+        </Modal>
+        <TouchableHighlight
+          style={styles.openButton}
+          onPress={() => {
+            setModalVisible(true);
+          }}
+        >
+          <Text style={styles.textStyle}>Show Correct Words</Text>
+        </TouchableHighlight>
       </View>
       <View style={styles.inputCont}>
         {error.length > 0 ? (
@@ -222,6 +252,43 @@ const styles = StyleSheet.create({
     marginRight: 5
   },
   textCenter: {
+    textAlign: 'center'
+  },
+
+  centeredView: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginTop: 22
+  },
+  modalView: {
+    margin: 20,
+    backgroundColor: 'white',
+    borderRadius: 20,
+    padding: 35,
+    alignItems: 'center',
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    elevation: 5
+  },
+  openButton: {
+    backgroundColor: '#F194FF',
+    borderRadius: 20,
+    padding: 10,
+    elevation: 2
+  },
+  textStyle: {
+    color: 'white',
+    fontWeight: 'bold',
+    textAlign: 'center'
+  },
+  modalText: {
+    marginBottom: 15,
     textAlign: 'center'
   }
 });

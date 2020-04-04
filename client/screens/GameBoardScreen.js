@@ -199,7 +199,13 @@ function GameBoardScreen(props) {
         </Content>
       </View>
       <View style={styles.inputCont}>
-        <Input style={styles.textCenter} inputLetters={input} />
+        {input.map(i =>
+          i === cl ? (
+            <Text style={styles.yellow}>{i}</Text>
+          ) : (
+            <Text style={styles.black}>{i}</Text>
+          )
+        )}
         <Error error={error} />
       </View>
       <Hive
@@ -259,8 +265,7 @@ const styles = StyleSheet.create({
     display: 'flex',
     justifyContent: 'space-around',
     alignItems: 'center',
-    flexDirection: 'row',
-    backgroundColor: 'orange'
+    flexDirection: 'row'
   },
   topBarUserInfo: {
     flex: 1,
@@ -268,22 +273,19 @@ const styles = StyleSheet.create({
     flexDirection: 'column',
     textAlign: 'center',
     justifyContent: 'center',
-    backgroundColor: 'cyan',
     margin: 1
   },
   topBarItem: {
     flex: 1,
     flexDirection: 'column',
     textAlign: 'center',
-    justifyContent: 'flex-start',
-    backgroundColor: 'red'
+    justifyContent: 'flex-start'
   },
   topBarScore: {
     flex: 1,
     flexDirection: 'column',
     textAlign: 'center',
-    justifyContent: 'flex-end',
-    backgroundColor: 'cyan'
+    justifyContent: 'flex-end'
   },
   topBarClock: {
     display: 'flex',
@@ -291,8 +293,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     textAlign: 'center',
     justifyContent: 'flex-start',
-    flex: 1,
-    backgroundColor: 'blue'
+    flex: 1
   },
   topBarIcon: {
     flex: 1
@@ -305,14 +306,14 @@ const styles = StyleSheet.create({
   correctWordsCont: {
     flex: 1,
     alignItems: 'center',
-    backgroundColor: 'yellow',
     zIndex: 1000
   },
   inputCont: {
     width: '100%',
     flex: 3,
-    justifyContent: 'flex-end',
-    backgroundColor: 'blue'
+    alignItems: 'center',
+    flexDirection: 'row',
+    justifyContent: 'flex-end'
   },
   hive: {
     alignItems: 'center',
@@ -327,12 +328,19 @@ const styles = StyleSheet.create({
   },
   gameButtons: {
     flex: 1,
+    marginTop: 20,
     marginLeft: 5,
-    marginRight: 5,
-    backgroundColor: 'cyan'
+    marginRight: 5
   },
-  textCenter: {
-    textAlign: 'center'
+  black: {
+    textAlign: 'center',
+    color: 'black',
+    fontSize: 40
+  },
+  yellow: {
+    textAlign: 'center',
+    color: '#f8cd05',
+    fontSize: 40
   }
 });
 
