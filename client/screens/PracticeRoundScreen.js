@@ -25,7 +25,7 @@ function PracticeRoundScreen(props) {
     possiblePoints
   } = getInitialStateFromProps(props);
 
-  console.log('round dict is', roundDict)
+  console.log('round dict is', roundDict);
 
   const [input, setInput] = useState([]);
   const [correctWords, setCorrectWords] = useState([]);
@@ -33,7 +33,7 @@ function PracticeRoundScreen(props) {
   const [score, setScore] = useState(0);
   const [rank, setRank] = useState('Beginner');
   const [error, setError] = useState([]);
-  const [gameTimer, setGameTimer] = useState(300);
+  const [gameTimer, setGameTimer] = useState(10);
 
   useEffect(() => {
     setTimeout(() => {
@@ -68,7 +68,7 @@ function PracticeRoundScreen(props) {
   };
 
   const handleEnter = () => {
-    let word = input.join('')
+    let word = input.join('');
     // Clear input
     setInput([]);
     //Clear error message everytime enter is pressed
