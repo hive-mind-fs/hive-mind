@@ -298,7 +298,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     textAlign: 'center',
     justifyContent: 'flex-start',
-    flex: 1
+    flex: 2
   },
   topBarIcon: {
     flex: 1
@@ -311,14 +311,16 @@ const styles = StyleSheet.create({
   correctWordsCont: {
     flex: 1,
     alignItems: 'center',
-    zIndex: 1000
+    flexDirection: 'column',
+    backgroundColor: 'cyan',
+    justifyContent: 'flex-end'
   },
   inputCont: {
     width: '100%',
     flex: 3,
     alignItems: 'center',
     flexDirection: 'row',
-    justifyContent: 'flex-end'
+    justifyContent: 'center'
   },
   hive: {
     alignItems: 'center',

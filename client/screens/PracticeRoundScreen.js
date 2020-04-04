@@ -212,7 +212,8 @@ const styles = StyleSheet.create({
     width: '100%',
     flex: 3,
     alignItems: 'center',
-    justifyContent: 'flex-end'
+    flexDirection: 'row',
+    justifyContent: 'center'
   },
   hive: {
     alignItems: 'center',
@@ -230,8 +231,15 @@ const styles = StyleSheet.create({
     marginLeft: 5,
     marginRight: 5
   },
-  textCenter: {
-    textAlign: 'center'
+  black: {
+    textAlign: 'center',
+    color: 'black',
+    fontSize: 40
+  },
+  yellow: {
+    textAlign: 'center',
+    color: '#f8cd05',
+    fontSize: 40
   }
 });
 
