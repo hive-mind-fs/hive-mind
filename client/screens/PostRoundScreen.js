@@ -18,6 +18,9 @@ function PostRoundScreen({ route, navigation, createUserRound, user }) {
   const words = route.params.words;
   const score = route.params.score;
 
+  const sumWordLength = (acc, curr ) => acc + curr.word.length
+  const averageWordLength = words.length ? words.reduce(sumWordLength,0)/words.length : 0
+
   return (
     <Container>
       <Logo />
@@ -33,7 +36,7 @@ function PostRoundScreen({ route, navigation, createUserRound, user }) {
         <View style={styles.halves}>
           <Text style={styles.right}>{score}</Text>
           <Text style={styles.right}>{words.length}</Text>
-          <Text style={styles.right}>x</Text>
+          <Text style={styles.right}>{averageWordLength}</Text>
         </View>
       </View>
 

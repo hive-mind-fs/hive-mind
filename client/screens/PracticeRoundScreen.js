@@ -25,8 +25,6 @@ function PracticeRoundScreen(props) {
     possiblePoints
   } = getInitialStateFromProps(props);
 
-  console.log('round dict is', roundDict);
-
   const [input, setInput] = useState([]);
   const [correctWords, setCorrectWords] = useState([]);
   const [lettersOrdering, setLettersOrdering] = useState(otherLetters);
@@ -72,6 +70,8 @@ function PracticeRoundScreen(props) {
     // Clear input
     setInput([]);
     //Clear error message everytime enter is pressed
+    console.log(roundDict)
+    console.log(word)
     setError(error.slice(0, error.length - 1));
     if (word.length < 4) {
       err('Your word is too short');
@@ -93,8 +93,6 @@ function PracticeRoundScreen(props) {
   let minutes = Math.floor(gameTimer / 60);
   let secondsCalc = gameTimer - minutes * 60;
   let seconds = secondsCalc <= 9 ? '0' + secondsCalc : secondsCalc;
-
-  console.log(error);
 
   return (
     <Container style={styles.container}>
