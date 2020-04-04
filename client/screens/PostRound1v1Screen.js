@@ -85,8 +85,7 @@ function PostRound1v1Screen({ route, navigation, createUserRound, user }) {
           marginTopL
           title="Play Again"
           onPress={() => {
-            createUserRound(user.id);
-            navigation.navigate('LobbyScreen');
+            navigation.navigate('PlayScreen');
           }}
         >
           <Text>Play Again</Text>
