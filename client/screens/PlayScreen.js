@@ -67,16 +67,6 @@ function PlayScreen({ navigation, createUserRound, user }) {
       >
         <Text>How To Play</Text>
       </Button>
-
-      <Button
-        light
-        block
-        rounded
-        marginTop
-        onPress={() => navigation.navigate('PostRound1v1Screen')}
-      >
-        <Text>Post1v1</Text>
-      </Button>
     </Container>
   );
 }
