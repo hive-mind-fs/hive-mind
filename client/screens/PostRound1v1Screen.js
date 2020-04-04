@@ -1,20 +1,28 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { View, StyleSheet } from 'react-native';
-import { Button, Footer, Card, Container, H1, H3, Text, Thumbnail } from 'native-base';
+import {
+  Button,
+  Footer,
+  Card,
+  Container,
+  H1,
+  H3,
+  Text,
+  Thumbnail
+} from 'native-base';
 // import { Col, Row, Grid } from 'react-native-easy-grid';
 import { Stats, Logo, BarChartGrouped } from '../components';
-import { fetchPracticeRound } from '../store/game';
+import { fetchRound } from '../store/game';
 import { getAverageWordLength, getPangrams } from './postRoundUtils'
 
 function PostRound1v1Screen({ route, navigation, createUserRound, user }) {
-
   const opName = route.params.opponent.username;
   const opPhoto = route.params.opponent.photo;
   const opScore = route.params.opponent.score;
 
-  const userName = user.username
-  const userPhoto = user.photo
+  const userName = user.username;
+  const userPhoto = user.photo;
   const userScore = route.params.user.score;
   const userWords = route.params.user.words;
   const userPangrams = getPangrams(userWords);
@@ -22,14 +30,16 @@ function PostRound1v1Screen({ route, navigation, createUserRound, user }) {
 
   return (
     <Container>
-      <H1 style={styles.textCenter}>Game Over! You {opScore > userScore ? 'Lost!' : 'Won!'}</H1>
+      <H1 style={styles.textCenter}>
+        Game Over! You {opScore > userScore ? 'Lost!' : 'Won!'}
+      </H1>
       <View style={styles.flexRow}>
         <View style={styles.colLarge}>
-        {userPhoto ? (
-        <Thumbnail center large source={{ uri: userPhoto }} />
-      ) : (
-        <Logo />
-      )}
+          {userPhoto ? (
+            <Thumbnail center large source={{ uri: userPhoto }} />
+          ) : (
+            <Logo />
+          )}
           <H3 style={styles.textCenter}>{userName}</H3>
         </View>
         <View style={styles.colSmall}>
@@ -37,10 +47,10 @@ function PostRound1v1Screen({ route, navigation, createUserRound, user }) {
         </View>
         <View style={styles.colLarge}>
           {opPhoto ? (
-        <Thumbnail center large source={{ uri: opPhoto }} />
-      ) : (
-        <Logo />
-      )}
+            <Thumbnail center large source={{ uri: opPhoto }} />
+          ) : (
+            <Logo />
+          )}
           <H3 style={styles.textCenter}>{opName}</H3>
         </View>
       </View>
@@ -146,7 +156,7 @@ const mapState = state => {
 
 const mapDispatch = dispatch => {
   return {
-    createUserRound: userId => dispatch(fetchPracticeRound(userId))
+    createUserRound: userId => dispatch(fetchRound(userId))
   };
 };
 
