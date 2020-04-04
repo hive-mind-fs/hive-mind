@@ -191,7 +191,9 @@ function GameBoardScreen(props) {
           <Text style={styles.topBarScore}>{opScore}</Text>
           <Text style={styles.topBarItem}>
             {opName.length === 0 && loading}
-            {opName.length > 0 && opName}
+            {opName.length > 0 && opName.length > 7
+              ? opName.slice(0, 4) + '...'
+              : opName}
           </Text>
         </View>
       </View>
@@ -312,7 +314,6 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     flexDirection: 'column',
-    backgroundColor: 'cyan',
     justifyContent: 'flex-end'
   },
   inputCont: {
