@@ -173,7 +173,11 @@ function GameBoardScreen(props) {
         />
         <View style={styles.topBarUserInfo}>
           <Text style={styles.topBarScore}>{score}</Text>
-          <Text style={styles.topBarItem}>{props.user.username}</Text>
+          <Text style={styles.userName}>
+            {props.user.username.length > 0 && props.user.username.length > 6
+              ? props.user.username.slice(0, 4) + '...'
+              : props.user.username}
+          </Text>
         </View>
         <View style={styles.topBarClock}>
           <Icon classes={styles.topBarIcon} name="alarm" />
@@ -189,10 +193,10 @@ function GameBoardScreen(props) {
         />
         <View style={styles.topBarUserInfo}>
           <Text style={styles.topBarScore}>{opScore}</Text>
-          <Text style={styles.topBarItem}>
+          <Text style={styles.opName}>
             {opName.length === 0 && loading}
             {opName.length > 0 && opName.length > 7
-              ? opName.slice(0, 4) + '...'
+              ? opName.slice(0, 5) + '...'
               : opName}
           </Text>
         </View>
@@ -280,9 +284,17 @@ const styles = StyleSheet.create({
     flexDirection: 'column',
     textAlign: 'center',
     justifyContent: 'center',
-    margin: 1
+    margin: 1,
+    backgroundColor: 'cyan'
   },
-  topBarItem: {
+  userName: {
+    flex: 1,
+    flexDirection: 'column',
+    textAlign: 'center',
+    justifyContent: 'flex-start',
+    backgroundColor: 'orange'
+  },
+  opName: {
     flex: 1,
     flexDirection: 'column',
     textAlign: 'center',
