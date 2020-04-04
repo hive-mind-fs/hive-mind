@@ -32,7 +32,7 @@ function PracticeRoundScreen(props) {
   const [score, setScore] = useState(0);
   const [rank, setRank] = useState('Beginner');
   const [error, setError] = useState([]);
-  const [gameTimer, setGameTimer] = useState(30000);
+  const [gameTimer, setGameTimer] = useState(300);
   const [isActive, toggleActive] = useState(true);
   const [modalVisible, setModalVisible] = useState(false);
 

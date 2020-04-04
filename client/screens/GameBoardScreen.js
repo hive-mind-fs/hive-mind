@@ -42,7 +42,7 @@ function GameBoardScreen(props) {
   const [opScore, setOpScore] = useState(0);
   const [rank, setRank] = useState('Beginner');
   const [error, setError] = useState([]);
-  const [gameTimer, setGameTimer] = useState(30000);
+  const [gameTimer, setGameTimer] = useState(300);
   const [isActive, toggleActive] = useState(true);
   const [gameStart, setGameStart] = useState(true);
   const [opName, setOpName] = useState('');
