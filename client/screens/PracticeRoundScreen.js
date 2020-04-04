@@ -25,13 +25,23 @@ function PracticeRoundScreen(props) {
     possiblePoints
   } = getInitialStateFromProps(props);
 
+  const gameDuration = 10;
+
   const [input, setInput] = useState([]);
   const [correctWords, setCorrectWords] = useState([]);
   const [lettersOrdering, setLettersOrdering] = useState(otherLetters);
   const [score, setScore] = useState(0);
   const [rank, setRank] = useState('Beginner');
   const [error, setError] = useState([]);
-  const [gameTimer, setGameTimer] = useState(10);
+  const [gameTimer, setGameTimer] = useState(gameDuration);
+
+  // Reset timer when screen is loaded
+  useEffect(() => {
+    const unsubscribe = props.navigation.addListener('focus', () => {
+      setGameTimer(gameDuration);
+    });
+    return unsubscribe;
+  }, [props.navigation]);
 
   useEffect(() => {
     setTimeout(() => {
