@@ -50,9 +50,10 @@ function GameBoardScreen(props) {
   const [gotOp, setGotOp] = useState(false);
   const [opId, setOpId] = useState('');
 
-  const [error, setError] = useState([])
+  const [error, setError] = useState([]);
   const [gameTimer, setGameTimer] = useState(gameDuration);
   const [modalVisible, setModalVisible] = useState(false);
+  const [gameStart, setGameStart] = useState(true);
 
   // Reset timer when screen is reloaded
   useEffect(() => {
@@ -112,14 +113,17 @@ function GameBoardScreen(props) {
           correctWords.includes(word.word)
         );
         let userPangrams = userWords.filter(word => {
-          const uniqueLetters = new Set(...word.split(''))
-          return uniqueLetters === 7
-        })
+          const uniqueLetters = new Set(...word.split(''));
+          return uniqueLetters === 7;
+        });
         props.saveRound(props.round.id, score, userWords, opId);
-        props.navigation.navigate('PostRound1v1Screen', {user: {
-          words: userWords,
-          score: score,
-          pangrams: userPangrams}, opponent: {
+        props.navigation.navigate('PostRound1v1Screen', {
+          user: {
+            words: userWords,
+            score: score,
+            pangrams: userPangrams
+          },
+          opponent: {
             username: opName,
             photo: opPhoto,
             score: opScore
@@ -129,22 +133,22 @@ function GameBoardScreen(props) {
     }, 1000);
   }, [gameTimer]);
 
-  err = str => {
+  const err = str => {
     setError([...error, str]);
   };
 
-  handleDelete = () => {
+  const handleDelete = () => {
     setInput(input.slice(0, input.length - 1));
   };
-  handleShuffle = () => {
+  const handleShuffle = () => {
     setLettersOrdering(shuffle(lettersOrdering));
   };
-  handleLetterPress = letter => {
+  const handleLetterPress = letter => {
     setError(error.slice(0, error.length - 1));
     setInput([...input, letter]);
   };
 
-  handleEnter = () => {
+  const handleEnter = () => {
     let word = input.join('');
     // Clear input
     setInput([]);
