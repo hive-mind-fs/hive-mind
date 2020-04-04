@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
-import { StyleSheet, View } from 'react-native';
-import { Button, Container, Text, Icon } from 'native-base';
+import { StyleSheet, View, Modal, TouchableHighlight } from 'react-native';
+import { Button, Container, Text, Icon, Content, Accordion } from 'native-base';
 import Hive from '../components/Hive';
+import CorrectWordsModal from '../components/CorrectWordsModal';
 import Input from '../components/Input';
 import Error from '../components/Error';
 import CorrectWords from '../components/CorrectWords';
@@ -33,9 +34,10 @@ function PracticeRoundScreen(props) {
   const [score, setScore] = useState(0);
   const [rank, setRank] = useState('Beginner');
   const [error, setError] = useState([]);
+  const [modalVisible, setModalVisible] = useState(false);
   const [gameTimer, setGameTimer] = useState(gameDuration);
 
-  // Reset timer when screen is loaded
+  // Reset timer when screen is reloaded
   useEffect(() => {
     const unsubscribe = props.navigation.addListener('focus', () => {
       setGameTimer(gameDuration);
@@ -78,7 +80,6 @@ function PracticeRoundScreen(props) {
   };
 
   const handleEnter = () => {
-
     let word = input.join('');
     // Clear input
     setInput([]);
@@ -107,6 +108,13 @@ function PracticeRoundScreen(props) {
   let secondsCalc = gameTimer - minutes * 60;
   let seconds = secondsCalc <= 9 ? '0' + secondsCalc : secondsCalc;
 
+  const correctWordsArray = [
+    {
+      title: "You've found " + correctWords.length + ' correct words',
+      content: correctWords.join(' ')
+    }
+  ];
+
   return (
     <Container style={styles.container}>
       <View style={styles.topBar}>
@@ -127,15 +135,23 @@ function PracticeRoundScreen(props) {
         </Text>
       </View>
       <View style={styles.correctWordsCont}>
-        <Text marginT10>You've found {correctWords.length} correct words</Text>
-        <CorrectWords words={correctWords.join('   ')} />
+        <CorrectWordsModal
+          correctWords={correctWords}
+          correctWordsjoined={correctWords.join('   ')}
+          correctWordsArray={correctWordsArray}
+          modalVisible={modalVisible}
+          setModalVisible={setModalVisible}
+        />
       </View>
       <View style={styles.inputCont}>
-        {error.length > 0 ? (
-          <Error error={error} />
-        ) : (
-          <Input style={styles.textCenter} inputLetters={input} />
+        {input.map(i =>
+          i === cl ? (
+            <Text style={styles.yellow}>{i}</Text>
+          ) : (
+            <Text style={styles.black}>{i}</Text>
+          )
         )}
+        <Error error={error} />
       </View>
       <View style={styles.hive}>
         <Hive
@@ -205,12 +221,16 @@ const styles = StyleSheet.create({
   },
   correctWordsCont: {
     flex: 1,
-    alignItems: 'center'
+    alignItems: 'center',
+    flexDirection: 'column',
+    justifyContent: 'flex-end'
   },
   inputCont: {
     width: '100%',
     flex: 3,
-    justifyContent: 'flex-end'
+    alignItems: 'center',
+    flexDirection: 'row',
+    justifyContent: 'center'
   },
   hive: {
     alignItems: 'center',
@@ -228,8 +248,15 @@ const styles = StyleSheet.create({
     marginLeft: 5,
     marginRight: 5
   },
-  textCenter: {
-    textAlign: 'center'
+  black: {
+    textAlign: 'center',
+    color: 'black',
+    fontSize: 40
+  },
+  yellow: {
+    textAlign: 'center',
+    color: '#f8cd05',
+    fontSize: 40
   }
 });
 

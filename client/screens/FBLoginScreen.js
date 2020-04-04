@@ -5,12 +5,13 @@ import {
   View,
   Image,
   StyleSheet,
-  ActivityIndicator,
+  ActivityIndicator
 } from 'react-native';
+import { connect } from 'react-redux';
 import * as Facebook from 'expo-facebook';
+import { auth } from '../store';
 
-
-const FBLoginScreen = ({navigation}) => {
+const FBLoginScreen = ({ handleSubmit, navigation }) => {
   const [isLoggedin, setLoggedinStatus] = useState(false);
   const [userData, setUserData] = useState([]);
   const [isImageLoading, setImageLoadStatus] = useState(false);
@@ -53,12 +54,10 @@ const FBLoginScreen = ({navigation}) => {
   //   }
   // });
 
-  return (
-
-    isLoggedin ?
-        userData && isImageLoading ?
+  return isLoggedin ? (
+    userData && isImageLoading ? (
       <View>
-         <ActivityIndicator
+        <ActivityIndicator
           size="large"
           color="#0000ff"
           animating={!isImageLoading}
@@ -74,13 +73,15 @@ const FBLoginScreen = ({navigation}) => {
           Hi {userData.name}!
         </Text>
 
-        <TouchableOpacity style={styles.logoutBtn}  onPress={() => navigation.navigate('PlayScreen')}>
+        <TouchableOpacity
+          style={styles.logoutBtn}
+          onPress={() => navigation.navigate('PlayScreen')}
+        >
           <Text style={{ color: '#fff' }}>Play</Text>
         </TouchableOpacity>
       </View>
-     :
-      null
-  :
+    ) : null
+  ) : (
     <View style={styles.container}>
       <TouchableOpacity style={styles.loginBtn} onPress={() => facebookLogIn()}>
         <Text style={{ color: '#fff' }}>Login with Facebook</Text>
@@ -89,26 +90,35 @@ const FBLoginScreen = ({navigation}) => {
   );
 };
 
-
-
 const styles = StyleSheet.create({
-    loginBtn: {
-      backgroundColor: '#4267b2',
-      paddingVertical: 10,
-      paddingHorizontal: 20,
-      borderRadius: 20,
-      top: 50
-    },
-    logoutBtn: {
-      backgroundColor: '#4267b2',
-      paddingVertical: 10,
-      paddingHorizontal: 20,
-      borderRadius: 20,
-      position: 'absolute',
-      left: 35,
-      bottom: -50
-    }
-  });
+  loginBtn: {
+    backgroundColor: '#4267b2',
+    paddingVertical: 10,
+    paddingHorizontal: 20,
+    borderRadius: 20,
+    top: 50
+  },
+  logoutBtn: {
+    backgroundColor: '#4267b2',
+    paddingVertical: 10,
+    paddingHorizontal: 20,
+    borderRadius: 20,
+    position: 'absolute',
+    left: 35,
+    bottom: -50
+  }
+});
 
+const mapState = state => {
+  return {
+    user: state.user
+  };
+};
 
-  export default FBLoginScreen;
+const mapDispatch = dispatch => {
+  return {
+    handleSubmit: (email, password) => dispatch(auth(email, password, 'signup'))
+  };
+};
+
+export default connect(mapState, mapDispatch)(FBLoginScreen);

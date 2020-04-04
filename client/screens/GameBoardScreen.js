@@ -1,11 +1,20 @@
 import React, { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
 import { StyleSheet, View } from 'react-native';
-import { Button, Container, Text, Icon, Thumbnail } from 'native-base';
+import {
+  Button,
+  Container,
+  Text,
+  Icon,
+  Thumbnail,
+  Content,
+  Accordion
+} from 'native-base';
 import Hive from '../components/Hive';
 import Input from '../components/Input';
 import Error from '../components/Error';
 import CorrectWords from '../components/CorrectWords';
+import CorrectWordsModal from '../components/CorrectWordsModal';
 import { saveRound } from '../store';
 import socket from '../socket';
 
@@ -26,20 +35,32 @@ function GameBoardScreen(props) {
     possiblePoints
   } = getInitialStateFromProps(props);
 
+  const gameDuration = 20;
+
   const [input, setInput] = useState([]);
   const [correctWords, setCorrectWords] = useState([]);
   const [lettersOrdering, setLettersOrdering] = useState(otherLetters);
   const [score, setScore] = useState(0);
   const [rank, setRank] = useState('Beginner');
-  const [error, setError] = useState([]);
-  const [gameTimer, setGameTimer] = useState(10);
-  const [isActive, toggleActive] = useState(true);
-  const [gameStart, setGameStart] = useState(true);
   const [opScore, setOpScore] = useState(0);
+
+  // refactor this
   const [opName, setOpName] = useState('');
   const [opPhoto, setOpPhoto] = useState('');
   const [gotOp, setGotOp] = useState(false);
   const [opId, setOpId] = useState('');
+
+  const [error, setError] = useState([])
+  const [gameTimer, setGameTimer] = useState(gameDuration);
+  const [modalVisible, setModalVisible] = useState(false);
+
+  // Reset timer when screen is reloaded
+  useEffect(() => {
+    const unsubscribe = props.navigation.addListener('focus', () => {
+      setGameTimer(gameDuration);
+    });
+    return unsubscribe;
+  }, [props.navigation]);
 
   //runs once on component did mount
   useEffect(() => {
@@ -77,9 +98,7 @@ function GameBoardScreen(props) {
     });
 
     socket.on('ops score changed', function(data) {
-      console.log('this is your oponents score', data.score);
       setOpScore(data.score);
-      console.log('this is the score on state:', opScore);
     });
   }, [score]);
   //Runs everytime the score changes
@@ -156,41 +175,78 @@ function GameBoardScreen(props) {
   let opProfPic = opPhoto + '.jpg';
   let loading = 'Loading...';
 
+  const correctWordsArray = [
+    {
+      title: "You've found " + correctWords.length + ' correct words',
+      content: correctWords.join('   ')
+    }
+  ];
+
   return (
     <Container style={styles.container}>
       <View style={styles.topBar}>
-        <Thumbnail center large source={{ uri: profPic }} />
-        <Text style={styles.topBarItem}>
-          {score + ' '}
-          {props.user.username}
-        </Text>
-        <Text style={styles.topBarItem}>
+        <Thumbnail
+          style={styles.topBarPhoto}
+          center
+          large
+          source={{ uri: profPic }}
+        />
+        <View style={styles.topBarUserInfo}>
+          <Text style={styles.topBarScore}>{score}</Text>
+          <Text style={styles.userName}>
+            {props.user.username.length > 0 && props.user.username.length > 6
+              ? props.user.username.slice(0, 4) + '...'
+              : props.user.username}
+          </Text>
+        </View>
+        <View style={styles.topBarClock}>
           <Icon classes={styles.topBarIcon} name="alarm" />
-          {'  '}
-          {minutes}:{seconds}
-        </Text>
-        <Thumbnail center large source={{ uri: opProfPic }} />
-        <Text style={styles.topBarItem}>
-          {opScore + ' '}
-          {opName.length === 0 && loading}
-          {opName.length > 0 && opName}
-        </Text>
+          <Text style={styles.topBarItem}>
+            {minutes}:{seconds}
+          </Text>
+        </View>
+        <Thumbnail
+          style={styles.topBarPhoto}
+          center
+          large
+          source={{ uri: opProfPic }}
+        />
+        <View style={styles.topBarUserInfo}>
+          <Text style={styles.topBarScore}>{opScore}</Text>
+          <Text style={styles.opName}>
+            {opName.length === 0 && loading}
+            {opName.length > 0 && opName.length > 7
+              ? opName.slice(0, 5) + '...'
+              : opName}
+          </Text>
+        </View>
       </View>
       <View style={styles.correctWordsCont}>
-        <Text marginT10>You've found {correctWords.length} correct words</Text>
-        <CorrectWords words={correctWords.join('   ')} />
+        <CorrectWordsModal
+          correctWords={correctWords}
+          correctWordsjoined={correctWords.join('   ')}
+          correctWordsArray={correctWordsArray}
+          modalVisible={modalVisible}
+          setModalVisible={setModalVisible}
+        />
       </View>
       <View style={styles.inputCont}>
-        <Input style={styles.textCenter} inputLetters={input} />
+        {input.map(i =>
+          i === cl ? (
+            <Text style={styles.yellow}>{i}</Text>
+          ) : (
+            <Text style={styles.black}>{i}</Text>
+          )
+        )}
         <Error error={error} />
       </View>
       <Hive
-        style={styles.gameBoard}
+        style={styles.hive}
         centerLetter={cl} // comes from redux now
         otherLetters={lettersOrdering}
         onLetterPress={letter => handleLetterPress(letter)}
       />
-      <View style={styles.flexRow}>
+      <View style={styles.bottom}>
         <Button
           style={styles.gameButtons}
           block
@@ -230,61 +286,100 @@ function GameBoardScreen(props) {
 }
 
 const styles = StyleSheet.create({
+  container: {
+    display: 'flex',
+    flexDirection: 'column'
+  },
   topBar: {
-    position: 'absolute',
-    top: 70,
-    // flex: 2,
+    width: '100%',
+    flex: 1,
+    marginTop: 15,
     display: 'flex',
     justifyContent: 'space-around',
+    alignItems: 'center',
     flexDirection: 'row'
   },
-  topBarItem: {
+  topBarUserInfo: {
     flex: 1,
-    textAlign: 'center'
+    display: 'flex',
+    flexDirection: 'column',
+    textAlign: 'center',
+    justifyContent: 'center',
+    margin: 1
+  },
+  userName: {
+    flex: 1,
+    flexDirection: 'column',
+    textAlign: 'center',
+    justifyContent: 'flex-start'
+  },
+  opName: {
+    flex: 1,
+    flexDirection: 'column',
+    textAlign: 'center',
+    justifyContent: 'flex-start'
+  },
+  topBarScore: {
+    flex: 1,
+    flexDirection: 'column',
+    textAlign: 'center',
+    justifyContent: 'flex-end'
+  },
+  topBarClock: {
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+    textAlign: 'center',
+    justifyContent: 'flex-start',
+    flex: 2
   },
   topBarIcon: {
-    paddingRight: 15
+    flex: 1
   },
   topBarPhoto: {
     paddingRight: 15,
-    width: 10,
-    height: 10,
-    borderRadius: 50
+    width: 50,
+    height: 50
   },
   correctWordsCont: {
-    // flex: 1
-    // width: 100
-    position: 'absolute',
-    top: 130,
-    alignItems: 'center'
+    flex: 1,
+    alignItems: 'center',
+    flexDirection: 'column',
+    justifyContent: 'flex-end'
   },
   inputCont: {
-    // flex: 4,
-    position: 'absolute',
-    top: 200
-  },
-  gameBoard: {
+    width: '100%',
+    flex: 3,
     alignItems: 'center',
-    justifyContent: 'center',
-    // flex: 5,
-    position: 'absolute',
-    bottom: 200
+    flexDirection: 'row',
+    justifyContent: 'center'
   },
-  flexRow: {
+  hive: {
+    alignItems: 'center',
+    flex: 10,
+    width: '100%'
+  },
+  bottom: {
     display: 'flex',
     flexDirection: 'row',
     justifyContent: 'space-around',
-    position: 'absolute',
-    bottom: 40
-    // flex: 1
+    flex: 2
   },
   gameButtons: {
     flex: 1,
+    marginTop: 20,
     marginLeft: 5,
     marginRight: 5
   },
-  textCenter: {
-    textAlign: 'center'
+  black: {
+    textAlign: 'center',
+    color: 'black',
+    fontSize: 40
+  },
+  yellow: {
+    textAlign: 'center',
+    color: '#f8cd05',
+    fontSize: 40
   }
 });
 

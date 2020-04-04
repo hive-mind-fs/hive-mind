@@ -35,7 +35,11 @@ const LobbyScreen = ({ navigation, create1v1Round, setUserRoom, user }) => {
       setUsers(gameData.users);
       setRoom(gameData.room);
       setUserRoom(gameData.room);
-      create1v1Round(user.id, gameData.round.id);
+      console.log(gameData);
+      const makeRound = async () => {
+        await create1v1Round(user.id, gameData.round.id);
+      };
+      makeRound();
       navigation.navigate('CountdownScreen', { user: user });
     });
   }, [users]);

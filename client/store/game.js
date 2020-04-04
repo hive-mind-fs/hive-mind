@@ -76,8 +76,8 @@ export const fetchRound = userId => async dispatch => {
       round = await axios.post(`/api/userRounds/${userId}`);
     }
     dispatch(setRound(round.data));
-  } catch (err) {
-    console.error(err);
+  } catch (error) {
+    console.error(error);
   }
 };
 
@@ -93,8 +93,8 @@ export const fetch1v1Round = (userId, roundId) => async dispatch => {
     }
     console.log('round data in thunk', round.data);
     dispatch(set1v1Round(round.data));
-  } catch (err) {
-    console.error(err);
+  } catch (error) {
+    console.error(error);
   }
 };
 
@@ -117,8 +117,8 @@ export const saveRound = (
       console.error(error);
     }
     dispatch(savedRound(round.data));
-  } catch (err) {
-    console.error(err);
+  } catch (error) {
+    console.error(error);
   }
 };
 
@@ -134,8 +134,8 @@ export const getUserStats = userId => async dispatch => {
     let response = userStats.data ? userStats.data : userStats;
 
     dispatch(gotUserStats(response));
-  } catch (err) {
-    console.error(err);
+  } catch (error) {
+    console.error(error);
   }
 };
 
@@ -149,8 +149,8 @@ export const getLeaderboard = () => async dispatch => {
       leaderboard = await axios.get(`/api/userRounds/leaderboard`);
     }
     dispatch(gotLeaderboard(leaderboard.data));
-  } catch (err) {
-    console.error(err);
+  } catch (error) {
+    console.error(error);
   }
 };
 
