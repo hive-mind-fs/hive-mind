@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
 import { StyleSheet, View } from 'react-native';
-import { Button, Container, Text, Icon } from 'native-base';
+import { Button, Container, Text, Icon, Content, Accordion } from 'native-base';
 import Hive from '../components/Hive';
 import Input from '../components/Input';
 import Error from '../components/Error';
@@ -92,7 +92,12 @@ function PracticeRoundScreen(props) {
   let minutes = Math.floor(gameTimer / 60);
   let secondsCalc = gameTimer - minutes * 60;
   let seconds = secondsCalc <= 9 ? '0' + secondsCalc : secondsCalc;
-
+  const correctWordsArray = [
+    {
+      title: "You've found " + correctWords.length + ' correct words',
+      content: correctWords.join('\n')
+    }
+  ];
   return (
     <Container style={styles.container}>
       <View style={styles.topBar}>
@@ -113,8 +118,9 @@ function PracticeRoundScreen(props) {
         </Text>
       </View>
       <View style={styles.correctWordsCont}>
-        <Text marginT10>You've found {correctWords.length} correct words</Text>
-        <CorrectWords words={correctWords.join('   ')} />
+        <Content padder>
+          <Accordion dataArray={correctWordsArray} />
+        </Content>
       </View>
       <View style={styles.inputCont}>
         {error.length > 0 ? (
@@ -190,12 +196,13 @@ const styles = StyleSheet.create({
     paddingRight: 15
   },
   correctWordsCont: {
-    flex: 1,
+    flex: 2,
     alignItems: 'center'
   },
   inputCont: {
     width: '100%',
     flex: 3,
+    alignItems: 'center',
     justifyContent: 'flex-end'
   },
   hive: {
