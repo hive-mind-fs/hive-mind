@@ -26,15 +26,24 @@ function PracticeRoundScreen(props) {
     possiblePoints
   } = getInitialStateFromProps(props);
 
+  const gameDuration = 10;
+
   const [input, setInput] = useState([]);
   const [correctWords, setCorrectWords] = useState([]);
   const [lettersOrdering, setLettersOrdering] = useState(otherLetters);
   const [score, setScore] = useState(0);
   const [rank, setRank] = useState('Beginner');
   const [error, setError] = useState([]);
-  const [gameTimer, setGameTimer] = useState(300);
-  const [isActive, toggleActive] = useState(true);
   const [modalVisible, setModalVisible] = useState(false);
+  const [gameTimer, setGameTimer] = useState(gameDuration);
+
+  // Reset timer when screen is reloaded
+  useEffect(() => {
+    const unsubscribe = props.navigation.addListener('focus', () => {
+      setGameTimer(gameDuration);
+    });
+    return unsubscribe;
+  }, [props.navigation]);
 
   useEffect(() => {
     setTimeout(() => {
@@ -61,6 +70,8 @@ function PracticeRoundScreen(props) {
     setInput(input.slice(0, input.length - 1));
   };
   const handleShuffle = () => {
+    console.log('letters are', otherLetters)
+    console.log('words are', roundDict)
     setLettersOrdering(shuffle(lettersOrdering));
   };
   const handleLetterPress = letter => {
@@ -73,6 +84,8 @@ function PracticeRoundScreen(props) {
     // Clear input
     setInput([]);
     //Clear error message everytime enter is pressed
+    console.log(roundDict)
+    console.log(word)
     setError(error.slice(0, error.length - 1));
     if (word.length < 4) {
       err('Your word is too short');
@@ -81,7 +94,7 @@ function PracticeRoundScreen(props) {
     } else if (correctWords.includes(word)) {
       err("You've already found this word");
     } else if (roundDict.includes(word)) {
-      setCorrectWords([...correctWords, word.toUpperCase()]);
+      setCorrectWords([...correctWords, word]);
       // Score function
       setScore(score + getScore(word, pangramList));
     } else {
@@ -94,6 +107,7 @@ function PracticeRoundScreen(props) {
   let minutes = Math.floor(gameTimer / 60);
   let secondsCalc = gameTimer - minutes * 60;
   let seconds = secondsCalc <= 9 ? '0' + secondsCalc : secondsCalc;
+
   const correctWordsArray = [
     {
       title: "You've found " + correctWords.length + ' correct words',

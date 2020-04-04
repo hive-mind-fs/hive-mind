@@ -35,21 +35,32 @@ function GameBoardScreen(props) {
     possiblePoints
   } = getInitialStateFromProps(props);
 
+  const gameDuration = 20;
+
   const [input, setInput] = useState([]);
   const [correctWords, setCorrectWords] = useState([]);
   const [lettersOrdering, setLettersOrdering] = useState(otherLetters);
   const [score, setScore] = useState(0);
-  const [opScore, setOpScore] = useState(0);
   const [rank, setRank] = useState('Beginner');
-  const [error, setError] = useState([]);
-  const [gameTimer, setGameTimer] = useState(300);
-  const [isActive, toggleActive] = useState(true);
-  const [gameStart, setGameStart] = useState(true);
+  const [opScore, setOpScore] = useState(0);
+
+  // refactor this
   const [opName, setOpName] = useState('');
   const [opPhoto, setOpPhoto] = useState('');
   const [gotOp, setGotOp] = useState(false);
   const [opId, setOpId] = useState('');
+
+  const [error, setError] = useState([])
+  const [gameTimer, setGameTimer] = useState(gameDuration);
   const [modalVisible, setModalVisible] = useState(false);
+
+  // Reset timer when screen is reloaded
+  useEffect(() => {
+    const unsubscribe = props.navigation.addListener('focus', () => {
+      setGameTimer(gameDuration);
+    });
+    return unsubscribe;
+  }, [props.navigation]);
 
   //runs once on component did mount
   useEffect(() => {
@@ -100,10 +111,19 @@ function GameBoardScreen(props) {
         let userWords = roundDictObjs.filter(word =>
           correctWords.includes(word.word)
         );
+        let userPangrams = userWords.filter(word => {
+          const uniqueLetters = new Set(...word.split(''))
+          return uniqueLetters === 7
+        })
         props.saveRound(props.round.id, score, userWords, opId);
-        props.navigation.navigate('PostRoundScreen', {
+        props.navigation.navigate('PostRound1v1Screen', {user: {
           words: userWords,
-          score: score
+          score: score,
+          pangrams: userPangrams}, opponent: {
+            username: opName,
+            photo: opPhoto,
+            score: opScore
+          }
         });
       }
     }, 1000);
@@ -137,7 +157,7 @@ function GameBoardScreen(props) {
     } else if (correctWords.includes(word)) {
       err("You've already found this word");
     } else if (roundDict.includes(word)) {
-      setCorrectWords([...correctWords, word.toUpperCase()]);
+      setCorrectWords([...correctWords, word]);
       // Score function
       setScore(score + getScore(word, pangramList));
     } else {

@@ -1,6 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { View } from 'react-native';
+import { View, StyleSheet } from 'react-native';
 import {
   Button,
   Content,
@@ -13,39 +13,39 @@ import {
 } from 'native-base';
 import { Stats, Logo } from '../components';
 import { fetchRound } from '../store/game';
+import { getAverageWordLength } from './postRoundUtils'
 
 function PostRoundScreen({ route, navigation, createUserRound, user }) {
   const words = route.params.words;
   const score = route.params.score;
-
-  const postRound = [
-    {
-      title: 'Total Score',
-      stat: `${score}`
-    },
-    {
-      title: 'Words Got',
-      stat: `${words.length}`
-    }
-  ];
+  const averageWordLength = getAverageWordLength(words)
 
   return (
     <Container>
       <Logo />
       <H1>Round Over</H1>
+      <View style={styles.flexRow}></View>
 
-      <Tabs>
-        <Tab heading={<TabHeading>{/* <Text>Stats</Text> */}</TabHeading>}>
-          <Stats style={{ height: 100 }} stats={postRound} />
-        </Tab>
-      </Tabs>
+      <View style={styles.flexRow}>
+        <View style={styles.halves}>
+          <Text style={styles.left}>Score</Text>
+          <Text style={styles.left}>Words Got</Text>
+          <Text style={styles.left}>Avg Word Length</Text>
+        </View>
+        <View style={styles.halves}>
+          <Text style={styles.right}>{score}</Text>
+          <Text style={styles.right}>{words.length}</Text>
+          <Text style={styles.right}>{averageWordLength}</Text>
+        </View>
+      </View>
+
       <Button
         block
         rounded
         title="Play Again"
         onPress={() => {
           createUserRound(user.id);
-          navigation.navigate('HomeScreen', { screen: 'CountdownScreen' });
+          navigation.navigate( 'CountdownScreen', {mode: 'practice'});
         }}
       >
         <Text>Play Again</Text>
@@ -64,6 +64,30 @@ function PostRoundScreen({ route, navigation, createUserRound, user }) {
     </Container>
   );
 }
+
+const styles = StyleSheet.create({
+  flexRow: {
+    display: 'flex',
+    alignSelf: 'stretch',
+    flexDirection: 'row',
+    borderBottomWidth: 1,
+    borderBottomColor: 'black',
+    paddingBottom: 30,
+    marginBottom: 30
+    // backgroundColor: 'black'
+  },
+  halves: {
+    flex: 1
+  },
+  left: {
+    marginRight: 10,
+    textAlign: 'right'
+  },
+  right: {
+    marginLeft: 10,
+    textAlign: 'left'
+  }
+});
 
 const mapState = state => {
   return {
