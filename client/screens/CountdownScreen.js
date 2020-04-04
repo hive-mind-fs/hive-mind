@@ -3,7 +3,8 @@ import { connect } from 'react-redux';
 import { StyleSheet } from 'react-native';
 import { Container, H1, H3 } from 'native-base';
 
-function CountdownScreen({ navigation }) {
+function CountdownScreen({route, navigation }) {
+  const mode = route.params.mode
   const preGameTimer = 3;
 
   const [countdownTimer, setCountdownTimer] = useState(preGameTimer);
@@ -21,7 +22,11 @@ function CountdownScreen({ navigation }) {
       if (countdownTimer > 0) {
         setCountdownTimer(countdownTimer - 1);
       } else {
-        navigation.navigate('GameBoardScreen');
+        if (mode === 'practice') {
+          navigation.navigate('PracticeRoundScreen');
+        } else {
+          navigation.navigate('GameBoardScreen');
+        }
       }
     }, 1000);
   });

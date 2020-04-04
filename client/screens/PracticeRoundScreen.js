@@ -25,7 +25,7 @@ function PracticeRoundScreen(props) {
     possiblePoints
   } = getInitialStateFromProps(props);
 
-  console.log('round dict is', roundDict);
+  const gameDuration = 10;
 
   const [input, setInput] = useState([]);
   const [correctWords, setCorrectWords] = useState([]);
@@ -33,7 +33,15 @@ function PracticeRoundScreen(props) {
   const [score, setScore] = useState(0);
   const [rank, setRank] = useState('Beginner');
   const [error, setError] = useState([]);
-  const [gameTimer, setGameTimer] = useState(10);
+  const [gameTimer, setGameTimer] = useState(gameDuration);
+
+  // Reset timer when screen is loaded
+  useEffect(() => {
+    const unsubscribe = props.navigation.addListener('focus', () => {
+      setGameTimer(gameDuration);
+    });
+    return unsubscribe;
+  }, [props.navigation]);
 
   useEffect(() => {
     setTimeout(() => {
@@ -60,6 +68,8 @@ function PracticeRoundScreen(props) {
     setInput(input.slice(0, input.length - 1));
   };
   const handleShuffle = () => {
+    console.log('letters are', otherLetters)
+    console.log('words are', roundDict)
     setLettersOrdering(shuffle(lettersOrdering));
   };
   const handleLetterPress = letter => {
@@ -68,10 +78,13 @@ function PracticeRoundScreen(props) {
   };
 
   const handleEnter = () => {
+
     let word = input.join('');
     // Clear input
     setInput([]);
     //Clear error message everytime enter is pressed
+    console.log(roundDict)
+    console.log(word)
     setError(error.slice(0, error.length - 1));
     if (word.length < 4) {
       err('Your word is too short');
@@ -93,8 +106,6 @@ function PracticeRoundScreen(props) {
   let minutes = Math.floor(gameTimer / 60);
   let secondsCalc = gameTimer - minutes * 60;
   let seconds = secondsCalc <= 9 ? '0' + secondsCalc : secondsCalc;
-
-  console.log(error);
 
   return (
     <Container style={styles.container}>

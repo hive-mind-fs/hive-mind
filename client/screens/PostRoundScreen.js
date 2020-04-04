@@ -13,10 +13,12 @@ import {
 } from 'native-base';
 import { Stats, Logo } from '../components';
 import { fetchRound } from '../store/game';
+import { getAverageWordLength } from './postRoundUtils'
 
 function PostRoundScreen({ route, navigation, createUserRound, user }) {
   const words = route.params.words;
   const score = route.params.score;
+  const averageWordLength = getAverageWordLength(words)
 
   return (
     <Container>
@@ -33,7 +35,7 @@ function PostRoundScreen({ route, navigation, createUserRound, user }) {
         <View style={styles.halves}>
           <Text style={styles.right}>{score}</Text>
           <Text style={styles.right}>{words.length}</Text>
-          <Text style={styles.right}>x</Text>
+          <Text style={styles.right}>{averageWordLength}</Text>
         </View>
       </View>
 
@@ -43,7 +45,7 @@ function PostRoundScreen({ route, navigation, createUserRound, user }) {
         title="Play Again"
         onPress={() => {
           createUserRound(user.id);
-          navigation.navigate('HomeScreen', { screen: 'CountdownScreen' });
+          navigation.navigate( 'CountdownScreen', {mode: 'practice'});
         }}
       >
         <Text>Play Again</Text>
