@@ -5,7 +5,7 @@ import { Button, Footer, Card, Container, H1, H3, Text, Thumbnail } from 'native
 // import { Col, Row, Grid } from 'react-native-easy-grid';
 import { Stats, Logo, BarChartGrouped } from '../components';
 import { fetchPracticeRound } from '../store/game';
-import { getAverageWordLength } from './postRoundUtils'
+import { getAverageWordLength, getPangrams } from './postRoundUtils'
 
 function PostRound1v1Screen({ route, navigation, createUserRound, user }) {
 
@@ -17,7 +17,7 @@ function PostRound1v1Screen({ route, navigation, createUserRound, user }) {
   const userPhoto = user.photo
   const userScore = route.params.user.score;
   const userWords = route.params.user.words;
-  const userPangrams = route.params.user.pangrams;
+  const userPangrams = getPangrams(userWords);
   const userAverageWordLength = getAverageWordLength(userWords)
 
   return (

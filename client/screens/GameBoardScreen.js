@@ -112,16 +112,11 @@ function GameBoardScreen(props) {
         let userWords = roundDictObjs.filter(word =>
           correctWords.includes(word.word)
         );
-        let userPangrams = userWords.filter(word => {
-          const uniqueLetters = new Set(...word.split(''));
-          return uniqueLetters === 7;
-        });
         props.saveRound(props.round.id, score, userWords, opId);
         props.navigation.navigate('PostRound1v1Screen', {
           user: {
             words: userWords,
-            score: score,
-            pangrams: userPangrams
+            score: score
           },
           opponent: {
             username: opName,
