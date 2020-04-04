@@ -285,15 +285,13 @@ const styles = StyleSheet.create({
     flexDirection: 'column',
     textAlign: 'center',
     justifyContent: 'center',
-    margin: 1,
-    backgroundColor: 'cyan'
+    margin: 1
   },
   userName: {
     flex: 1,
     flexDirection: 'column',
     textAlign: 'center',
-    justifyContent: 'flex-start',
-    backgroundColor: 'orange'
+    justifyContent: 'flex-start'
   },
   opName: {
     flex: 1,
