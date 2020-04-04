@@ -49,6 +49,7 @@ function GameBoardScreen(props) {
   const [opPhoto, setOpPhoto] = useState('');
   const [gotOp, setGotOp] = useState(false);
   const [opId, setOpId] = useState('');
+  const [modalVisible, setModalVisible] = useState(false);
 
   //runs once on component did mount
   useEffect(() => {

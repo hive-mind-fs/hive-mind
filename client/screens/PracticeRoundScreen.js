@@ -129,11 +129,14 @@ function PracticeRoundScreen(props) {
         />
       </View>
       <View style={styles.inputCont}>
-        {error.length > 0 ? (
-          <Error error={error} />
-        ) : (
-          <Input style={styles.textCenter} inputLetters={input} />
+        {input.map(i =>
+          i === cl ? (
+            <Text style={styles.yellow}>{i}</Text>
+          ) : (
+            <Text style={styles.black}>{i}</Text>
+          )
         )}
+        <Error error={error} />
       </View>
       <View style={styles.hive}>
         <Hive
