@@ -206,8 +206,10 @@ const styles = StyleSheet.create({
     paddingRight: 15
   },
   correctWordsCont: {
-    flex: 2,
-    alignItems: 'center'
+    flex: 1,
+    alignItems: 'center',
+    flexDirection: 'column',
+    justifyContent: 'flex-end'
   },
   inputCont: {
     width: '100%',
