@@ -113,7 +113,7 @@ function GameBoardScreen(props) {
           correctWords.includes(word.word)
         );
         let userPangrams = userWords.filter(word => {
-          const uniqueLetters = new Set(...word.split(''));
+          const uniqueLetters = new Set(...word.word.split(''));
           return uniqueLetters === 7;
         });
         props.saveRound(props.round.id, score, userWords, opId);
