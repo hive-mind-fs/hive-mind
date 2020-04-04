@@ -123,6 +123,7 @@ function PracticeRoundScreen(props) {
       <View style={styles.correctWordsCont}>
         <CorrectWordsModal
           correctWords={correctWords}
+          correctWordsjoined={correctWords.join('   ')}
           correctWordsArray={correctWordsArray}
           modalVisible={modalVisible}
           setModalVisible={setModalVisible}

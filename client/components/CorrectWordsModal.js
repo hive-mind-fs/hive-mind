@@ -50,7 +50,7 @@ const styles = StyleSheet.create({
 
 const WordsGuessedModal = ({
   correctWords,
-  correctWordsArray,
+  correctWordsjoined,
   modalVisible,
   setModalVisible
 }) => {
@@ -65,7 +65,7 @@ const WordsGuessedModal = ({
         <View style={styles.centeredView}>
           <View style={styles.modalView}>
             <Content padder>
-              <Input>{correctWords}</Input>
+              <Input>{correctWordsjoined}</Input>
               {/* <Accordion dataArray={correctWordsArray} expanded={0} /> */}
             </Content>
 
