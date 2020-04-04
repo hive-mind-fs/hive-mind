@@ -1,6 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { View } from 'react-native';
+import { View, StyleSheet } from 'react-native';
 import {
   Button,
   Content,
@@ -18,27 +18,25 @@ function PostRoundScreen({ route, navigation, createUserRound, user }) {
   const words = route.params.words;
   const score = route.params.score;
 
-  const postRound = [
-    {
-      title: 'Total Score',
-      stat: `${score}`
-    },
-    {
-      title: 'Words Got',
-      stat: `${words.length}`
-    }
-  ];
-
   return (
     <Container>
       <Logo />
       <H1>Round Over</H1>
+      <View style={styles.flexRow}></View>
 
-      <Tabs>
-        <Tab heading={<TabHeading>{/* <Text>Stats</Text> */}</TabHeading>}>
-          <Stats style={{ height: 100 }} stats={postRound} />
-        </Tab>
-      </Tabs>
+      <View style={styles.flexRow}>
+        <View style={styles.halves}>
+          <Text style={styles.left}>Score</Text>
+          <Text style={styles.left}>Words Got</Text>
+          <Text style={styles.left}>Avg Word Length</Text>
+        </View>
+        <View style={styles.halves}>
+          <Text style={styles.right}>{score}</Text>
+          <Text style={styles.right}>{words.length}</Text>
+          <Text style={styles.right}>x</Text>
+        </View>
+      </View>
+
       <Button
         block
         rounded
@@ -64,6 +62,30 @@ function PostRoundScreen({ route, navigation, createUserRound, user }) {
     </Container>
   );
 }
+
+const styles = StyleSheet.create({
+  flexRow: {
+    display: 'flex',
+    alignSelf: 'stretch',
+    flexDirection: 'row',
+    borderBottomWidth: 1,
+    borderBottomColor: 'black',
+    paddingBottom: 30,
+    marginBottom: 30
+    // backgroundColor: 'black'
+  },
+  halves: {
+    flex: 1
+  },
+  left: {
+    marginRight: 10,
+    textAlign: 'right'
+  },
+  right: {
+    marginLeft: 10,
+    textAlign: 'left'
+  }
+});
 
 const mapState = state => {
   return {
