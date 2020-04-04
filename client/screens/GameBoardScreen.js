@@ -49,6 +49,7 @@ function GameBoardScreen(props) {
   const [opPhoto, setOpPhoto] = useState('');
   const [gotOp, setGotOp] = useState(false);
   const [opId, setOpId] = useState('');
+  const [opWords, setOpWords] = useState([])
 
   const [error, setError] = useState([]);
   const [gameTimer, setGameTimer] = useState(gameDuration);
@@ -95,11 +96,13 @@ function GameBoardScreen(props) {
   useEffect(() => {
     socket.emit('my score changed', {
       room: props.room,
-      score: score
+      score: score,
+      words: JSON.stringify(correctWords)
     });
 
     socket.on('ops score changed', function(data) {
       setOpScore(data.score);
+      setOpWords(JSON.parse(data.words));
     });
   }, [score]);
   //Runs everytime the score changes
@@ -121,7 +124,8 @@ function GameBoardScreen(props) {
           opponent: {
             username: opName,
             photo: opPhoto,
-            score: opScore
+            score: opScore,
+            words: opWords
           }
         });
       }
@@ -241,7 +245,7 @@ function GameBoardScreen(props) {
       </View>
       <Hive
         style={styles.hive}
-        centerLetter={cl} // comes from redux now
+        centerLetter={cl}
         otherLetters={lettersOrdering}
         onLetterPress={letter => handleLetterPress(letter)}
       />

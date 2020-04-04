@@ -20,6 +20,9 @@ function PostRound1v1Screen({ route, navigation, createUserRound, user }) {
   const opName = route.params.opponent.username;
   const opPhoto = route.params.opponent.photo;
   const opScore = route.params.opponent.score;
+  const opWords = route.params.opponent.words;
+  const opPangrams = getPangrams(opWords);
+  const opAverageWordLength = getAverageWordLength(opWords);
 
   const userName = user.username;
   const userPhoto = user.photo;
@@ -68,11 +71,10 @@ function PostRound1v1Screen({ route, navigation, createUserRound, user }) {
           <Text style={styles.textCenter}>Avg Word Length</Text>
         </View>
         <View style={styles.colMed}>
-          <Text style={styles.textCenter}>x,xxx</Text>
-          <Text style={styles.textCenter}>xx</Text>
-          <Text style={styles.textCenter}>x</Text>
-          <Text style={styles.textCenter}>x,xxx</Text>
-          <Text style={styles.textCenter}>x.x</Text>
+          <Text style={styles.textCenter}>{opScore}</Text>
+          <Text style={styles.textCenter}>{opWords.length}</Text>
+          <Text style={styles.textCenter}>{opPangrams.length}</Text>
+          <Text style={styles.textCenter}>{opAverageWordLength}</Text>
         </View>
       </View>
       {/* <BarChartGrouped paddingTop={10} paddingLeft={30} /> */}
