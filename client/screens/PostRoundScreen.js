@@ -46,7 +46,7 @@ function PostRoundScreen({ route, navigation, createUserRound, user }) {
         title="Play Again"
         onPress={() => {
           createUserRound(user.id);
-          navigation.navigate('HomeScreen', { screen: 'CountdownScreen' });
+          navigation.navigate( 'CountdownScreen', {mode: 'practice'});
         }}
       >
         <Text>Play Again</Text>
