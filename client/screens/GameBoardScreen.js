@@ -114,11 +114,11 @@ function GameBoardScreen(props) {
       } else {
         let userWords = roundDictObjs.filter(word =>
           correctWords.includes(word.word)
-        );
+        )
         props.saveRound(props.round.id, score, userWords, opId);
         props.navigation.navigate('PostRound1v1Screen', {
           user: {
-            words: userWords,
+            words: correctWords,
             score: score
           },
           opponent: {
