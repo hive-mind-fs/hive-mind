@@ -22,6 +22,7 @@ module.exports = io => {
 
       if (Object.keys(users).length === 1) {
         // TO DO: get a round once
+        // round = await Round.findByPk(853823, { include: [{ model: Word }] });
         round = await Round.getRandom({ include: [{ model: Word }] });
       } else {
         io.to(v1Room).emit(

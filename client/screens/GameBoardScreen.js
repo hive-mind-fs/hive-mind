@@ -35,7 +35,7 @@ function GameBoardScreen(props) {
     possiblePoints
   } = getInitialStateFromProps(props);
 
-  const gameDuration = 20;
+  const gameDuration = 30;
 
   const [input, setInput] = useState([]);
   const [correctWords, setCorrectWords] = useState([]);
@@ -49,7 +49,7 @@ function GameBoardScreen(props) {
   const [opPhoto, setOpPhoto] = useState('');
   const [gotOp, setGotOp] = useState(false);
   const [opId, setOpId] = useState('');
-  const [opWords, setOpWords] = useState([])
+  const [opWords, setOpWords] = useState([]);
 
   const [error, setError] = useState([]);
   const [gameTimer, setGameTimer] = useState(gameDuration);
