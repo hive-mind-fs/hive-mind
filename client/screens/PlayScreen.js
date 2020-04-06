@@ -19,9 +19,9 @@ function PlayScreen({ navigation, createUserRound, user }) {
   return (
     <Container>
       <Logo />
-      <H1>Spelling Bee</H1>
+      <H1>Hivemind</H1>
       <Text marginT5 center>
-        How many words can you make{'\n'}with 7 letters?
+        How many words can you{'\n'}spell with 7 letters?
       </Text>
 
       <Button
@@ -32,7 +32,7 @@ function PlayScreen({ navigation, createUserRound, user }) {
         title="FindOpponent"
         onPress={() => handleRandomLobbying()}
       >
-        <Text>Play A Stranger</Text>
+        <Text>Find Opponent</Text>
       </Button>
       {/*
       <Button
@@ -58,7 +58,7 @@ function PlayScreen({ navigation, createUserRound, user }) {
       </Button>
 
       <Button
-        light
+        bordered
         block
         rounded
         marginTop
