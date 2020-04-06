@@ -39,6 +39,14 @@ export default () => {
         borderRadius: 0
       }
     },
+    '.xxlarge': {
+      width: 200,
+      height: 200,
+      borderRadius: 40,
+      '.square': {
+        borderRadius: 0
+      }
+    },
     '.center': {
       alignSelf: 'center'
     },
