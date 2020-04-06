@@ -55,7 +55,7 @@ function PracticeRoundScreen(props) {
         );
         props.saveRound(props.round.id, score, userWords);
         props.navigation.navigate('PostRoundScreen', {
-          words: userWords,
+          words: correctWords,
           score: score
         });
       }
