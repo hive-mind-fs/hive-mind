@@ -2,6 +2,8 @@
 
 This project is built using [React Native](https://reactnative.dev/) and [Expo](https://expo.io/).
 
+![](1v1.gif)
+
 ### Build the project locally
 
 First, install the command line tools.
