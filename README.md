@@ -1,6 +1,6 @@
 # Hivemind
 
-This project is built using [React Native](https://reactnative.dev/) and [Expo](https://expo.io/)
+This project is built using [React Native](https://reactnative.dev/) and [Expo](https://expo.io/).
 
 ### Build the project locally
 
@@ -43,12 +43,10 @@ npm run seed
 Run the project:
 
 ```
-
 npm run dev
-
 ```
 
-On the left panel, click “Run on iOS simulator”. This requires [Xcode](https://apps.apple.com/us/app/xcode/id497799835?mt=12)
+On the left panel, click “Run on iOS simulator”. This requires [Xcode](https://apps.apple.com/us/app/xcode/id497799835?mt=12).
 
 ### Build the project remotely
 
