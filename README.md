@@ -1,10 +1,35 @@
+![Hivemind](/client/assets/app-screenshot.jpg)
+
 # Hivemind
 
-This project is built using [React Native](https://reactnative.dev/) and [Expo](https://expo.io/).
+A live multiplayer spelling game mobile app based off [NYT Spelling Bee](https://www.nytimes.com/puzzles/spelling-bee). Built with React Native, Node.js, Express, Postgres, Web Sockets, D3, and Expo.
 
-![](1v1.gif)
+## Features
 
-### Build the project locally
+- Two Play Modes
+  - Practice: Single player practice rounds
+  - Live 1v1: Complete live against another player in the app via web sockets
+- Email and Facebook Auth
+- Leaderboard
+- Player stats and game logs
+
+![Hivemind How To Play](https://media.giphy.com/media/Za3YoADDQSGUitmfEe/giphy.gif)
+
+## Game Rules & Scoring
+
+The goal of the game is to spell as many words as you can with the 7 provided letters within 5 minutes.
+
+- Every word must include the "Core Letter", the letter in the yellow center of the hive
+- Words must be at least 4 letters long
+- 4-letter words are worth 1 point each
+- Longer words earn 1 point per letter
+- Each puzzle includes at least one “pangram” which uses every letter – these are worth 7 extra points!
+
+## Getting Started / Installing Locally
+
+This project is developed with [React Native](https://reactnative.dev/) and [Expo](https://expo.io/). We are using the “managed workflow” (similar to create-react-app) to minimize complexity.
+https://docs.expo.io/versions/v36.0.0/introduction/managed-vs-bare/.
+
 
 First, install the command line tools.
 
@@ -50,18 +75,13 @@ npm run dev
 
 On the left panel, click “Run on iOS simulator”. This requires [Xcode](https://apps.apple.com/us/app/xcode/id497799835?mt=12).
 
-### Build the project remotely
 
-## Algorithms
+## Round Creation Algorithm
 
-### Scoring
+We generated all possible rounds using...need to put details here...
 
-4-letter words are worth 1 point each.
-Longer words earn 1 point per letter.
-Each puzzle includes at least one “pangram” which uses every letter. These are worth 7 extra points!
 
-### Ranking
-
+## Rankings
 Rankings are based on the percentage of total points earned in a puzzle.
 
 * **Beginner**: 0% - 2.5%
@@ -73,3 +93,10 @@ Rankings are based on the percentage of total points earned in a puzzle.
 * **Great**: 40% - 55%
 * **Amazing**: 55% - 75%
 * **Genius**: 75% - 100%
+
+## Contributors
+
+- @rhanixon
+- @natiwhitney
+- @richmcateer
+- @vosters
