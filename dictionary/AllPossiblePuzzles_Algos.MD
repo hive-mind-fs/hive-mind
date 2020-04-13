@@ -33,7 +33,7 @@ The second performance gain was to switch from using Javascript objects to store
 
 Finally, we sped up the individual comparisons by storing the unique letters for each word as an alphabetized string. In the naive implementation, we checked if the set of letters in a word was a subset of the pangram's set. This method involved creating set objects for each word and set operations. With alphabetization, we iterated through the chars in the sorted string, exiting early if we arrived at a letter that was not in the pangram.
 
-With the above optimizations, we were able to generate all the puzzles in less than 6 minutes, more than full order of magnitude faster.
+With the above optimizations, we were able to generate all the puzzles in 6 minutes; a full order of magnitude more efficient.
 
 ## Bit Set Approach
 
