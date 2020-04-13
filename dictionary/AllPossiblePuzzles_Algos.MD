@@ -17,7 +17,7 @@ At the core of each puzzle is the honeycomb, the seven letters that populate the
 
 To find all the pangrams, we converted every word in the dictionary into a set of unique letters. There were 20,000 sets that contained exactly seven characters. Next, for each set we needed to find every other word with at least four letters that was made up of letters in the set.
 
-For example, the set of seven letters, {'a','d','f','l','r','o','w'}, has one pangram 'aardwolf' as well as over 150 other English words that can be made from those letters, including 'afar', 'warlord', and 'allow'.
+For example, the set of seven letters, {a, d, f, l, r, o, w}, has one pangram 'aardwolf' as well as over 150 other English words that can be made from those letters, including 'afar', 'warlord', and 'allow'.
 
 To find the other words, we looped through the entire dictionary and checked whether for each word, its set of letters was a subset of the seven letters in the pangram. If so, the word was added to the list of valid words for that puzzle. Generating all the puzzles with this approach would have taken close to six hours. 
  
