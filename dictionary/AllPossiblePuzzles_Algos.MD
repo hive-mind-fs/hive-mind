@@ -31,9 +31,9 @@ Now, to construct a puzzle, we only had to check if the hashmap key was a subset
 
 The second performance gain was to switch from using Javascript objects to store the pangrams and the pre-processed words to using ES6 maps. Maps are more performant than objects for storing large data sets, keys whose values aren’t known until runtime, and strongly-typed keys and values (all of which applied in our case). Storing the pangrams and the words in a ES6 map more than halved our runtime.
 
-Finally, we sped up the individual comparisons by alphabetizing the keys. In the naive implementation we converted each word into a set and compared it to the pangram's 7-letter set. This method involved the creation of additional objects as well as $7*n$ equality operations (where 7 is the number of unique letters in the pangram and n is the number of unique letters in the word). Rather than use sets, we stored the unique letters for each word as an alphabetized string. Then we iterated through each letter in this sorted string and check if it was in the 7-letter set, exiting early if we arrived at a letter that was not in the pangram.
+Finally, we sped up the individual comparisons by storing the unique letters for each word as an alphabetized string. In the naive implementation, we checked if the set of letters in a word was a subset of the pangram's set. This method involved creating set objects for each word and set operations. With alphabetization, we iterated through the chars in the sorted string, exiting early if we arrived at a letter that was not in the pangram.
 
-With the above optimizations we were able to speed up the algorithm several orders of magnitude, and generate the honeycomb and its corresponding words in less than 6 minutes.
+With the above optimizations, we were able to generate all the puzzles in less than 6 minutes, more than full order of magnitude faster.
 
 ## Bit Set Approach
 
