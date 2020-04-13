@@ -17,7 +17,7 @@ At the core of each puzzle is the honeycomb, the seven letters that populate the
 
 To find all the pangrams, we converted every word in the dictionary into a set of unique letters. There were 20,000 sets that contained exactly seven characters. Next, for each set we needed to find every other word with at least four letters that was made up of letters in the set.
 
-For example, the set of seven letters, {a,d,f,l,r,o,w}, has one pangram 'aardwolf' as well as over 150 other English words that can be made from those letters, including afar, warlord, and allow.
+For example, the set of seven letters, {'a','d','f','l','r','o','w'}, has one pangram 'aardwolf' as well as over 150 other English words that can be made from those letters, including 'afar', 'warlord', and 'allow'.
 
 To find the other words, we looped through the entire dictionary and checked whether for each word, its set of letters was a subset of the seven letters in the pangram. If so, the word was added to the list of valid words for that puzzle. Generating all the puzzles with this approach would have taken close to six hours. 
  
@@ -27,7 +27,7 @@ The dictionary we used had nearly 300,000 words, so combing through it for each 
 
 Our first optimization was to reduce the number of words that had to be checked for each honeycomb. We did this by pre-processing the dictionary and converting it into a hashmap. The keys of the map were the unique letters in a word and the values were all the words composed of those letters. For example, instead of having four entries, one for each of ‘yellow’, ‘yellowly’, ‘yellowy’, and ‘yowley’, we now had one entry for ‘elowy’ that pointed to an array of those four words.
 
-Now, to construct a puzzle, we only had to check if the hashmap key was a subset of the pangram. If so, all the words in the array were added to the possible words for the puzzle. Grouping our words by unique letters was relatively cheap ($< 1$ sec) reduced the number of entries by 66%, significantly cutting down the number of comparisons we had to make per pangram.
+Now, to construct a puzzle, we only had to check if the hashmap key was a subset of the pangram. If so, all the words in the array were added to the possible words for the puzzle. Grouping our words by unique letters took less than a second and reduced the number of entries to 100 thousand. 
 
 The second performance gain was to switch from using Javascript objects to store the pangrams and the pre-processed words to using ES6 maps. Maps are more performant than objects for storing large data sets, keys whose values aren’t known until runtime, and strongly-typed keys and values (all of which applied in our case). Storing the pangrams and the words in a ES6 map more than halved our runtime.
 
