@@ -27,13 +27,13 @@ The dictionary we used had nearly 300,000 words, so combing through it for each 
 
 Our first optimization was to reduce the number of words that had to be checked for each honeycomb. We did this by pre-processing the dictionary and converting it into a hashmap. The keys of the map were the unique letters in a word and the values were all the words composed of those letters. For example, instead of having four entries, one for each of ‘yellow’, ‘yellowly’, ‘yellowy’, and ‘yowley’, we now had one entry for ‘elowy’ that pointed to an array of those four words.
 
-Now, to construct a puzzle, we only had to check if the hashmap key was a subset of the pangram. If so, all the words in the array were added to the possible words for the puzzle. Grouping our words by unique letters took less than a second and reduced the number of entries to 80 thousand (a 75% reduction).
+Now, to construct a puzzle, we only had to check if the hashmap key was a subset of the pangram. If so, all the words in the array were added to the possible words for the puzzle. Grouping our words by unique letters took less than a second and reduced the number of entries to 80 thousand, about an hour and a half to run.
 
-The second performance gain was to switch from using Javascript objects to store the pangrams and the pre-processed words to using ES6 maps. Maps are more performant than objects for storing large data sets, keys whose values aren’t known until runtime, and strongly-typed keys and values (all of which applied in our case). Storing the pangrams and the words in a ES6 map more than halved our runtime.
+The major performace gain was to switch from using Javascript objects to store the pangrams and the pre-processed words to using ES6 maps. Maps are more performant than objects for storing large data sets, keys whose values aren’t known until runtime, and strongly-typed keys and values (all of which applied in our case). Somewhat surprisingly, using a map to store and look up the words for the (still sizable) 1.8 billion comparisons cut our algorithm's run time from an hour and a half to under 10 minutes.
 
-Finally, we sped up the individual comparisons by storing the unique letters for each word as an alphabetized string. In the naive implementation, we checked if the set of letters in a word was a subset of the pangram's set. This method involved creating set objects for each word and set operations. With alphabetization, we iterated through the chars in the sorted string, exiting early if we arrived at a letter that was not in the pangram.
+Finally, we sped up the individual comparisons by storing each word's unique letters as an alphabetized string. Rather than check if the set of letters in the word was a subset of the set of letters in the pangram, we compared the sorted strings index by index. This method let us exit early if we arrived at a letter that was not in the pangram, and spared us from creating additional set objects.
 
-With the above optimizations, we were able to generate all the puzzles in 6 minutes; a full order of magnitude more efficient.
+With the above straightforward optimizations, we were able to generate all the puzzles in $\leq$ 3 minutes, a full two order of magnitude faster than our original approach!
 
 ## Bit Set Approach
 
