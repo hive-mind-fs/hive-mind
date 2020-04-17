@@ -1,8 +1,14 @@
 'use strict';
-const db = require('../server/db');
+const db = require('../server/dist/db');
 const { read, getPossiblePoints } = require('../dictionary');
 
-const { User, Round, Game, Word, UserRound } = require('../server/db/models');
+const {
+  User,
+  Round,
+  Game,
+  Word,
+  UserRound
+} = require('../server/dist/db/models');
 
 const dummyUsers = require('../server/db/dummyData/dummyUsers.js');
 const dummyGames = require('../server/db/dummyData/dummyGames.js');
@@ -124,10 +130,10 @@ async function seed() {
           where: { userId: userId, roundId: roundId }
         });
         if (userRound) {
-          userRound.score = score
-          await userRound.save
+          userRound.score = score;
+          await userRound.save;
         } else {
-          await UserRound.create(userRoundToAdd)
+          await UserRound.create(userRoundToAdd);
         }
       }
     }
