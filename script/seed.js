@@ -1,7 +1,6 @@
 'use strict';
 const db = require('../server/dist/db');
 const { read, getPossiblePoints } = require('../dictionary');
-
 const {
   User,
   Round,
