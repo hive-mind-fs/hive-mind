@@ -1,7 +1,5 @@
-export {};
-
-const { expect } = require('chai');
-const { db, Game } = require('.');
+import { expect } from 'chai';
+import { db, Game } from '.';
 
 describe('Game model', () => {
   beforeEach(() => db.sync({ force: true }));

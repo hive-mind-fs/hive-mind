@@ -1,6 +1,4 @@
-export {};
-
-const Sequelize = require('sequelize');
+import Sequelize from 'sequelize';
 const db = require('../db');
 
 const UserRound = db.define('userRound', {
@@ -20,4 +18,4 @@ const UserRound = db.define('userRound', {
   }
 });
 
-module.exports = UserRound;
+export default UserRound;
