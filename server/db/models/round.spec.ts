@@ -1,3 +1,5 @@
+export {};
+
 const { expect } = require('chai');
 const { db, Round } = require('.');
 

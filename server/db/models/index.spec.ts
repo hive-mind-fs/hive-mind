@@ -1,3 +1,5 @@
+export {};
+
 const { expect } = require('chai');
 const { db, Word, Round, Game, User, UserRound } = require('../models');
 

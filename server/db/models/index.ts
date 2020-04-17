@@ -1,3 +1,5 @@
+export {};
+
 const Game = require('./game');
 const Round = require('./round');
 const User = require('./user');
