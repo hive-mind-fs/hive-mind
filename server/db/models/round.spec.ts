@@ -1,5 +1,5 @@
-const { expect } = require('chai');
-const { db, Round } = require('.');
+import { expect } from 'chai';
+import { db, Round } from '.';
 
 describe('Round model', () => {
   beforeEach(() => db.sync({ force: true }));

@@ -1,9 +1,9 @@
-const Game = require('./game');
-const Round = require('./round');
-const User = require('./user');
-const Word = require('./word');
-const UserRound = require('./userRound');
-const GuessedWord = require('./guessedWord');
+import Game from './game';
+import Round from './round';
+import User from './user';
+import Word from './word';
+import UserRound from './userRound';
+import GuessedWord from './guessedWord';
 const db = require('../db');
 
 /** Model associations here **/
@@ -62,12 +62,4 @@ UserRound.belongsToMany(Word, {
  * instead of: const User = require('../db/models/user')
  */
 
-module.exports = {
-  Game,
-  Round,
-  User,
-  Word,
-  UserRound,
-  GuessedWord,
-  db
-};
+export { Game, Round, User, Word, UserRound, GuessedWord, db };

@@ -1,5 +1,5 @@
-const { expect } = require('chai');
-const { db, Word, Round, Game, User, UserRound } = require('../models');
+import { expect } from 'chai';
+import { db, Word, Round, Game, User, UserRound } from '../models';
 
 describe('Game >-< Round Association', () => {
   beforeEach(() => db.sync({ force: true }));

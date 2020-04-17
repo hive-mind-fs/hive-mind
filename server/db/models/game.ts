@@ -13,4 +13,4 @@ const Game = db.define('game', {
   }
 });
 
-module.exports = Game;
+export default Game;

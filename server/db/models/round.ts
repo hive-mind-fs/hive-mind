@@ -1,4 +1,4 @@
-const Sequelize = require('sequelize');
+import Sequelize from 'sequelize';
 const db = require('../db');
 
 const Round = db.define('round', {
@@ -55,4 +55,4 @@ Round.getRandom = async function(opts = {}) {
   return round;
 };
 
-module.exports = Round;
+export default Round;

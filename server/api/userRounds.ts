@@ -1,3 +1,5 @@
+export {};
+
 const router = require('express').Router();
 const sequelize = require('sequelize');
 const { Round, Word, User, UserRound, GuessedWord } = require('../db/models');
@@ -108,17 +110,16 @@ router.get('/leaderboard', async (req, res, next) => {
         ],
         include: [{ model: User, attributes: ['id', 'username', 'photo'] }],
         group: ['user.id'],
-        order: [[sequelize.col('totalScore'), 'DESC']],
+        order: [[sequelize.col('totalScore'), 'DESC']]
       });
 
-      leaderboardObj = leaderboard
-        .map(rank => {
-          return {
-            totalScore: rank.dataValues.totalScore,
-            username: rank.user.username,
-            photo: rank.user.photo
-          };
-        })
+      leaderboardObj = leaderboard.map(rank => {
+        return {
+          totalScore: rank.dataValues.totalScore,
+          username: rank.user.username,
+          photo: rank.user.photo
+        };
+      });
     } catch (err) {
       next(err);
     }

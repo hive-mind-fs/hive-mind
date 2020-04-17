@@ -1,4 +1,4 @@
-const Sequelize = require('sequelize');
+import Sequelize from 'sequelize';
 const db = require('../db');
 
 const Word = db.define('word', {
@@ -18,4 +18,4 @@ Word.alphabetize = async function() {
   return words;
 };
 
-module.exports = Word;
+export default Word;
