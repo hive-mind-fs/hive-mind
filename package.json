@@ -111,7 +111,7 @@
     "mocha": "^6.1.4",
     "npm-merge-driver": "^2.3.5",
     "prettier": "^1.19.1",
-    "simple-git": "^1.121.0",
+    "simple-git": "^3.3.0",
     "supertest": "^4.0.2",
     "yaml": "^1.6.0"
   },
